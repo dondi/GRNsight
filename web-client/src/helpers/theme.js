@@ -5,6 +5,7 @@ export const theme = {
     colors: {
       text: "#333",
       control: "blue",
+      disabled: "#ccc",
     },
     font: {
       family: "Helvetica Neue, Helvetica, Arial, sans-serif",
@@ -97,14 +98,14 @@ export const theme = {
     extend: `
       /* Keep navbar buttons borderless without using !important */
       .navbar &,
-        .navbar &:hover,
-        .navbar &:focus,
-        .navbar &:focus-visible,
-        .navbar &:active {
-          border: none;
-          background-color: transparent;
-          box-shadow: none;
-        }
+      .navbar &:hover,
+      .navbar &:focus,
+      .navbar &:focus-visible,
+      .navbar &:active {
+        border: none;
+        background-color: transparent;
+        box-shadow: none;
+      }
 
       border-radius: 4px;
       &:hover,

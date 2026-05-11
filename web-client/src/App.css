@@ -94,6 +94,24 @@ header span {
   flex-direction: column;
 }
 
+/* Keep dropdown menu buttons borderless and transparent */
+.dropdown-menu button,
+.dropdown-menu [role="button"] {
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+  outline: none;
+}
+
+.dropdown-menu button:hover,
+.dropdown-menu button:focus,
+.dropdown-menu [role="button"]:hover,
+.dropdown-menu [role="button"]:focus {
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+}
+
 .demo-dropdown-menu {
   padding-left: 10px;
   padding-right: 10px;

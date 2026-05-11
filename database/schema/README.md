@@ -39,7 +39,7 @@ The scripts already contain the command to create the schema for you. Each schem
 
 First, outside of postgres, navigate to the `schema` folder in your local copy of the GRNsight repository:
 ```
-cd <path to `schema` folder>
+cd <path to schema folder>
 ```
 
 Then run the following commands. Note that for any command that begins with `psql`, you need to be _outside_ of postgres to run it. Also, you may need to specify the database username in front of localhost, i.e., use `postgresql://postgres@localhost/postgres` for each of the following commands.
@@ -73,9 +73,9 @@ Once these steps are completed, your database will be set up and ready to accept
 
 ### 1. Settings Database
 
-The `settings` table stores the default database name for the node coloring dropdown menu. Question: is this optional?
+The `settings` table stores the default expression dataset name that is used for the node coloring dropdown menu in GRNsight.
 
-To change the default database name, follow these steps:
+To change the default expression dataset name, follow these steps:
 
 1. **Log in to the Database**
 
@@ -91,18 +91,18 @@ To change the default database name, follow these steps:
 
 3. **Delete the Current Default Database Name**
 
-    Delete the existing database name with this command:
+    Delete the existing expression dataset name with this command:
 
     ```
     DELETE FROM grnsettings;
     ```
 
-4. **Insert the New Default Database Name**  
-   Insert the new default database name with the following command:
+4. **Insert the New Default Expression Dataset Name**  
+   Insert the new default dataset name with the following command:
     ```
-    INSERT INTO grnsettings(expression_dataset) VALUES ('<new default database name>');
+    INSERT INTO grnsettings(expression_dataset) VALUES ('<new default dataset name>');
     ```
-    _Note: The current default database is `dahlquist_2018`. Don't forget!_
+    _Note: The current default expression dataset is `dahlquist_2018`. Don't forget!_
 
 ### 2. Other databases
 

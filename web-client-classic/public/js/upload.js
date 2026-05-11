@@ -97,14 +97,14 @@ export const upload = function () {
         if (currentExtension && currentExtension.length) {
             filename = filename.substr(0, filename.length - currentExtension[0].length);
         }
-        if (Object.keys(grnState.workbook.expression).length > 0) {
+        if (Object.keys(grnState.workbook.expression).length > 0 && mode === NETWORK_GRN_MODE) {
             source = $("input[name=expressionSource]:checked")[0].value;
             if (source === "userInput") {
                 source = "user-data";
             }
         }
 
-        if (mode !== "grn") {
+        if (mode !== NETWORK_GRN_MODE) {
             mode = "PPI";
         }
         if (mode !== null && genes !== null && edges !== null && type !== null) {
@@ -405,6 +405,8 @@ export const upload = function () {
             production_rates: "ProductionRates",
             degradation_rates: "DegradationRates",
             threshold_b: "ThresholdB",
+            optimized_production_rates: "ProductionRates",
+            optimized_threshold_b: "ThresholdB",
         };
 
         const { chosenTwoColumnSheets, sheetsToFetch, warningsToAdd } =
@@ -412,7 +414,7 @@ export const upload = function () {
                 workbookTwoColumnSheets: finalExportSheets.two_column_sheets,
                 chosenSheets,
                 source,
-                warningsConstants: warnings,
+                exportWarningsConstants: warnings,
                 workbookWarnings: grnState.workbook.warnings,
             });
 
@@ -758,9 +760,10 @@ export const upload = function () {
                     if (
                         typeof allSheets[i] === "object" &&
                         allSheets[i].id !== "exportExcelWorkbookSheet-All" &&
+                        allSheets[i].checked &&
                         allSheets[i].value &&
-                        allSheets[i].value.includes("expression") &&
-                        allSheets[i].checked
+                        (allSheets[i].value.includes("expression") ||
+                            allSheets[i].value.includes("sigma"))
                     ) {
                         anyExpressionChecked = true;
                         break;

@@ -11,16 +11,85 @@ This folder contains scripts for retrieving gene regulatory network (GRN) and pr
 
 ## Running the Script
 
-To fetch and populate data, run `main.py` with the `--network` argument:
+Run `main.py` with `--network` and optionally `--action`:
 
 - `all` – Fetch and populate both GRN and PPI data.
 - `grn` – Fetch and populate only GRN data.
 - `ppi` – Fetch and populate only PPI data.
 
+Actions:
+
+- `all` (default) – Generate TSV files, then populate PostgreSQL.
+- `generate` – Only fetch/process AllianceMine data and write TSV files.
+- `populate` – Only read existing TSV files and populate PostgreSQL.
+
 Example command to populate both GRN and PPI data into a local database:
 
 ```bash
 python3 main.py --network all --db_url postgresql://localhost/postgres
+```
+
+Example command to only generate TSV files (no database write):
+
+```bash
+python3 main.py --network all --action generate
+```
+
+Example command to only populate PostgreSQL from previously generated TSV files:
+
+```bash
+python3 main.py --network all --action populate --db_url postgresql://localhost/postgres
+```
+
+### Populate Input Options
+
+Populate mode uses `--input_dir` to determine how data file is read.
+
+How input is selected:
+
+- If `--input_dir` is `script-results` (default), data is read directly from `script-results/`.
+- Otherwise, the loader treats `--input_dir` as a parent folder and scans its subfolders.
+
+For custom folders, supported schema folder names are:
+
+- GRN:
+    - `gene_regulatory_network_with_timestamp/`
+    - `gene_regulatory_network/`
+- PPI:
+    - `protein_protein_interactions_with_timestamp/`
+    - `protein_protein_interactions/`
+
+If `--network all` is used, both one GRN folder and one PPI folder must exist.
+
+Expected files per schema folder:
+
+- GRN: `source.tsv`, `gene.tsv`, `network.tsv`
+- PPI: `source.tsv`, `gene.tsv`, `protein.tsv`, `physical_interactions.tsv`
+
+Examples:
+
+Populate from `script-results` (default):
+
+```bash
+python3 main.py --network all --action populate --db_url postgresql://localhost/postgres
+```
+
+Populate from a custom directory that contains schema folders:
+
+```bash
+python3 main.py --network all --action populate --db_url postgresql://localhost/postgres --input_dir <your-database-foldername>
+```
+
+Populate only GRN from a custom directory:
+
+```bash
+python3 main.py --network grn --action populate --db_url postgresql://localhost/postgres --input_dir <your-database-foldername>
+```
+
+Populate only PPI from a custom directory:
+
+```bash
+python3 main.py --network ppi --action populate --db_url postgresql://localhost/postgres --input_dir <your-database-foldername>
 ```
 
 ## Troubleshooting

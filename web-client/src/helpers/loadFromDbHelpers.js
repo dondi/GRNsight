@@ -28,7 +28,7 @@ export const modeOptions = [
 ];
 
 export function getFirstSource(sources) {
-  const keys = Object.keys(sources || {});
+  const keys = Object.keys(sources ?? {});
   return keys.length > 0 ? keys[0] : null;
 }
 
@@ -45,13 +45,13 @@ export function isValidGene(gene) {
 }
 
 export function countEdges(links) {
-  return Object.values(links || {}).reduce((total, targets) => {
+  return Object.values(links ?? {}).reduce((total, targets) => {
     return total + (Array.isArray(targets) ? targets.length : 0);
   }, 0);
 }
 
 export function sortWorkbookGenes(genes, workbookType) {
-  const entries = Object.entries(genes || {});
+  const entries = Object.entries(genes ?? {});
 
   if (workbookType === NETWORK_GRN_MODE_SHORT) {
     return entries.sort((a, b) => String(a[1]).localeCompare(String(b[1])));

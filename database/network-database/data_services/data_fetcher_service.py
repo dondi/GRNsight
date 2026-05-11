@@ -68,9 +68,10 @@ class GeneRegulatoryNetworkFetcherService(DataFetcherService):
         query.add_constraint("regulatoryRegions.strainBackground", "=", "S288c", code="A")
         
         rows_data = []
-        print("Query length: ", len(query.rows()))
         networks = set()
+        total_rows = 0
         for row in query.rows():
+            total_rows += 1
             network = (row["secondaryIdentifier"], row["regulatoryRegions.regulator.secondaryIdentifier"], row["regulatoryRegions.annotationType"])
             if network in networks:
                 continue
@@ -86,7 +87,7 @@ class GeneRegulatoryNetworkFetcherService(DataFetcherService):
                 
         df = pd.DataFrame(rows_data)
         print("Data fetched successfully")
-        print("Number of duplicated networks: ", len(query.rows()) - len(networks))
+        print("Number of duplicated networks: ", total_rows - len(networks))
         print("====================================================================")
         return df
             
