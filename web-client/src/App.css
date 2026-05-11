@@ -13,6 +13,11 @@ body {
   transition-timing-function: none;
 }
 
+button:hover {
+  border: none;
+  background-color: #ebebeb;
+}
+
 #header-container {
   font-family: "Georgia", serif;
 }
@@ -59,6 +64,11 @@ header span {
   border: none;
 }
 
+.navbar > button:hover {
+  border: none;
+  background-color: transparent;
+}
+
 .navbar button span {
   font-size: 14px;
 }
@@ -84,6 +94,29 @@ header span {
   flex-direction: column;
 }
 
+/* Keep dropdown menu buttons borderless and transparent */
+.dropdown-menu button,
+.dropdown-menu [role="button"] {
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+  outline: none;
+}
+
+.dropdown-menu button:hover,
+.dropdown-menu button:focus,
+.dropdown-menu [role="button"]:hover,
+.dropdown-menu [role="button"]:focus {
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.demo-dropdown-menu {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
 .dropdown-menu button {
   border: none;
 }
@@ -100,27 +133,21 @@ header span {
   background-color: #dfebe5;
 }
 
-.demo-dropdown-navbar {
+.demo-dropdown-navbar button,
+.demo-dropdown-navbar [role="button"] {
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.demo-dropdown-navbar button:hover {
   border: none;
 }
 
 .folder-icon {
   margin-right: 5px;
-}
-
-.navbar button:hover {
-  color: #696969;
-  box-shadow: none;
-}
-
-button {
-  border: none;
-  box-shadow: none;
-}
-
-button:hover {
-  border: none;
-  box-shadow: none;
 }
 
 .demo-button {
@@ -232,7 +259,6 @@ button:hover {
 .panel-dropdown-container button,
 .panel-dropdown-container select {
   border: 1px solid #ccc;
-  border-radius: 4px;
   text-overflow: hidden;
 }
 
@@ -255,6 +281,13 @@ button:hover {
   line-height: 1.42857143;
 }
 
+.demo-source-dropdown,
+.demo-source-dropdown *,
+.demo-source-dropdown-drop,
+.demo-source-dropdown-drop * {
+  font-weight: 400;
+}
+
 .file-input {
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -271,10 +304,8 @@ button:hover {
 
 .sidebar-radio-buttons {
   font-size: 14px;
-  /* border: 1px solid "green"; */
 }
 
-/* TODO: is this being used correctly? */
 input[type="radio"]:checked {
   border: 2px solid #333;
 }
@@ -296,8 +327,178 @@ input[type="radio"]:checked {
   transition: opacity 0.25s;
 }
 
-.load-from-database {
-  border: 2px solid red;
+.generate-network-modal {
+  width: calc(100vw - 20px);
+  margin: 0 auto;
+  border: 1px transparent rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #ffffff;
+  background-clip: padding-box;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+@media (min-width: 768px) {
+  .generate-network-modal {
+    width: 600px;
+    margin: 0 auto;
+  }
+}
+
+.generate-network-modal-header {
+  padding: 15px;
+  background: none;
+  border-radius: 6px 6px 0 0;
+  border-bottom: 1px solid #d2d2d2;
+}
+
+.generate-network-close {
+  color: #d0d0d0;
+}
+
+.generate-network-close svg,
+.generate-network-close svg * {
+  stroke: #d0d0d0;
+}
+
+.generate-network-close:hover {
+  color: #5f5f5f;
+  border: none;
+  background-color: transparent;
+}
+
+.generate-network-close:hover svg,
+.generate-network-close:hover svg * {
+  stroke: #5f5f5f;
+}
+
+.generate-network-row {
+  width: 100%;
+  margin-bottom: 22px;
+}
+
+.generate-network-label {
+  min-width: 150px;
+}
+
+.generate-network-select,
+.generate-network-source-select {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  max-width: none;
+}
+
+.generate-network-select-wrap {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+}
+
+.generate-network-search-input {
+  width: 100%;
+}
+
+.generate-network-search-row {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+.generate-network-search-row .generate-network-search-input {
+  flex: 1 1 0;
+  min-width: 0;
+  width: 100%;
+}
+
+.generate-network-search-button {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  background: #f5f5f5;
+  min-width: 60px;
+}
+
+.generate-network-search-button:hover,
+.generate-network-search-button:focus,
+.generate-network-search-button:focus-visible,
+.generate-network-search-button:active {
+  border: 1px solid #ccc;
+}
+
+.generate-network-search-button svg {
+  display: block;
+  margin: 0 auto;
+}
+
+.generate-network-search-button:hover {
+  background: #ebebeb;
+}
+
+.generate-network-added-text {
+  font-size: 43px;
+  color: #373a3d;
+  line-height: 1.35;
+}
+
+.selected-genes-container {
+  border: none;
+  min-height: 70px;
+}
+
+.generate-network-error {
+  background: #ffe5e5;
+  border: 1px solid #e6b7b7;
+  border-radius: 4px;
+  margin-top: 8px;
+}
+
+.generate-network-modal-footer {
+  border-top: 1px solid #d2d2d2;
+  padding: 20px 20px 20px 20px;
+}
+
+.generate-network-action-button {
+  padding: 6px 12px;
+}
+
+@media (max-width: 1200px) {
+  .generate-network-modal-title {
+    font-size: 28px;
+  }
+
+  .generate-network-heading {
+    font-size: 52px;
+  }
+
+  .generate-network-warning,
+  .generate-network-label,
+  .generate-network-added-text {
+    font-size: 30px;
+  }
+
+  .generate-network-label {
+    min-width: 165px;
+  }
+
+  .generate-network-search-row {
+    max-width: 100%;
+  }
+
+  .generate-network-select,
+  .generate-network-source-select {
+    width: auto;
+  }
+
+  .generate-network-search-row .generate-network-search-input {
+    width: 100%;
+  }
 }
 
 .scale-and-scroll {
@@ -347,11 +548,11 @@ table {
 }
 
 .pull-left {
-  float: left !important;
+  float: left;
 }
 
 .pull-right {
-  float: right !important;
+  float: right;
 }
 
 .zoomTable {
