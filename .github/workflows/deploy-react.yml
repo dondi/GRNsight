@@ -5,19 +5,16 @@ on:
         branches:
             - main
             - beta
-
-permissions:
-    contents: write
+            - cecilia-1454
 
 jobs:
     build-and-deploy:
-        concurrency: ci-${{ github.ref }}
+        concurrency: gh-pages-deploy
         runs-on: ubuntu-latest
+
         steps:
             - name: Checkout Repo
               uses: actions/checkout@v5
-              with:
-                  ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
             - name: Install Dependencies
               working-directory: ./web-client
@@ -32,22 +29,29 @@ jobs:
                   git config --global user.email "github-actions@github.com"
                   git config --global user.name "GitHub Actions"
 
+            - name: Sync gh-pages Branch
+              run: |
+                  git fetch origin gh-pages
+
+                  git checkout gh-pages || git checkout -b gh-pages origin/gh-pages
+                  git pull --ff-only origin gh-pages
+
+                  git checkout -B gh-pages-react
+
             - name: Prepare Deployment Folder
               run: |
                   mkdir -p react-thesis-4081
-                  rm -rf react-thesis-4081/*
-                  cp -r web-client/dist/* react-thesis-4081/
+                  rsync -a --delete web-client/dist/ react-thesis-4081/
 
             - name: Commit and Push
               id: deployment
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
-                  git add react-thesis-4081/
+                  git add -A react-thesis-4081/
                   if ! git diff --cached --quiet; then
                     git commit -m "Deploy React app from ${{ github.sha }}"
-                    #git fetch origin gh-pages --depth=1
-                    #git push origin HEAD:gh-pages
+                    git push origin gh-pages-react:gh-pages
                     echo "status=deployed" >> $GITHUB_OUTPUT
                   else
                     echo "status=no-changes" >> $GITHUB_OUTPUT
