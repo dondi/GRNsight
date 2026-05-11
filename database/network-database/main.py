@@ -27,18 +27,17 @@ def load_data(network_option):
     
     SourceDataGenerator(SourceProcessor(formatted_time_stamp), save_service)
     
-def main(network_option, db_url=None, action='all', input_dir=Constants.DATA_DIRECTORY):
-    runner = PopulatorRunner(db_url=db_url, input_dir=input_dir)
+def main(db_url=None, action='all', input_dir=Constants.DATA_DIRECTORY):
+    network_options = [Constants.GRN_NETWORK_MODE, Constants.PPI_NETWORK_MODE]
+    for network in network_options:
 
-    if action in ['all', 'generate']:
-        load_data(network_option)
-    if action in ['all', 'populate']:
-        runner.populate(network_option)
+        if action in ['all', 'generate']:
+            load_data(network)
+        if action in ['all', 'populate']:
+            PopulatorRunner(db_url=db_url, input_dir=input_dir).populate(network)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate data for different networks.")
-    parser.add_argument('--network', choices=[Constants.PPI_NETWORK_MODE, Constants.GRN_NETWORK_MODE, 'all'], required=True,
-                        help=f"Specify the type of network data to generate. Options: '{Constants.PPI_NETWORK_MODE}', '{Constants.GRN_NETWORK_MODE}', 'all'")
     parser.add_argument('--action', choices=['generate', 'populate', 'all'], default='all',
                         help="Choose whether to only generate TSV files, only populate PostgreSQL from TSV, or do both.")
     parser.add_argument('--db_url', type=str,
@@ -50,7 +49,7 @@ if __name__ == "__main__":
     if args.action in ['populate', 'all'] and not args.db_url:
         parser.error("--db_url is required when --action is 'populate' or 'all'.")
 
-    main(args.network, args.db_url, args.action, args.input_dir)
+    main(args.db_url, args.action, args.input_dir)
     
 
     
