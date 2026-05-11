@@ -116,7 +116,6 @@ export const theme = {
         border-radius: 4px;
         box-shadow: none;
       }
-
     `,
   },
   fileInput: {
