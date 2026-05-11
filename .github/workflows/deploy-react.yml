@@ -5,7 +5,6 @@ on:
         branches:
             - main
             - beta
-            - cecilia-1454
 
 jobs:
     build-and-deploy:
