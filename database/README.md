@@ -86,20 +86,14 @@ Download the _"network-database-source-files"_ folder from Box located in [`GRNs
 
 **Step 3: Run the main.py Script**
 
-Run the `main.py` script with the appropriate `--network` argument:
-
-- `all`: GRN and PPI data.
-- `grn`: GRN data only.
-- `ppi`: PPI data only.
-
-and the `--action` argument, `populate`, which reads existing TSV files and populates the PostgreSQL database.
+Run the `main.py` script with the `--action` argument, `populate`, which reads existing TSV files and populates the PostgreSQL database.
 
 The `populate` action uses `--input_dir` to determine which data files are read. In this case, our input directory is `network-database-source-files`.
 
 For example, to populate both GRN and PPI data into a local database, run:
 
 ```
-python3 main.py --network all --action populate --db_url postgresql://localhost/postgres --input_dir network-database-source-files
+python3 main.py --action populate --db_url postgresql://localhost/postgres --input_dir network-database-source-files
 ```
 
 For more information about the options for `main.py`, including how to newly fetch data from AllianceMine and troubleshooting, refer to the [`README.md`](https://github.com/dondi/GRNsight/blob/main/database/network-database/README.md) in the `network-database` folder.
