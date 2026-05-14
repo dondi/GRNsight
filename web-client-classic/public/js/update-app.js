@@ -112,6 +112,7 @@ import {
     SET_NORMALIZATION_SIDEBAR,
     SET_NORMALIZATION_SIDEBAR_VALUE,
     RESET_NORMALIZATION_SIDEBAR,
+    SET_NORMALIZATION_MENU,
     //   EXPRESSION_SOURCE,
 } from "./constants";
 
@@ -1038,6 +1039,10 @@ export const updateApp = grnState => {
         $(RESET_NORMALIZATION_SIDEBAR).prop("disabled", !grnState.colorOptimal);
         $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).prop("disabled", !grnState.colorOptimal);
         $(GREY_EDGES_DASHED_SIDEBAR).prop("disabled", !grnState.colorOptimal);
+        const edgeColoringFunc = !grnState.colorOptimal ? "addClass" : "removeClass";
+        $(".weightedGraphOptionsMenu.edge-coloring-dependent")[edgeColoringFunc]("disabled");
+        $(SET_NORMALIZATION_MENU).prop("disabled", !grnState.colorOptimal);
+        $(GREY_EDGE_THRESHOLD_MENU).prop("disabled", !grnState.colorOptimal);
     } else if (grnState.workbook !== null && grnState.workbook.sheetType === "unweighted") {
         hideEdgeWeightOptions();
     } else {

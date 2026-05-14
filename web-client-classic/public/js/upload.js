@@ -97,10 +97,15 @@ export const upload = function () {
         if (currentExtension && currentExtension.length) {
             filename = filename.substr(0, filename.length - currentExtension[0].length);
         }
-        if (Object.keys(grnState.workbook.expression).length > 0 && mode === NETWORK_GRN_MODE) {
+        if (mode === NETWORK_GRN_MODE && extension === "xlsx") {
             source = $("input[name=expressionSource]:checked")[0].value;
-            if (source === "userInput") {
-                source = "user-data";
+            if (source === "none") {
+                source = null;
+            } else if (source === "userInput") {
+                // only demos will have an expression source
+                source = grnState.workbook.expression.source
+                    ? grnState.workbook.expression.source
+                    : "user-data";
             }
         }
 
@@ -110,10 +115,8 @@ export const upload = function () {
         if (mode !== null && genes !== null && edges !== null && type !== null) {
             filename = `${mode.toUpperCase()}_${genes}-genes_${edges}-edges_${type}`;
         }
-        const { source: expressionSource } = grnState.workbook.expression; // Only demos will have this.
-        if (expressionSource || source) {
-            // In almost all cases, we will use source. But some demos will pre-empt this choice.
-            filename = `${filename}_${expressionSource || source}`;
+        if (source) {
+            filename = `${filename}_${source}`;
         }
         return `${filename}.${extension}`;
     };
@@ -626,7 +629,7 @@ export const upload = function () {
             result +
             `
             <li class=\'export-excel-workbook-sheet-option\'>
-                <input type=\'checkbox\' name=\'workbookSheets\' value=\"${networkWeights[1]}\" id=\'exportExcelWorkbookSheet-${networkWeights[1]}\' class=\'export-checkbox\'/>
+                <input type=\'checkbox\' name=\'workbookSheets\' checked=\'true\' value=\"${networkWeights[1]}\" id=\'exportExcelWorkbookSheet-${networkWeights[1]}\' class=\'export-checkbox\'/>
                 <label for=\'exportExcelWorkbookSheet-${networkWeights[1]}\' id=\'exportExcelWorkbookSheet-${networkWeights[1]}-label\' class=\'export-checkbox-label\' >
                     ${networkWeights[1]}
                 </label>
@@ -739,20 +742,20 @@ export const upload = function () {
     };
 
     var handleWorkbookSheetCheckboxBehaviour = () => {
+        const syncSelectAll = () => {
+            const selectAll = $("#exportExcelWorkbookSheet-All");
+            if (!selectAll.length) return;
+            const allSheets = $("input[name=workbookSheets]")
+                .not("#exportExcelWorkbookSheet-All")
+                .not(":disabled");
+            selectAll[0].checked = allSheets.toArray().every(el => el.checked);
+        };
+
         $("input[name=workbookSheets]")
             .not($("#exportExcelWorkbookSheet-All"))
             .on("click", () => {
-                const selectAll = $("#exportExcelWorkbookSheet-All");
-                const allSheets = $("input[name=workbookSheets]");
-                if (selectAll[0].checked) {
-                    for (let i in allSheets) {
-                        if (typeof allSheets[i] === "object") {
-                            if (allSheets[i].checked !== selectAll[0].checked) {
-                                selectAll[0].checked = false;
-                            }
-                        }
-                    }
-                }
+                syncSelectAll();
+
                 let anyExpressionChecked = false;
                 for (let i in allSheets) {
                     if (
@@ -780,6 +783,7 @@ export const upload = function () {
                 }
             }
         });
+        syncSelectAll();
     };
 
     const handleExpressionSheetsFromSource = function (source) {
