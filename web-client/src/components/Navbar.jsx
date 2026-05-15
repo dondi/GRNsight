@@ -340,7 +340,6 @@ export default function Navbar({}) {
                   </Button>
                 </Box>
                 <DottedLine />
-                {/* TODO: maybe instead do a collapsible instead of a tip */}
                 <Box pad={{ horizontal: "45px", vertical: "3px" }}>
                   <Button>
                     <Text>Select Top Dataset</Text>
@@ -546,7 +545,6 @@ export default function Navbar({}) {
         }
       />
 
-      {/* TODO: set width so that shorter and wider window like web-client-classic */}
       <DropButton
         label="Demo"
         open={openMenu === "demo"}

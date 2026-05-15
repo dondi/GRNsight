@@ -166,7 +166,6 @@ export function getTopYBoundaryMargin(adaptive, graphZoom, yTranslation) {
   return !adaptive ? -yTranslation / graphZoom + BOUNDARY_MARGIN / 2 : BOUNDARY_MARGIN;
 }
 
-// TODO: ensure boudary margin on the right is being applied correctly, because nodes currently go exactly next to border
 export function getRightXBoundaryMargin(adaptive, graphZoom, xTranslation, width, nodeWidth) {
   return !adaptive
     ? -xTranslation / graphZoom + BOUNDARY_MARGIN / 2 + width / graphZoom - BOUNDARY_MARGIN

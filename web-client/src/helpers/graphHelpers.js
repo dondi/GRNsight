@@ -188,13 +188,6 @@ export function getEdgeThickness(workbook, colorOptimal, edge) {
   const allWeights = workbook.positiveWeights.concat(workbook.negativeWeights);
   const maxWeight = Math.max(...allWeights.map(Math.abs));
 
-  // TODO: total scale should consider normMax
-  /*
-  const totalScale = d3.scaleLinear()
-  .domain([0, normMax > 0 ? normMax : maxWeight])
-  .range([2, 14])
-  .clamp(true);
-  */
   const scale = d3.scaleLinear().domain([0, maxWeight]).range([2, 14]).clamp(true);
 
   return Math.floor(scale(Math.abs(edge.value)));

@@ -143,7 +143,6 @@ export default function Graph() {
     }
   }, [networkData]);
 
-  // TODO: need to update with adaptive (restrict to viewport)
   useEffect(() => {
     if (!zoomRef.current || !svgRef.current || !zoomContainerRef.current) return;
     const scale = zoomPercent / 100;
