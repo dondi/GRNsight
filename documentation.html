@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Documentation
-modified: 3/19/2026
+modified: 5/19/2026
 description: Learn how to format and upload files to GRNsight, a web application for visualizing small-scale gene regulatory networks and protein-protein interaction networks.
 ---
 <p id="pageTitle">Documentation</p>
@@ -23,7 +23,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                     </a>
                 </h5>
             </div>
-            <div id="section1Content" class="panel-collapse collapse">
+            <div id="section1Content" class="panel-collapse collapse" data-toggle="collapse">
                 <div class="panel-body">
                     <ul>
                         <li>
@@ -65,7 +65,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                 </a>
                             </h4>
                         </div>
-                        <div id="demo" class="panel-collapse collapse">
+                        <div id="demo" class="panel-collapse collapse" data-toggle="collapse">
                             <div class="panel-body">
                                 <p>
                                     If you do not have your own input spreadsheet, you can load and view demonstration gene regulatory and protein-protein physical interaction networks.
@@ -131,7 +131,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                             </a>
                                         </h4>
                                     </div>
-                                    <div id="format_input" class="panel-collapse collapse">
+                                    <div id="format_input" class="panel-collapse collapse" data-toggle="collapse">
                                         <div class="panel-body">
                                             <ul>
                                                 <li>
@@ -146,7 +146,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                                         </a>
                                                     </h4>
                                                 </div>
-                                                <div id="excel_instructions" class="panel-collapse collapse">
+                                                <div id="excel_instructions" class="panel-collapse collapse" data-toggle="collapse">
                                                     <div class="panel-body">
                                                         <p>
                                                             If you want to create manually a new file to use with GRNsight, format the file in the following manner:
@@ -273,7 +273,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                                         </a>
                                                     </h4>
                                                 </div>
-                                                <div id="yeastract_instructions" class="panel-collapse collapse">
+                                                <div id="yeastract_instructions" class="panel-collapse collapse" data-toggle="collapse">
                                                     <div class="panel-body">
                                                         This section has instructions for how to format a gene regulation matrix downloaded from <a href="http://www.yeastract.com" target="_blank">YEASTRACT</a> as a .xlsx file in the native GRNsight format.
                                                         <ul>
@@ -307,7 +307,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                                         </a>
                                                     </h4>
                                                 </div>
-                                                <div id="cytoscape_sif_instructions" class="panel-collapse collapse">
+                                                <div id="cytoscape_sif_instructions" class="panel-collapse collapse" data-toggle="collapse">
                                                     <div class="panel-body">
                                                         Simple Interaction Format (SIF or .sif) was originally created for use with <a href="http://www.cytoscape.org" target="_blank">Cytoscape</a>, an open source bioinformatics software platform for visualizing molecular interaction networks, but is now used to exchange network data between many different software packages.  Users who have data in SIF format can import these files directly into GRNsight.  However, if you are creating a new input file for use with GRNsight, we recommend using the native Excel format expected by GRNsight as described in <a href="#excel_instructions" data-toggle="collapse">Section 1a</a>.  An extended description of the SIF format can be found in the <a href="http://manual.cytoscape.org/en/3.4.0/Supported_Network_File_Formats.html#sif-format" target="_blank">Cytoscape v3.4.0 User Manual</a>, from which the description below is derived.
                                                         <ul>
@@ -381,7 +381,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                                         </a>
                                                     </h4>
                                                 </div>
-                                                <div id="graphml_instructions" class="panel-collapse collapse">
+                                                <div id="graphml_instructions" class="panel-collapse collapse" data-toggle="collapse">
                                                     <div class="panel-body">
                                                         According to <a href="http://graphml.graphdrawing.org" target="_blank">http://graphml.graphdrawing.org</a>, "GraphML is a comprehensive and easy-to-use file format for graphs. It consists of a language core to describe the structural properties of a graph and a flexible extension mechanism to add application-specific data."<br><br>
                                                         Users who have GRN data in GraphML format can import these files directly into GRNsight. However, if you are creating a new input file for use with GRNsight, we recommend using the native Excel format expected by GRNsight as described in <a href="#excel_instructions" data-toggle="collapse">Section 1a</a>. GRNsight does not currently support import of PPI networks in GraphML format.<br><br>
@@ -470,7 +470,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                             </a>
                                         </h4>
                                     </div>
-                                    <div id="load_input" class="panel-collapse collapse">
+                                    <div id="load_input" class="panel-collapse collapse" data-toggle="collapse">
                                         <div class="panel-body">
                                             <ul>
                                                             <li>
@@ -512,7 +512,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                 </a>
                             </h4>
                         </div>
-                        <div id="network_database" class="panel-collapse collapse">
+                        <div id="network_database" class="panel-collapse collapse" data-toggle="collapse">
                             <div class="panel-body">
                                 <p>
                                     If you do not have your own input network, you can use the Load from Database feature to select genes/proteins from our backend <i>Saccharomyces cerevisiae</i> database derived from the <i>Saccharomyces</i> Genome Database and display them as a gene regulatory or protein-protein physical interaction network.
@@ -540,7 +540,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                     </a>
                 </h4>
             </div>
-            <div id="section2Content" class="panel-collapse collapse">
+            <div id="section2Content" class="panel-collapse collapse" data-toggle="collapse">
                 <div class="panel-body">
                     <p>
                         GRNsight graphs are generated through D3.js, a JavaScript data visualization library.  We have modified the default implementation of D3 to include the following features:
@@ -571,7 +571,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                 </a>
                             </h4>
                         </div>
-                        <div id="unweighted_vs_weighted" class="panel-collapse collapse">
+                        <div id="unweighted_vs_weighted" class="panel-collapse collapse" data-toggle="collapse">
                             <div class="panel-body">
                                 <p>
                                     If your GRN adjacency matrix is contained in a worksheet entitled “network” and contains just 1's and 0's, GRNsight will make the edges connecting nodes black with a regular (pointy) arrowhead originating from the transcription factor (columns) to the target gene (rows) in your matrix. (Note that deselecting the menu item Edge > Enable Edge Coloring Based on Weight Values will make the graph display as an unweighted graph even if the worksheet "network_optimized_weights" has real numbers instead of 1's to indicated weighted edges.)
@@ -613,7 +613,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                 </a>
                             </h4>
                         </div>
-                        <div id="force_graph_parameters" class="panel-collapse collapse">
+                        <div id="force_graph_parameters" class="panel-collapse collapse" data-toggle="collapse">
                             <div class="panel-body">
                                 <p>
                                     Once you have selected the network to be loaded, GRNsight automatically lays out the positions of the nodes and edges based on certain Force Graph Parameters.
@@ -658,7 +658,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                 </a>
                             </h4>
                         </div>
-                        <div id="bounding_box" class="panel-collapse collapse">
+                        <div id="bounding_box" class="panel-collapse collapse" data-toggle="collapse">
                             <div class="panel-body">
                                 <p>
                                     An invisible "bounding box" contains the graph display. On the screen, a gray rectangle, known as the "viewport", defines the visible area of the bounding box. When GRNsight displays a graph, it will, by default, expand the bounding box outwards until the force graph parameters have been applied fully. The bounding box is anchored to the viewport in the top left corner, but expands to the bottom and to the right as necessitated by the movement of the nodes.  Thus, nodes and edges may disappear from the viewport on the bottom and right edges of the viewport.  This phenomenon is typically seen when the Force Graph Parameter sliders are manipulated. 
@@ -683,7 +683,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                 </a>
                             </h4>
                         </div>
-                        <div id="manual_manipulation" class="panel-collapse collapse">
+                        <div id="manual_manipulation" class="panel-collapse collapse" data-toggle="collapse">
                             <div class="panel-body">
                                 You have the option of manually moving nodes on the graph. Left-click on a node, and with the mouse button depressed, move the node to any position within the graph bounding box. Release the mouse button to leave the node in that position. Once a node has been moved, it will no longer respond to changes in the Force Graph Parameters. To restore the node's responsiveness to the Force Graph Parameters, double-click on the node.
                             </div>
@@ -697,7 +697,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                 </a>
                             </h4>
                         </div>
-                        <div id="node_coloring" class="panel-collapse collapse">
+                        <div id="node_coloring" class="panel-collapse collapse" data-toggle="collapse">
                             <div class="panel-body">
                                 <p>
                                     By default, when a user uploads an Excel workbook which contains correctly formatted expression sheets, nodes are colored with a heat map overlay to visualize time series expression data. Expression values of a gene at a given time point are mapped to corresponding vertical slices (stripes) on the node, and colored according to the node coloring legend located in the sidebar Node panel. Blue slices represent negative log<sub>2</sub> fold change expression values (indicating a decrease in mRNA), while red slices represent positive log<sub>2</sub> fold change expression values (indicating an increase in mRNA). The greater the magnitude of the expression value, the darker the shade of red or blue.
@@ -743,7 +743,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                     </a>
                 </h4>
             </div>
-            <div id="section3Content" class="panel-collapse collapse">
+            <div id="section3Content" class="panel-collapse collapse" data-toggle="collapse">
                 <div class="panel-body">
                     <p>
                         <a href="#section2">Section 2</a> above described how GRNsight uses the data in the adjacency matrix to automatically display a graph.  This section describes how to interpret the results of the resulting gene regulatory network graph biologically, focusing on the demonstration files Demo #3: Unweighted GRN (21 genes, 31 edges) and Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data).  These two files describe gene regulatory networks from budding yeast, <i>Saccharomyces cerevisiae</i>, and correspond to supplementary data published in the paper, <a href="http://link.springer.com/article/10.1007/s11538-015-0092-6" target="blank">Dahlquist, K.D., Fitzpatrick, B.G., Camacho, E.T., Entzminger, S.D., and Wanner, N.C. (2015) Parameter Estimation for Gene Regulatory Networks from Microarray Data: Cold Shock Response in Saccharomyces cerevisiae. Bulletin of Mathematical Biology. 77: 1457-1492, published online 29 September 2015, DOI: 10.1007/s11538-015-0092-6</a>, and when displayed by GRNsight, represent interactive versions of Figures 1 and 8 of that paper respectively.
@@ -756,7 +756,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                 </a>
                             </h4>
                         </div>
-                        <div id="visual_inspection" class="panel-collapse collapse">
+                        <div id="visual_inspection" class="panel-collapse collapse" data-toggle="collapse">
                             <div class="panel-body">
                                 <p>
                                     The figures shown below give a side-by-side view of the same adjacency matrices laid out by GRNsight and by hand.  The top three figures are derived from Demo #3: Unweighted GRN (21 genes, 31 edges), and the bottom three panels are derived from Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data).  The left two panels show an example of the automatic layout performed by GRNsight.  The right two panels show the same adjacency matrix laid out by hand in Adobe Illustrator, corresponding to Figure 1 (top right) and Figure 8 (bottom right) of the <a href="http://link.springer.com/article/10.1007/s11538-015-0092-6" target="blank">Dahlquist et al. (2015)</a> paper. The middle two panels started with the automatic layout from GRNsight and then were manually manipulated from within GRNsight to lay them out similarly to the right-hand panels.  The use of GRNsight represents a substantial time savings compared to creating the same figure entirely by hand.
@@ -809,7 +809,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                 </a>
                             </h4>
                         </div>
-                        <div id="node_coloring_grid_layout" class="panel-collapse collapse">
+                        <div id="node_coloring_grid_layout" class="panel-collapse collapse" data-toggle="collapse">
                             <div class="panel-body">
                                 <p>
                                     In GRNsight v3.0.0, two major features were added to GRNsight: node coloring visualization for time series expression data and a grid layout option. The following three figures were derived from Demo #2 Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data) using GRNsight v3.0.0. The figure on the left shows an example of the automated force graph layout generated by GRNsight with the new edge coloring scheme introduced in GRNsight v3.0.0. The figure in the middle shows an example of the automated force graph layout with the node coloring feature turned on. The figure on the right shows an example of the grid layout option with the node coloring feature turned on.
@@ -845,7 +845,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                 </a>
                             </h4>
                         </div>
-                        <div id="gene_pages" class="panel-collapse collapse">
+                        <div id="gene_pages" class="panel-collapse collapse" data-toggle="collapse">
                             <div class="panel-body">
                                 <p>
                                     In GRNsight v3.1.0, the gene page feature was added. To access a gene page, right-click on the label of any given node when a graph is displayed. A "page is loading" message should appear while data is being retrieved from the source databases, as shown in the figure on the left.
@@ -890,7 +890,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                               </a>
                             </h4>
                           </div>
-                          <div id="graph_statistics" class="panel-collapse collapse">
+                          <div id="graph_statistics" class="panel-collapse collapse" data-toggle="collapse">
                             <div class="panel-body">
                               (to be written)
                             </div>
@@ -909,7 +909,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                     </a>
                 </h4>
             </div>
-            <div id="exporting" class="panel-collapse collapse">
+            <div id="exporting" class="panel-collapse collapse" data-toggle="collapse">
                 <div class="panel-body">
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -919,7 +919,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                 </a>
                             </h4>
                         </div>
-                        <div id="cytoscape_sif_export" class="panel-collapse collapse">
+                        <div id="cytoscape_sif_export" class="panel-collapse collapse" data-toggle="collapse">
                             <div class="panel-body">
                                 <ul>
                                     <li>
@@ -964,7 +964,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                 </a>
                             </h4>
                         </div>
-                        <div id="graphml_export" class="panel-collapse collapse">
+                        <div id="graphml_export" class="panel-collapse collapse" data-toggle="collapse">
                             <div class="panel-body">
                                 <ul>
                                     <li>To export a GRN to GraphML format, select the menu option Export > Export Data > To Unweighted GraphML or File > Export Data > To Weighted GraphML. A dialog box will open for you to Save your file. Clicking the Cancel button will return you to the GRNsight web page. (Note that exporting PPI data to GraphML is not currently supported by GRNsight).
@@ -987,7 +987,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                 </a>
                             </h4>
                         </div>
-                        <div id="excel_export" class="panel-collapse collapse">
+                        <div id="excel_export" class="panel-collapse collapse" data-toggle="collapse">
                             <div class="panel-body">
                                 <ul>
                                     <li>
@@ -1020,7 +1020,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                 </a>
                             </h4>
                         </div>
-                        <div id="image_export" class="panel-collapse collapse">
+                        <div id="image_export" class="panel-collapse collapse" data-toggle="collapse">
                             <div class="panel-body">
                                 <ul>
                                     <li>
@@ -1051,7 +1051,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                     </a>
                 </h4>
             </div>
-            <div id="printing" class="panel-collapse collapse">
+            <div id="printing" class="panel-collapse collapse" data-toggle="collapse">
                 <div class="panel-body">
                     <p>
                         To print a graph, select the menu item File > Print. Mac users can utilize the native print to PDF function available from their operating system to print the graph to a PDF file. Windows users will need to have the full version of Adobe Acrobat (or other "print to PDF" utility) to print graphs to a PDF file. The Print menu item is disabled until a gene regulatory network graph is loaded. There is a known bug when GRNsight is used with Firefox browsers where the side of the graph gets cut off. This is an issue with Firefox that we cannot solve at this time. There are two workarounds. First, in Firefox, go to the menu item File > Page Setup and check the box Shrink to fit Page Width. Second, you can use the Chrome browser to print to PDF.
@@ -1068,7 +1068,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                     </a>
                 </h4>
             </div>
-            <div id="further_help" class="panel-collapse collapse">
+            <div id="further_help" class="panel-collapse collapse" data-toggle="collapse">
                 <div class="panel-body">
                     <p>
                         For additional documentation, please see the <a href="https://github.com/dondi/GRNsight/wiki" target="_blank">GRNsight Wiki</a>.<br><br>
