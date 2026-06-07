@@ -261,6 +261,14 @@ button:hover {
   padding: 6px 12px;
 }
 
+.file-input-trigger {
+  cursor: pointer;
+}
+
+.file-input-native {
+  display: none;
+}
+
 .sidebar-radio-buttons {
   font-size: 14px;
   /* border: 1px solid "green"; */

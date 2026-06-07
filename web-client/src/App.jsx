@@ -29,16 +29,20 @@ function App() {
   const [edgeWeightNormalization, setEdgeWeightNormalization] = useState(2.971);
   const [grayThreshold, setGrayThreshold] = useState(0.05);
   const [showGrayEdgesDashed, setShowGrayEdgesDashed] = useState(false);
-  const [restrictGraphToViewport, setRestrictGraphToViewport] = useState(false);
   const [demoValue, setDemoValue] = useState(null);
-  // TODO: make viewSize dynamic to user's screen size
   const [viewSize, setViewSize] = useState(null);
   const [adaptive, setAdaptive] = useState(true);
   const [networkData, setNetworkData] = useState(null);
   const [zoomPercent, setZoomPercent] = useState(ZOOM_DISPLAY_MIDDLE);
 
   // All state and setters bundled into a single value for context
-  const grnStateValue = {
+  const grnState = {
+    demoValue,
+    setDemoValue,
+    viewSize,
+    setViewSize,
+    adaptive,
+    setAdaptive,
     networkMode,
     setNetworkMode,
     enableNodeColoring,
@@ -65,14 +69,6 @@ function App() {
     setGrayThreshold,
     showGrayEdgesDashed,
     setShowGrayEdgesDashed,
-    restrictGraphToViewport,
-    setRestrictGraphToViewport,
-    viewSize,
-    setViewSize,
-    adaptive,
-    setAdaptive,
-    demoValue,
-    setDemoValue,
     networkData,
     setNetworkData,
     zoomPercent,
@@ -85,7 +81,7 @@ function App() {
   }, []);
 
   return (
-    <GrnStateContext.Provider value={grnStateValue}>
+    <GrnStateContext.Provider value={grnState}>
       <Grommet theme={theme} background={{ color: "white", dark: false }} full>
         <Header />
         <Navbar />

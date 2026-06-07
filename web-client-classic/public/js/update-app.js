@@ -109,6 +109,10 @@ import {
     EXPORT_TO_UNWEIGHTED_GML_MENU,
     NETWORK_GRN_MODE,
     NETWORK_PPI_MODE,
+    SET_NORMALIZATION_SIDEBAR,
+    SET_NORMALIZATION_SIDEBAR_VALUE,
+    RESET_NORMALIZATION_SIDEBAR,
+    SET_NORMALIZATION_MENU,
     //   EXPRESSION_SOURCE,
 } from "./constants";
 
@@ -385,7 +389,7 @@ const enableNodeColoringUI = function () {
 
 const adjustGeneNameForExpression = function (gene) {
     const geneName = gene.name;
-    return grnState.workbook.meta.data.workbookType === NETWORK_PPI_MODE && geneName.endsWith("p")
+    return grnState.mode === NETWORK_PPI_MODE && geneName.endsWith("p")
         ? geneName.slice(0, -1)
         : geneName;
 };
@@ -555,9 +559,10 @@ const resetDemoDropdown = () => {
 };
 
 const checkWorkbookModeSettings = () => {
+    // We check for expression data to make sure Demo 3 has node coloring off by default
     const hasExpression = hasExpressionData(grnState.workbook.expression);
 
-    if (grnState.mode === NETWORK_PPI_MODE || !hasExpression) {
+    if (grnState.mode === NETWORK_PPI_MODE) {
         grnState.nodeColoring.nodeColoringEnabled = false;
         grnState.nodeColoring.showMenu = true;
         grnState.colorOptimal = false;
@@ -565,9 +570,9 @@ const checkWorkbookModeSettings = () => {
         hideEdgeWeightOptions();
         updateModeViews();
     } else if (grnState.mode === NETWORK_GRN_MODE) {
-        grnState.nodeColoring.nodeColoringEnabled = true;
+        grnState.nodeColoring.nodeColoringEnabled = hasExpression;
         grnState.nodeColoring.showMenu = true;
-        grnState.colorOptimal = true;
+        grnState.colorOptimal = grnState.workbook.sheetType === "weighted";
         showNodeColoringMenus();
         showEdgeWeightOptions();
         updateModeViews();
@@ -1029,6 +1034,15 @@ export const updateApp = grnState => {
 
     if (grnState.workbook !== null && grnState.workbook.sheetType === "weighted") {
         showEdgeWeightOptions();
+        $(SET_NORMALIZATION_SIDEBAR_VALUE).prop("disabled", !grnState.colorOptimal);
+        $(SET_NORMALIZATION_SIDEBAR).prop("disabled", !grnState.colorOptimal);
+        $(RESET_NORMALIZATION_SIDEBAR).prop("disabled", !grnState.colorOptimal);
+        $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).prop("disabled", !grnState.colorOptimal);
+        $(GREY_EDGES_DASHED_SIDEBAR).prop("disabled", !grnState.colorOptimal);
+        const edgeColoringFunc = !grnState.colorOptimal ? "addClass" : "removeClass";
+        $(".weightedGraphOptionsMenu.edge-coloring-dependent")[edgeColoringFunc]("disabled");
+        $(SET_NORMALIZATION_MENU).prop("disabled", !grnState.colorOptimal);
+        $(GREY_EDGE_THRESHOLD_MENU).prop("disabled", !grnState.colorOptimal);
     } else if (grnState.workbook !== null && grnState.workbook.sheetType === "unweighted") {
         hideEdgeWeightOptions();
     } else {

@@ -1,7 +1,17 @@
 # Database Services
 
-This folder contains all services for database operations. **Note:** This folder does not include any script runners.
+This folder handles loading TSV/CSV data into PostgreSQL.
 
-## File Descriptions
+## Files
 
-- **`populator.py`** – Handles inserting new data into the database.
+- `populator.py`
+    - Reads input files.
+    - Matches columns to database tables.
+    - Inserts data into PostgreSQL.
+
+- `populator_runner.py`
+    - Decides which populators to run.
+    - Supports GRN, PPI, or both.
+    - Supports two inputs:
+        - `script-results` directory
+        - custom folder with schema subfolders

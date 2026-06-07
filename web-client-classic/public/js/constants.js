@@ -10,7 +10,8 @@ export const CREATE_NETWORK_MODAL = "#generateNetworkModal";
 
 export const UNWEIGHTED_DEMO_ID = ".unweighted";
 export const UNWEIGHTED_DEMO_PATH = "demo/unweighted";
-export const UNWEIGHTED_DEMO_NAME = "Demo #1: Unweighted GRN (15 genes, 28 edges)";
+export const UNWEIGHTED_DEMO_NAME =
+    "Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)";
 export const WEIGHTED_DEMO_ID = ".weighted";
 export const WEIGHTED_DEMO_PATH = "demo/weighted";
 export const WEIGHTED_DEMO_NAME =
@@ -198,4 +199,10 @@ export const VIEWPORT_OPTION_CLASS_SIDEBAR = ".boundBoxSize";
 export const NETWORK_PPI_MODE = "protein-protein-physical-interaction";
 export const NETWORK_GRN_MODE = "grn";
 
-export const TWO_COLUMN_SHEETS = ["production_rates", "degradation_rates", "threshold_b"];
+export const TWO_COLUMN_SHEETS = [
+    "production_rates",
+    "degradation_rates",
+    "threshold_b",
+    "optimized_production_rates",
+    "optimized_threshold_b",
+];

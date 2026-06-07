@@ -2,7 +2,7 @@
 
 [![DOI](https://zenodo.org/badge/16195791.svg)](https://zenodo.org/badge/latestdoi/16195791)
 [![Node.js CI](https://github.com/dondi/GRNsight/actions/workflows/node.js.yml/badge.svg)](https://github.com/dondi/GRNsight/actions/workflows/node.js.yml)
-[![Coverage Status](https://coveralls.io/repos/github/dondi/GRNsight/badge.svg?branch=main)](https://coveralls.io/github/dondi/GRNsight?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/dondi/GRNsight/badge.svg?branch=beta)](https://coveralls.io/github/dondi/GRNsight?branch=beta)
 
 http://dondi.github.io/GRNsight/
 

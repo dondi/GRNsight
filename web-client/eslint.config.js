@@ -1,12 +1,16 @@
 import prettierPlugin from "eslint-plugin-prettier";
-import prettierConfig from "./.prettierrc";
+import { readFileSync } from "node:fs";
+
+const prettierConfig = JSON.parse(
+  readFileSync(new URL("./.prettierrc.json", import.meta.url), "utf8")
+);
 
 export default [
   {
     ignores: [
       "node_modules/**",
       "coverage/**",
-      "web-client-classic/public/js/*.min.js",
+      "web-client-classic/**",
       "coverage/lcov-report/**",
       "_site/**",
       ".git/**",
@@ -16,6 +20,11 @@ export default [
     languageOptions: {
       ecmaVersion: 2020,
       sourceType: "module",
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
       globals: {
         window: "readonly",
         document: "readonly",

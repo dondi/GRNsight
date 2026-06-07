@@ -1,10 +1,9 @@
-import { useRef, useContext } from "react";
+import { useContext, useState } from "react";
 import {
   Box,
   Text,
   Button,
   Select,
-  FileInput,
   Stack,
   RangeInput,
   CheckBox,
@@ -14,21 +13,25 @@ import {
 import { Refresh, FolderOpen, Database, FormDown } from "grommet-icons";
 import { GrnStateContext } from "../App";
 import {
-  UNWEIGHTED_DEMO_NAME,
-  WEIGHTED_DEMO_NAME,
-  SCHADE_INPUT_NAME,
-  SCHADE_OUTPUT_NAME,
-  PPI_DEMO_NAME,
+  DEMO_TYPES,
+  NETWORK_GRN_MODE_SHORT,
   VIEW_SIZE_SMALL,
   VIEW_SIZE_MEDIUM,
   VIEW_SIZE_LARGE,
   FIT_TO_WINDOW,
 } from "../helpers/constants";
+import { getNetworkMode, uploadWorkbook } from "../services/api";
+import {
+  annotateWorkbookLinks,
+  extractWorkbookErrorMessage,
+  returnUploadRoute,
+  trackUploadAnalytics,
+  validateUploadFile,
+} from "../services/upload";
 import "../App.css";
 import DottedLine from "./helper-components/DottedLine";
 
 export default function Sidebar({}) {
-  const fileInputRef = useRef();
   const {
     networkMode,
     setNetworkMode,
@@ -56,13 +59,62 @@ export default function Sidebar({}) {
     setGrayThreshold,
     showGrayEdgesDashed,
     setShowGrayEdgesDashed,
-    restrictGraphToViewport,
-    setRestrictGraphToViewport,
+    setNetworkData,
     demoValue,
     setDemoValue,
     viewSize,
     setViewSize,
+    adaptive,
+    setAdaptive,
   } = useContext(GrnStateContext);
+
+  const [uploadError, setUploadError] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleFileUpload = async event => {
+    const file = event.target.files?.[0];
+    const validationError = validateUploadFile(file);
+
+    if (validationError) {
+      setUploadError(validationError);
+      event.target.value = "";
+      return;
+    }
+
+    const uploadRoute = returnUploadRoute(file.name);
+    setUploadError("");
+    setIsUploading(true);
+
+    try {
+      const workbook = await uploadWorkbook(file, uploadRoute);
+      const normalizedWorkbook =
+        uploadRoute !== "upload" || !workbook?.positiveWeights || !workbook?.negativeWeights
+          ? annotateWorkbookLinks(workbook)
+          : workbook;
+
+      setDemoValue(null);
+      setNetworkData(normalizedWorkbook);
+
+      let workbookType = normalizedWorkbook?.meta?.data?.workbookType;
+      if (file.name.toLowerCase().endsWith(".sif")) {
+        workbookType = normalizedWorkbook?.workbookType;
+      } else if (file.name.toLowerCase().endsWith(".graphml")) {
+        workbookType = NETWORK_GRN_MODE_SHORT;
+      }
+
+      try {
+        setNetworkMode(getNetworkMode(workbookType));
+      } catch {
+        // Keep current network mode text if workbookType is unknown.
+      }
+      trackUploadAnalytics();
+    } catch (error) {
+      setUploadError(extractWorkbookErrorMessage(error.data || error.message));
+    } finally {
+      setIsUploading(false);
+      event.target.value = "";
+    }
+  };
 
   return (
     <Box id="sidebar">
@@ -86,42 +138,35 @@ export default function Sidebar({}) {
               </Box>
               <Select
                 className="demo-source-dropdown"
-                pad="0px"
                 icon={<FormDown color="black" size="small" />}
-                options={[
-                  <Text>{UNWEIGHTED_DEMO_NAME}</Text>,
-                  <Text>{WEIGHTED_DEMO_NAME}</Text>,
-                  <Text>{SCHADE_INPUT_NAME}</Text>,
-                  <Text>{SCHADE_OUTPUT_NAME}</Text>,
-                  <Text>{PPI_DEMO_NAME}</Text>,
-                ]}
+                options={Object.values(DEMO_TYPES).map(name => (
+                  <Text key={name}>{name}</Text>
+                ))}
                 value={demoValue}
                 placeholder={<Text>Select a Demo</Text>}
                 onChange={({ option }) => setDemoValue(option)}
                 size="small"
               />
               <Stack anchor="center" margin={{ vertical: "6px" }}>
-                <FileInput
-                  className="file-input"
-                  ref={fileInputRef}
-                  name="file"
-                  size="small"
-                  messages={{ browse: " ", dropPrompt: "Open File" }}
-                  onChange={event => {
-                    const fileList = event.target.files;
-                    for (let i = 0; i < fileList.length; i += 1) {
-                      const file = fileList[i];
-                    }
-                  }}
-                />
                 <Box
+                  as="label"
+                  htmlFor="sidebar-file-upload"
+                  className="file-input file-input-trigger"
                   direction="row"
                   align="center"
-                  gap="small"
-                  pad="medium"
-                  onClick={() => fileInputRef.current.click()} // Trigger the hidden file input
+                  aria-disabled={isUploading}
                 >
-                  <FolderOpen />
+                  <input
+                    id="sidebar-file-upload"
+                    className="file-input-native"
+                    type="file"
+                    name="file"
+                    accept=".xlsx,.sif,.graphml"
+                    disabled={isUploading}
+                    onChange={handleFileUpload}
+                  />
+                  <FolderOpen size="14px" style={{ marginRight: "4px" }} />
+                  <Text size="14px">Open File</Text>
                 </Box>
               </Stack>
               <Button margin={{ bottom: "15px" }} className="load-from-database">
@@ -255,13 +300,9 @@ export default function Sidebar({}) {
           {/* TODO: replace with datasets from database */}
           <Select
             className="demo-source-dropdown"
-            options={[
-              <Text>{UNWEIGHTED_DEMO_NAME}</Text>,
-              <Text>{WEIGHTED_DEMO_NAME}</Text>,
-              <Text>{SCHADE_INPUT_NAME}</Text>,
-              <Text>{SCHADE_OUTPUT_NAME}</Text>,
-              <Text>{PPI_DEMO_NAME}</Text>,
-            ]}
+            options={Object.values(DEMO_TYPES).map(name => (
+              <Text key={name}>{name}</Text>
+            ))}
             value={demoValue}
             placeholder={<Text>Select a Demo</Text>}
             onChange={({ option }) => setDemoValue(option)}
@@ -277,13 +318,9 @@ export default function Sidebar({}) {
           <Select
             className="demo-source-dropdown"
             pad="0px"
-            options={[
-              <Text>{UNWEIGHTED_DEMO_NAME}</Text>,
-              <Text>{WEIGHTED_DEMO_NAME}</Text>,
-              <Text>{SCHADE_INPUT_NAME}</Text>,
-              <Text>{SCHADE_OUTPUT_NAME}</Text>,
-              <Text>{PPI_DEMO_NAME}</Text>,
-            ]}
+            options={Object.values(DEMO_TYPES).map(name => (
+              <Text key={name}>{name}</Text>
+            ))}
             value={demoValue}
             placeholder={<Text>Select a Demo</Text>}
             onChange={({ option }) => setValue(option)}
@@ -392,9 +429,9 @@ export default function Sidebar({}) {
             onChange={event => setViewSize(event.target.value)}
           />
           <CheckBox
-            checked={restrictGraphToViewport}
+            checked={!adaptive}
             label={<Text>Restrict Graph to Viewport</Text>}
-            onChange={event => setRestrictGraphToViewport(event.target.checked)}
+            onChange={event => setAdaptive(!event.target.checked)}
           />
         </Box>
       </Box>

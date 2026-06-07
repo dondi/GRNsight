@@ -156,10 +156,11 @@ module.exports = function (sif) {
         errors: errors,
         warnings: warnings,
         sheetType: workbookMeta.sheetType,
-        workbookType: workbookMeta.workbookType,
         positiveWeights: [],
         negativeWeights: [],
-        meta: {},
+        meta: {
+            data: workbookMeta,
+        },
         expression: {},
     });
 
