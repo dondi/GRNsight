@@ -67,7 +67,75 @@ description: >-
                         <div id="releaseContent" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <div class="panel-group">
-
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <p class="panel-title aboutHeaders">
+                                                <a href="#v7_8_0Content" data-toggle="collapse">
+                                                    GRNsight v7.8.0
+                                                </a>
+                                            </p>
+                                        </div>
+                                        
+                                        <div id="v7_8_0Content" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                GRNsight v7.8.0 contains enhancements and bug fixes in these areas of functionality:
+                                                <ul>
+                                                  <li>Open Excel workbook
+                                                    <ul>
+                                                        <li> Add warnings for two column sheets when the sheets have rows that are missing geneIDs but have values</li>
+                                                        <li> Add warning for extra genes in two column sheets</li>
+                                                        <li> Add warning for wrong gene order in two column sheet</li>
+                                                        <li> Make the warning message more informative for extraneous data</li>
+                                                        <li> Adjust warning messages</li>
+                                                        <li> Add warnings when some genes are missing values</li>
+                                                        <li> Do not fetch the database when sheets are optimized sheets for GRNmap</li>
+                                                    </ul>
+                                                  </li>
+                                                  <li>Import data
+                                                    <ul>
+                                                        <li> Add import warnings for optimized_threshold_b and optimized_production_rates</li>
+                                                        <li> Fix import sif and graphml files</li>
+                                                    </ul>
+                                                  </li>
+                                                  <li>Export data
+                                                    <ul>
+                                                        <li> Resolve hanging export</li>
+                                                        <li> Correct demo 1 name inconsistency</li>
+                                                        <li> Implement export option defaulting to none when no node coloring</li>
+                                                        <li> Add export warnings for optimized_threshold_b and optimized_production_rates</li>
+                                                        <li> File naming fixes</li>
+                                                    </ul>
+                                                  </li>
+                                                  <li>User interface behavior and consistency
+                                                    <ul>
+                                                        <li> Update edge coloring enabling logic to be attached to presence of network edge weights</li>
+                                                        <li> Disable edge options when Edge Coloring is turned off</li>
+                                                        <li> Network panel requires two clicks to collapse vertically</li>
+                                                        <li> Reset demo dropdown when non-demo file is loaded</li>
+                                                        <li> Making sure Select All checkbox is accurate by default checking network_weights</li>
+                                                        <li> Changing code within checkbox export popup to support sigma checkboxes</li>
+                                                        <li> Make Demo 3 have Node Coloring Off by Default</li>
+                                                    </ul>
+                                                  </li>
+                                                  <li>Database loading and import
+                                                    <ul>
+                                                        <li> Fix AllianceMine URL in data_fetcher_service.py</li>
+                                                        <li> Delete empty grnsettings folder</li>
+                                                        <li> Allow robust running when run main.py; add script to allow populate data by a specific folder; default network to all for database</li>
+                                                    </ul>
+                                                  </li>
+                                                  <li>Test suite
+                                                    <ul>
+                                                        <li> Add test files for wrong ids</li>
+                                                        <li> Test coverage for when only network/network_optimized_weights tab is present</li>
+                                                        <li> Add test file for issue</li>
+                                                    </ul>
+                                                  </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                             <p class="panel-title aboutHeaders">
