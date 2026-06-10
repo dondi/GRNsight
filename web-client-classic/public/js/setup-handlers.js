@@ -190,7 +190,6 @@ export const setupHandlers = grnState => {
         }
 
         let canvas = document.createElement("canvas");
-        //canvg(canvas, svgElement);
         const ctx = canvas.getContext("2d");
         const v = await Canvg.fromString(ctx, svgElement);
         await v.render();
