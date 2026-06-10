@@ -1,8 +1,9 @@
 import { updaters } from "./graph";
 import { updateApp, identifySpeciesMenu } from "./update-app";
 import { saveSvgAsPng } from "save-svg-as-png";
-import * as jsPDF from "jspdf";
-import canvg from "canvg";
+import { jsPDF } from "jspdf";
+import { Canvg } from "canvg";
+import { filenameWithExtension } from "./upload";
 
 import {
     HOST_SITE,
@@ -183,13 +184,17 @@ export const setupHandlers = grnState => {
         $("#exportAsSvg").attr("download", name);
     };
 
-    const exportPDF = (svgElement, name) => {
+    const exportPDF = async (svgElement, name) => {
         if (svgElement) {
             svgElement = svgElement.replace(/\r?\n|\r/g, "").trim();
         }
 
         let canvas = document.createElement("canvas");
-        canvg(canvas, svgElement);
+        //canvg(canvas, svgElement);
+        const ctx = canvas.getContext("2d");
+        const v = await Canvg.fromString(ctx, svgElement);
+        await v.render();
+
         const imgData = canvas.toDataURL("image/png");
 
         const pdf = new jsPDF("l", "mm", "letter");
@@ -236,19 +241,37 @@ export const setupHandlers = grnState => {
     // Image Export
     $(EXPORT_TO_PNG).click(() => {
         var svgContainer = document.getElementById("exportContainer");
-        var editedName = grnState.name.replace(determineFileType(grnState.name), "") + ".png";
+        var editedName = filenameWithExtension(
+            grnState.mode,
+            grnState.workbook.genes.length,
+            grnState.workbook.links.length,
+            null,
+            "png"
+        );
         saveSvgAsPng(svgContainer, editedName, { backgroundColor: "white" });
     });
 
     $(EXPORT_TO_SVG).click(() => {
         var svgContainer = document.getElementById("exportContainer");
-        var editedName = grnState.name.replace(determineFileType(grnState.name), "") + ".svg";
+        var editedName = filenameWithExtension(
+            grnState.mode,
+            grnState.workbook.genes.length,
+            grnState.workbook.links.length,
+            null,
+            "svg"
+        );
         exportSVG(svgContainer, editedName);
     });
 
-    $(EXPORT_TO_PDF).click(() => {
+    $(EXPORT_TO_PDF).click(async () => {
         var svgContainer = document.getElementById("exportContainer").innerHTML;
-        var editedName = grnState.name.replace(determineFileType(grnState.name), "") + ".pdf";
+        var editedName = filenameWithExtension(
+            grnState.mode,
+            grnState.workbook.genes.length,
+            grnState.workbook.links.length,
+            null,
+            "pdf"
+        );
         exportPDF(svgContainer, editedName);
     });
 
