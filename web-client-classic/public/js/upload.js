@@ -82,6 +82,18 @@ export const filenameWithExtension = function (mode, genes, edges, type, extensi
     return `${filename}.${extension}`;
 };
 
+export const determineWorkbookType = function () {
+    const workbookSheets = $("input[name=workbookSheets]:checked");
+    for (const [key, value] of Object.entries(workbookSheets)) {
+        if (!isNaN(parseInt(key, 10))) {
+            if (value.value === "network_optimized_weights") {
+                return "weighted";
+            }
+        }
+    }
+    return "unweighted";
+};
+
 export const upload = function () {
     // Values
     var TOOLTIP_SHOW_DELAY = 700;
@@ -471,18 +483,6 @@ export const upload = function () {
         finalExportSheets = await fetchTwoColumnSheets(finalExportSheets, chosenSheets, source);
 
         handleExpressionDataAndExport(route, extension, sheetType, source, finalExportSheets);
-    };
-
-    const determineWorkbookType = function () {
-        const workbookSheets = $("input[name=workbookSheets]:checked");
-        for (const [key, value] of Object.entries(workbookSheets)) {
-            if (!isNaN(parseInt(key, 10))) {
-                if (value.value === "network_optimized_weights") {
-                    return "weighted";
-                }
-            }
-        }
-        return "unweighted";
     };
 
     var performExport = function (route, extension, sheetType, source) {

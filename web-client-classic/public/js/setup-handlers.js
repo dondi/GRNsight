@@ -4,6 +4,7 @@ import { saveSvgAsPng } from "save-svg-as-png";
 import { jsPDF } from "jspdf";
 import { Canvg } from "canvg";
 import { filenameWithExtension } from "./upload";
+import { determineWorkbookType } from "./upload";
 
 import {
     HOST_SITE,
@@ -244,7 +245,7 @@ export const setupHandlers = grnState => {
             grnState.mode,
             grnState.workbook.genes.length,
             grnState.workbook.links.length,
-            null,
+            determineWorkbookType(),
             "png"
         );
         saveSvgAsPng(svgContainer, editedName, { backgroundColor: "white" });
@@ -256,7 +257,7 @@ export const setupHandlers = grnState => {
             grnState.mode,
             grnState.workbook.genes.length,
             grnState.workbook.links.length,
-            null,
+            determineWorkbookType(),
             "svg"
         );
         exportSVG(svgContainer, editedName);
@@ -268,7 +269,7 @@ export const setupHandlers = grnState => {
             grnState.mode,
             grnState.workbook.genes.length,
             grnState.workbook.links.length,
-            null,
+            determineWorkbookType(),
             "pdf"
         );
         exportPDF(svgContainer, editedName);
