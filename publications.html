@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Publications
-modified: 5/18/2026
+modified: 6/11/2026
 description: Papers, talks, and posters about GRNsight, a web application and service for visualizing models of small-scale gene regulatory and protein-protein interaction networks.
 ---
             <p id="pageTitle">Publications</p>
@@ -320,6 +320,17 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
 
                         <div id="posters" class="panel-collapse collapse">
                             <div class="panel-body">
+
+                               <p class="abstract">
+                                    <b>Yeast Genetics Meeting, Asilomar Conference Grounds, Pacific Grove, California</a></b><br>
+                                    <b>June 13-17, 2026</b><br><br>
+                                    Sensitivity analysis of GRNmap and new features for GRNsight: open source software for dynamical systems modeling and visualization of small-scale gene regulatory networks in yeast<br>
+                                    <b>Kam D. Dahlquist</b>, Ben G. Fitzpatrick, John David N. Dionisio, Ngoc K. Tran, Nikki C. Chun, Cecilia J. Zaragoza, Amelie T. Dinh, Milka Y. Zekarias, Jia S. Garcia, Alex J. Miller, Cindy L. Tong<br><br>
+
+                                    Abstract: A gene regulatory network (GRN) is a set of transcription factors that regulate the expression of genes encoding other transcription factors. The dynamics of GRNs explain how gene expression changes over time. GRNmap is an open-source MATLAB package that uses ordinary differential equations to model dynamics of small-scale GRNs. The program estimates production rates, expression thresholds, and regulatory weights for each transcription factor in the network based on experimentally derived gene expression and degradation rate data and then performs forward simulations of model dynamics. While the model has been successfully used to understand networks of 15-20 genes that regulate the response to the environmental stress of cold shock in budding yeast, Saccharomyces cerevisiae, we wanted to closely examine how it works on a smaller scale to determine parameter sensitivity. All 21 possible “toy” networks of 3 nodes and 4 edges were created, which fall into 11 families of network motifs such as “feed-forward loops”, “mutual-in”, and “fan-in”, among others. Parameters were estimated from simulated expression data output when known arbitrary weight parameters (-2, -1, 1, 2) underwent a forward simulation. Then the simulated data was used to estimate the parameters again. Comparison of the known to estimated parameters showed that estimating production rates in addition to weights and thresholds reduced the accuracy of the results. The model was also sensitive to the direction and magnitude of the arbitrary weight parameters for networks with the same connectivity. To better understand the influence of the weight parameters, we generated all twenty-four possible weight permutations for a few network motifs. By evaluating the permuted network model results, we can better understand why certain network motifs are more prevalent in natural GRNs. To facilitate interpretation of model results, we developed GRNsight, an open-source web application for visualizing models of GRNs, automatically displaying a graph where edges are color-coded based on the activation and repression relationships, and nodes are color-coded with time course gene expression data. Backend yeast gene expression, gene regulatory network, and protein-protein physical interaction databases based on data from NCBI GEO and SGD AllianceMine allow users to generate a network, color the nodes with expression data, and export an Excel workbook for modeling in GRNmap. Software is available at http://kdahlquist.github.io/GRNmap/ and https://dondi.github.io/GRNsight/<br><br>
+                                     <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/posters/Dahlquist-et-al_Yeast-Genetics_2026.pdf" target="_blank">Click here</a> to view the poster. <br><br>
+                                </p>
+                                        
                                     <p class="abstract">
                                     <b>Loyola Marymount University 18<sup>th</sup> Annual Undergraduate Research Symposium</a></b><br>
                                     <b>March 20, 2026</b><br><br>
