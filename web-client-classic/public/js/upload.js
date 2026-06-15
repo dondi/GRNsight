@@ -55,14 +55,24 @@ export const filenameWithExtension = function (mode, genes, edges, type, extensi
         filename = filename.substr(0, filename.length - currentExtension[0].length);
     }
     if (mode === NETWORK_GRN_MODE && extension === "xlsx") {
-        source = $("input[name=expressionSource]:checked")[0].value;
-        if (source === "none") {
+        const anyExpressionChecked = $("input[name=workbookSheets]:checked")
+            .toArray()
+            .some(
+                el => el.value && (el.value.includes("expression") || el.value.includes("sigma"))
+            );
+
+        if (anyExpressionChecked) {
+            source = $("input[name=expressionSource]:checked")[0].value;
+            if (source === "none") {
+                source = null;
+            } else if (source === "userInput") {
+                // only demos will have an expression source
+                source = grnState.workbook.expression.source
+                    ? grnState.workbook.expression.source
+                    : "user-data";
+            }
+        } else {
             source = null;
-        } else if (source === "userInput") {
-            // only demos will have an expression source
-            source = grnState.workbook.expression.source
-                ? grnState.workbook.expression.source
-                : "user-data";
         }
     }
 
@@ -135,6 +145,48 @@ export const upload = function () {
             delete link.weightElement;
         });
         return result;
+    };
+
+    var filenameWithExtension = function (mode, genes, edges, type, extension) {
+        var filename = $("#fileName").text();
+        var source = null;
+        var currentExtension = filename.match(/\.[^\.]+$/);
+        if (currentExtension && currentExtension.length) {
+            filename = filename.substr(0, filename.length - currentExtension[0].length);
+        }
+        if (mode === NETWORK_GRN_MODE && extension === "xlsx") {
+            const anyExpressionChecked = $("input[name=workbookSheets]:checked")
+                .toArray()
+                .some(
+                    el =>
+                        el.value && (el.value.includes("expression") || el.value.includes("sigma"))
+                );
+
+            if (anyExpressionChecked) {
+                source = $("input[name=expressionSource]:checked")[0].value;
+                if (source === "none") {
+                    source = null;
+                } else if (source === "userInput") {
+                    // only demos will have an expression source
+                    source = grnState.workbook.expression.source
+                        ? grnState.workbook.expression.source
+                        : "user-data";
+                }
+            } else {
+                source = null;
+            }
+        }
+
+        if (mode !== NETWORK_GRN_MODE) {
+            mode = "PPI";
+        }
+        if (mode !== null && genes !== null && edges !== null && type !== null) {
+            filename = `${mode.toUpperCase()}_${genes}-genes_${edges}-edges_${type}`;
+        }
+        if (source) {
+            filename = `${filename}_${source}`;
+        }
+        return `${filename}.${extension}`;
     };
 
     const download = (workbook, route, extension, sheetType) => {
