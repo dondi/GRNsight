@@ -55,7 +55,7 @@ module.exports = {
                 warningCode: `MISSING_OR_EMPTY_${sheetName.toUpperCase()}_SHEET`,
                 errorDescription: [
                     isMissing
-                        ? `There was no "${sheetName}" sheet in the imported workbook.`
+                        ? `There was no "${sheetName}" sheet in the exported workbook.`
                         : `The "${sheetName}" sheet was empty in the exported workbook.`,
                     prefix
                         ? `GRNsight is checking because a ${sheetName.split("_")[1] + " " + sheetName.split("_")[2]} value should have been provided as GRNmap output, but will not affect the display of the graph in GRNsight.`
@@ -71,7 +71,7 @@ module.exports = {
                 errorDescription: [
                     `There were no ${missingType} supplied`,
                     `in the "${sheetName}" sheet in the exported workbook.`,
-                    `GRNsight has supplied ${dataSourceForTwoColumnSheet[sheetName]}.`,
+                    `GRNsight is checking because a ${sheetName.split("_")[0] + " " + sheetName.split("_")[1]} value should have been provided as GRNmap output, but will not affect the display of the graph in GRNsight.`,
                 ].join(" "),
             };
         },
