@@ -143,7 +143,6 @@ export default function Graph() {
     }
   }, [networkData]);
 
-  // TODO: need to update with adaptive (restrict to viewport)
   useEffect(() => {
     if (!zoomRef.current || !svgRef.current || !zoomContainerRef.current) return;
     const scale = zoomPercent / 100;
@@ -522,10 +521,7 @@ export default function Graph() {
             ? getSelfReferringRadius(selfReferringEdge) + selfReferringEdge.strokeWidth + 2
             : 0;
           let rightBoundary =
-            widthBoundingBox.current -
-            (d.textWidth + NODE_POS_OFFSET) -
-            BOUNDARY_MARGIN -
-            selfReferringEdgeWidth;
+            widthBoundingBox.current - nodeWidth - BOUNDARY_MARGIN - selfReferringEdgeWidth;
           if (!adaptive) {
             rightBoundary =
               getRightXBoundaryMargin(
@@ -535,7 +531,7 @@ export default function Graph() {
                 widthBoundingBox.current,
                 nodeWidth
               ) -
-              (d.textWidth + NODE_POS_OFFSET) -
+              nodeWidth -
               selfReferringEdgeWidth;
           }
           // currentXPos bounds the graph when toggle to !adaptive and moves each of the nodes to be in bounds
