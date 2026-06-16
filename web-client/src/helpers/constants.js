@@ -61,6 +61,10 @@ export const VIEW_SIZE_DIMENSIONS = {
 export const WIDTH_OFFSET = 255;
 export const HEIGHT_OFFSET = 53;
 
+// Load From Database Modal
+export const MAX_GENES = 75;
+export const MAX_EDGES = 100;
+
 // Zoom
 export const ZOOM_DISPLAY_MINIMUM = 25;
 export const ZOOM_MIN_DISPLAY = ZOOM_DISPLAY_MINIMUM;

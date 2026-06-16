@@ -1,8 +1,11 @@
+import { color } from "d3";
+
 export const theme = {
   global: {
     colors: {
       text: "#333",
       control: "blue",
+      disabled: "#ccc",
     },
     font: {
       family: "Helvetica Neue, Helvetica, Arial, sans-serif",
@@ -81,13 +84,39 @@ export const theme = {
     active: {
       default: {
         border: {
-          width: "0px",
+          width: "1px",
+          color: "#ccc",
+          radius: "4px",
         },
       },
     },
     border: {
-      width: "0px",
+      width: "1px",
+      color: "#ccc",
+      radius: "4px",
     },
+    extend: `
+      /* Keep navbar buttons borderless without using !important */
+      .navbar &,
+      .navbar &:hover,
+      .navbar &:focus,
+      .navbar &:focus-visible,
+      .navbar &:active {
+        border: none;
+        background-color: transparent;
+        box-shadow: none;
+      }
+
+      border-radius: 4px;
+      &:hover,
+      &:focus,
+      &:focus-visible,
+      &:active {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-shadow: none;
+      }
+    `,
   },
   fileInput: {
     message: {
@@ -106,6 +135,36 @@ export const theme = {
         style: "solid",
         color: "light-4",
       },
+    },
+  },
+  select: {
+    icons: {
+      color: "black",
+      size: "medium",
+    },
+    container: {
+      extend: `
+        [role="option"]:hover,
+        button[role="option"]:hover,
+        [role="option"] button:hover {
+          background-color: #f2f2f2;
+          color: #333;
+          border-color: transparent;
+        }
+
+        [role="option"][aria-selected="true"],
+        button[role="option"][aria-selected="true"],
+        [role="option"] button[aria-selected="true"] {
+          background-color: #ebebeb;
+          color: #333;
+        }
+
+        [role="option"] *,
+        button[role="option"] *,
+        [role="option"] button * {
+          color: inherit;
+        }
+      `,
     },
   },
 };

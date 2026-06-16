@@ -1,4 +1,4 @@
-import { useContext, useState, useMemo, useRef } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { GrnStateContext } from "../App";
 import {
   ZOOM_DISPLAY_MINIMUM,
@@ -23,6 +23,27 @@ export default function ScaleAndScroll({ getViewportBoundsData }) {
   const frame = useRef(null);
   const [zoomSliderValue, setZoomSliderValue] = useState(null);
   const { zoomPercent, setZoomPercent, networkMode, adaptive } = useContext(GrnStateContext);
+
+  const mapPercentToSlider = percent => {
+    if (percent <= ZOOM_DISPLAY_MIDDLE) {
+      return (
+        ((percent - ZOOM_DISPLAY_MINIMUM) / (ZOOM_DISPLAY_MIDDLE - ZOOM_DISPLAY_MINIMUM)) *
+          (ZOOM_SLIDER_MIDDLE - ZOOM_SLIDER_MIN) +
+        ZOOM_SLIDER_MIN
+      );
+    }
+
+    return (
+      ((percent - ZOOM_DISPLAY_MIDDLE) / (ZOOM_DISPLAY_MAXIMUM - ZOOM_DISPLAY_MIDDLE)) *
+        (ZOOM_SLIDER_MAX - ZOOM_SLIDER_MIDDLE) +
+      ZOOM_SLIDER_MIDDLE
+    );
+  };
+
+  // Keep slider thumb position in sync when zoomPercent is changed externally.
+  useEffect(() => {
+    setZoomSliderValue(mapPercentToSlider(zoomPercent));
+  }, [zoomPercent]);
 
   const handleSliderChange = event => {
     const sliderInput = parseFloat(event.target.value);

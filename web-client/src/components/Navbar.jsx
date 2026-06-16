@@ -1,10 +1,12 @@
-import { useContext, useState } from "react";
-import { Nav, DropButton, Box, Text, Button, TextInput, Select } from "grommet";
+import { useContext, useEffect, useState } from "react";
+import { Nav, DropButton, Box, Text, Button, TextInput } from "grommet";
 import { Refresh, Checkmark, FolderOpen, CaretRightFill } from "grommet-icons";
 import { GrnStateContext } from "../App";
 import {
   DEMO_TYPES,
+  NETWORK_GRN_MODE_FULL,
   NETWORK_GRN_MODE_SHORT,
+  NETWORK_PPI_MODE_FULL,
   LIGHT_GREEN,
   LIGHT_GRAY,
   MEDIUM_GRAY,
@@ -29,11 +31,13 @@ import DottedLine from "./helper-components/DottedLine";
 import DropdownMenuButton from "./helper-components/DropdownMenuButton";
 import OptionalCheckmark from "./helper-components/OptionalCheckmark";
 import "../App.css";
+import LoadFromDbModal from "./LoadFromDbModal";
 
 export default function Navbar({}) {
   const [zoomTextInput, setZoomTextInput] = useState(ZOOM_DISPLAY_MIDDLE);
   const [uploadError, setUploadError] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+  const [openMenu, setOpenMenu] = useState(null);
   const {
     networkMode,
     setNetworkMode,
@@ -72,6 +76,13 @@ export default function Navbar({}) {
     setAdaptive,
   } = useContext(GrnStateContext);
 
+  const isZoomControlDisabled =
+    networkMode !== NETWORK_GRN_MODE_FULL && networkMode !== NETWORK_PPI_MODE_FULL;
+
+  useEffect(() => {
+    setZoomTextInput(zoomPercent);
+  }, [zoomPercent]);
+
   const valueValidator = (min, max, value) => {
     return Math.min(max, Math.max(min, value));
   };
@@ -81,9 +92,35 @@ export default function Navbar({}) {
   };
 
   const handleZoomInputChange = event => {
-    setZoomPercent(zoomInputValidator(event.target.value));
-    setZoomTextInput(event.target.value);
+    const rawValue = event.target.value;
+    setZoomTextInput(rawValue);
+
+    // Let users clear the field while typing without snapping to min zoom.
+    if (rawValue === "") {
+      return;
+    }
+
+    const numericValue = Number(rawValue);
+    if (Number.isNaN(numericValue)) {
+      return;
+    }
+
+    setZoomPercent(zoomInputValidator(numericValue));
   };
+
+  const handleDropContentClick = event => {
+    if (event.target.closest(".demo-dropdown-navbar")) {
+      return;
+    }
+
+    // Allow focusing/typing in inputs without immediately closing the menu.
+    if (event.target.closest('input, textarea, [contenteditable="true"], [role="textbox"]')) {
+      return;
+    }
+
+    setOpenMenu(null);
+  };
+
 
   const handleFileUpload = async event => {
     const file = event.target.files?.[0];
@@ -132,8 +169,6 @@ export default function Navbar({}) {
   };
 
   return (
-    // TODO: need to make sure that sizing of elements is okay and consistent because right now proportions look right at 50% view
-    // TODO: need to set max-width of nav? or maybe it's okay for now
     <Nav
       className="navbar"
       direction="row"
@@ -144,31 +179,47 @@ export default function Navbar({}) {
     >
       <DropButton
         label="Network"
+        open={openMenu === "network"}
+        onOpen={() => setOpenMenu("network")}
+        onClose={() => setOpenMenu(null)}
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <div className="dropdown-menu">
+          <div className="dropdown-menu" onClickCapture={handleDropContentClick}>
             <Text weight="bold" margin={{ left: "12px" }}>
               Network Source
             </Text>
-            {/* TODO: need to make sure there is a top margin, but adding a 7px top margin causes the buttons to display 7px shifted down */}
-            {/* TODO: need to style options to have no padding/margin */}
-            <Box pad={{ left: "30px", bottom: "5px" }}>
-              <Select
+            <Box pad={{ left: "10px", bottom: "5px" }}>
+              <DropButton
                 className="demo-dropdown-navbar"
-                icon={<CaretRightFill color={LIGHT_GRAY} />}
+                icon={false}
+                label={
+                  <Box direction="row" align="center" justify="between" width="100%">
+                    <Text>Demo</Text>
+                    <CaretRightFill color={LIGHT_GRAY} />
+                  </Box>
+                }
                 dropAlign={{ top: "top", bottom: "top", left: "right", right: "left" }}
-                options={Object.values(DEMO_TYPES).map(name => (
-                  <Text key={name}>{name}</Text>
-                ))}
-                value={<Text>Demo</Text>}
-                placeholder={<Text>Demo</Text>}
-                onChange={({ option }) => setDemoValue(option)}
-                size="small"
+                dropContent={
+                  <div className="dropdown-menu demo-dropdown-menu">
+                    {Object.values(DEMO_TYPES).map(demo => (
+                      <Button
+                        pad="100px"
+                        key={demo}
+                        onClick={() => {
+                          setDemoValue(demo);
+                          setOpenMenu(null);
+                        }}
+                      >
+                        <Text>{demo}</Text>
+                      </Button>
+                    ))}
+                  </div>
+                }
               />
             </Box>
             <DottedLine width="95%" />
-            <Box pad={{ left: "30px", top: "7px", bottom: "5px" }}>
+            <Box pad={{ left: "30px", top: "7px", bottom: "5px", right: "30px" }}>
               <Box
                 as="label"
                 htmlFor="navbar-file-upload"
@@ -194,9 +245,7 @@ export default function Navbar({}) {
             </Box>
             <DottedLine width="95%" />
             <Box>
-              <Button margin={{ top: "7px", right: "20px", left: "30px" }}>
-                <Text>Load from Database...</Text>
-              </Button>
+              <LoadFromDbModal margin={{ top: "7px", right: "20px", left: "20px" }} />
             </Box>
             <DottedLine />
             <Box>
@@ -206,17 +255,11 @@ export default function Navbar({}) {
               </Button>
             </Box>
             <DottedLine />
-            <Text weight="bold" margin={{ left: "12px" }}>
-              Network Mode
-            </Text>
-            {/* TODO: only display checkmark if selected view */}
-            {/* TODO: need to display text in gray when disabled */}
+            <Text margin={{ left: "12px" }}>Network Mode</Text>
             <Box margin={{ left: "50px" }}>
               <Text color={DARK_GRAY}>{networkMode}</Text>
             </Box>
-            <Text weight="bold" margin={{ left: "12px" }}>
-              Species
-            </Text>
+            <Text margin={{ left: "12px" }}>Species</Text>
             <Box direction="row" margin={{ left: "50px" }}>
               <Text color={DARK_GRAY}>Saccharomyces cerevisiae</Text>
             </Box>
@@ -226,10 +269,13 @@ export default function Navbar({}) {
 
       <DropButton
         label="Layout"
+        open={openMenu === "layout"}
+        onOpen={() => setOpenMenu("layout")}
+        onClose={() => setOpenMenu(null)}
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <div className="dropdown-menu">
+          <div className="dropdown-menu" onClickCapture={handleDropContentClick}>
             <Box pad={{ left: "12px" }}>
               <Text>Graph Options</Text>
             </Box>
@@ -279,12 +325,15 @@ export default function Navbar({}) {
 
       <DropButton
         label="Node"
+        open={openMenu === "node"}
+        onOpen={() => setOpenMenu("node")}
+        onClose={() => setOpenMenu(null)}
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
           <div>
             {enableNodeColoring ? (
-              <div className="dropdown-menu">
+              <div className="dropdown-menu" onClickCapture={handleDropContentClick}>
                 <Box pad={{ horizontal: "20px", vertical: "3px" }}>
                   <Button onClick={() => setEnableNodeColoring(false)}>
                     <Checkmark size="small" />
@@ -292,7 +341,6 @@ export default function Navbar({}) {
                   </Button>
                 </Box>
                 <DottedLine />
-                {/* TODO: maybe instead do a collapsible instead of a tip */}
                 <Box pad={{ horizontal: "45px", vertical: "3px" }}>
                   <Button>
                     <Text>Select Top Dataset</Text>
@@ -327,7 +375,7 @@ export default function Navbar({}) {
                 </Box>
               </div>
             ) : (
-              <div className="dropdown-menu">
+              <div className="dropdown-menu" onClickCapture={handleDropContentClick}>
                 <Box pad={{ horizontal: "20px", vertical: "3px" }}>
                   <Button onClick={() => setEnableNodeColoring(true)}>
                     <Text margin={{ left: "12px" }}>Enable Node Coloring</Text>
@@ -341,10 +389,13 @@ export default function Navbar({}) {
 
       <DropButton
         label="Edge"
+        open={openMenu === "edge"}
+        onOpen={() => setOpenMenu("edge")}
+        onClose={() => setOpenMenu(null)}
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <div className="dropdown-menu">
+          <div className="dropdown-menu" onClickCapture={handleDropContentClick}>
             <Box pad={{ horizontal: "20px", vertical: "3px" }}>
               <Button onClick={() => setColorOptimal(!colorOptimal)}>
                 {colorOptimal && <Checkmark size="small" />}
@@ -408,10 +459,13 @@ export default function Navbar({}) {
 
       <DropButton
         label="View"
+        open={openMenu === "view"}
+        onOpen={() => setOpenMenu("view")}
+        onClose={() => setOpenMenu(null)}
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <div className="dropdown-menu">
+          <div className="dropdown-menu" onClickCapture={handleDropContentClick}>
             <Text margin={{ left: "small" }}>Viewport Size</Text>
             <Box pad={{ horizontal: "20px", top: "3px" }}>
               <Button onClick={() => setViewSize(VIEW_SIZE_SMALL)}>
@@ -447,10 +501,14 @@ export default function Navbar({}) {
 
             <DottedLine />
             <Box pad={{ horizontal: "20px", vertical: "3px" }} direction="row">
-              <Text>
+              <Text color={isZoomControlDisabled ? "disabled" : undefined}>
                 Zoom ({ZOOM_DISPLAY_MINIMUM} - {ZOOM_DISPLAY_MAXIMUM})
               </Text>{" "}
-              <TextInput value={zoomTextInput} onChange={event => handleZoomInputChange(event)} />
+              <TextInput
+                value={zoomTextInput}
+                onChange={event => handleZoomInputChange(event)}
+                disabled={isZoomControlDisabled}
+              />
             </Box>
           </div>
         }
@@ -458,10 +516,13 @@ export default function Navbar({}) {
 
       <DropButton
         label="Export"
+        open={openMenu === "export"}
+        onOpen={() => setOpenMenu("export")}
+        onClose={() => setOpenMenu(null)}
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <div className="dropdown-menu">
+          <div className="dropdown-menu" onClickCapture={handleDropContentClick}>
             <DropdownMenuButton text="Export Data" />
             <DropdownMenuButton text="Export Image" />
             <DropdownMenuButton text="Print" />
@@ -471,27 +532,53 @@ export default function Navbar({}) {
 
       <DropButton
         label="Help"
+        open={openMenu === "help"}
+        onOpen={() => setOpenMenu("help")}
+        onClose={() => setOpenMenu(null)}
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <div className="dropdown-menu">
-            <DropdownMenuButton text="Getting Started" />
-            <DropdownMenuButton text="GRNsight Wiki" />
-            <DropdownMenuButton text="About GRNsight" />
+          <div className="dropdown-menu" onClickCapture={handleDropContentClick}>
+            <DropdownMenuButton
+              text="Getting Started"
+              href={
+                "https://dondi.github.io/GRNsight/documentation.html#gettingStarted"
+              }
+              onClick={() => setOpenMenu(null)}
+            />
+            <DropdownMenuButton
+              text="GRNsight Wiki"
+              href={"https://github.com/dondi/GRNsight/wiki"}
+              onClick={() => setOpenMenu(null)}
+            />
+            <DropdownMenuButton
+              text="About GRNsight"
+              href={"https://dondi.github.io/GRNsight/about.html"}
+              onClick={() => setOpenMenu(null)}
+            />
           </div>
         }
       />
 
-      {/* TODO: set width so that shorter and wider window like web-client-classic */}
       <DropButton
         label="Demo"
+        open={openMenu === "demo"}
+        onOpen={() => setOpenMenu("demo")}
+        onClose={() => setOpenMenu(null)}
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         icon={false}
         dropContent={
-          <div className="dropdown-menu">
+          <div className="dropdown-menu demo-dropdown-menu" onClickCapture={handleDropContentClick}>
             {Object.values(DEMO_TYPES).map(demo => (
-              <Button pad="100px" key={demo} onClick={() => setDemoValue(demo)}>
+              <Button
+                pad="100px"
+                key={demo}
+                onClick={() => {
+                  setDemoValue(demo);
+                  setOpenMenu(null);
+                }}
+              >
                 <Text>{demo}</Text>
               </Button>
             ))}
