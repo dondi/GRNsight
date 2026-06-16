@@ -10,7 +10,7 @@ import {
   TextInput,
   RadioButtonGroup,
 } from "grommet";
-import { Refresh, FolderOpen, Database, FormDown } from "grommet-icons";
+import { Refresh, FolderOpen } from "grommet-icons";
 import { GrnStateContext } from "../App";
 import {
   DEMO_TYPES,
@@ -30,6 +30,7 @@ import {
 } from "../services/upload";
 import "../App.css";
 import DottedLine from "./helper-components/DottedLine";
+import LoadFromDbModal from "./LoadFromDbModal";
 
 export default function Sidebar({}) {
   const {
@@ -138,14 +139,12 @@ export default function Sidebar({}) {
               </Box>
               <Select
                 className="demo-source-dropdown"
-                icon={<FormDown color="black" size="small" />}
-                options={Object.values(DEMO_TYPES).map(name => (
-                  <Text key={name}>{name}</Text>
-                ))}
+                options={Object.values(DEMO_TYPES)}
+                dropProps={{ className: "demo-source-dropdown-drop" }}
                 value={demoValue}
                 placeholder={<Text>Select a Demo</Text>}
                 onChange={({ option }) => setDemoValue(option)}
-                size="small"
+                size="14px"
               />
               <Stack anchor="center" margin={{ vertical: "6px" }}>
                 <Box
@@ -169,12 +168,9 @@ export default function Sidebar({}) {
                   <Text size="14px">Open File</Text>
                 </Box>
               </Stack>
-              <Button margin={{ bottom: "15px" }} className="load-from-database">
-                <Box pad={{ vertical: "6px", horizontal: "12px" }} direction="row" gap="4px">
-                  <Database size="14px" />
-                  <Text size="14px">Load from Database</Text>
-                </Box>
-              </Button>
+              <Box margin={{ bottom: "15px" }}>
+                <LoadFromDbModal />
+              </Box>
             </Box>
           </Box>
           <DottedLine width="95%" />
@@ -300,9 +296,8 @@ export default function Sidebar({}) {
           {/* TODO: replace with datasets from database */}
           <Select
             className="demo-source-dropdown"
-            options={Object.values(DEMO_TYPES).map(name => (
-              <Text key={name}>{name}</Text>
-            ))}
+            options={Object.values(DEMO_TYPES)}
+            dropProps={{ className: "demo-source-dropdown-drop" }}
             value={demoValue}
             placeholder={<Text>Select a Demo</Text>}
             onChange={({ option }) => setDemoValue(option)}
@@ -318,12 +313,11 @@ export default function Sidebar({}) {
           <Select
             className="demo-source-dropdown"
             pad="0px"
-            options={Object.values(DEMO_TYPES).map(name => (
-              <Text key={name}>{name}</Text>
-            ))}
+            options={Object.values(DEMO_TYPES)}
+            dropProps={{ className: "demo-source-dropdown-drop" }}
             value={demoValue}
             placeholder={<Text>Select a Demo</Text>}
-            onChange={({ option }) => setValue(option)}
+            onChange={({ option }) => setDemoValue(option)}
             size="small"
           />
           <CheckBox

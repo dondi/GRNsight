@@ -49,13 +49,17 @@ module.exports = {
         },
 
         MISSING_OR_EMPTY_TWO_COLUMN_SHEET: function (sheetName, isMissing) {
+            const prefix = sheetName.includes("optimized");
+
             return {
                 warningCode: `MISSING_OR_EMPTY_${sheetName.toUpperCase()}_SHEET`,
                 errorDescription: [
                     isMissing
                         ? `There was no "${sheetName}" sheet in the imported workbook.`
                         : `The "${sheetName}" sheet was empty in the exported workbook.`,
-                    `GRNsight has supplied ${dataSourceForTwoColumnSheet[sheetName]}.`,
+                    prefix
+                        ? `GRNsight is checking because a ${sheetName.split("_")[1] + " " + sheetName.split("_")[2]} value should have been provided as GRNmap output, but will not affect the display of the graph in GRNsight.`
+                        : `GRNsight has supplied ${dataSourceForTwoColumnSheet[sheetName]}.`,
                 ].join(" "),
             };
         },

@@ -17,7 +17,7 @@ var parseAdditionalSheet = require(
 
 var exportController = require(__dirname + "/../server/controllers/export-controller")();
 
-// changed network parser to preserve all network sheets instead of choosing the best and throwing awway rhe rest
+// changed network parser to preserve all network sheets instead of choosing the best and throwing away the rest
 // this helper method chooses the best network sheet, so prior implemented test behaviour doesn't crash
 var parseNetworkSheet = sheet => {
     var allNetworks = parseAllNetworkSheet.networks(sheet);
@@ -28,7 +28,7 @@ var parseNetworkSheet = sheet => {
         return allNetworks.networkOptimizedWeights;
     } else {
         // Network is the default network. If network_optimized_weights does not exist, then we will want to return the
-        // network sheet. If both network_optimized_weights and network do not exist, it returns an empty initalized
+        // network sheet. If both network_optimized_weights and network do not exist, it returns an empty initialized
         // network object with an error saying no network sheet detected.
         return allNetworks.network;
     }
@@ -505,6 +505,14 @@ const missingAllGenesInTwoColumnSheetWarning = (input, frequency, sheetName, exp
 const missingAllValuesForGenes = function (input, frequency, sheetName, expectedText) {
     const expectedWarningCode = `MISSING_ALL_VALUES_${sheetName.toUpperCase()}`;
     testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode, expectedText);
+};
+
+const loadsWithoutFatalError = function (input) {
+    const sheet = xlsx.parse(input);
+
+    assert.doesNotThrow(function () {
+        spreadsheetController.crossSheetInteractions(sheet);
+    });
 };
 
 const missingGenesAndValuesInTwoColumnSheetsWarning = (
@@ -1005,3 +1013,5 @@ exports.importExportReImportNoErrorsOrWarnings = importExportReImportNoErrorsOrW
 exports.importFileSameAsExportFile = importFileSameAsExportFile;
 
 exports.wrongCellA1Error = wrongCellA1Error;
+
+exports.loadsWithoutFatalError = loadsWithoutFatalError;

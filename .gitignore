@@ -84,6 +84,7 @@ Backup of *.doc*
 .env
 web-client/.vite/deps/
 dist/
+web-client-classic/public/js/vendors-node_modules_canvg*
 
 # Ignore Python __pycache__ folder
 __pycache__/.nyc_output/

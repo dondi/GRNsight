@@ -23,6 +23,10 @@ For example, to access your local PostgreSQL database, use the following command
 ```
 psql postgresql://localhost/postgres
 ```
+or
+```
+psql -U postgres postgresql://localhost/postgres
+```
 
 ## Creating Schemas and Adding Table Specifications
 
@@ -35,7 +39,7 @@ GRNsight requires six schemas, one for each of the following namespaces:
 5. `gene_regulatory_network` (this is the old schema for the gene regulatory network database before 2025 - this namepsace can be empty because we no longer load data into this namespace)
 6. `protein_protein_interactions` (this is the old schema for the protein protein interactions database before 2025 - this namepsace can be empty because we no longer load data into this namespace)
 
-The scripts already contain the command to create the schema for you. Each schema requires a set of table definitions. You can add these by running the following commands, each corresponding to an SQL file that defines the structure for each schema.
+The scripts already contain the commands to create the schemas for you. Each schema requires a set of table definitions. You can add these by running the following commands, each corresponding to an SQL file that defines the structure for each schema.
 
 First, outside of postgres, navigate to the `schema` folder in your local copy of the GRNsight repository:
 ```
@@ -75,7 +79,7 @@ Once these steps are completed, your database will be set up and ready to accept
 
 The `settings` table stores the default expression dataset name that is used for the node coloring dropdown menu in GRNsight.
 
-To change the default expression dataset name, follow these steps:
+You need to change the default expression dataset name by following these steps:
 
 1. **Log in to the Database**
 
@@ -106,4 +110,4 @@ To change the default expression dataset name, follow these steps:
 
 ### 2. Other databases
 
-For other databases, continue follow the instructions in the [README.md](https://github.com/dondi/GRNsight/tree/main/database) outside of this directory.
+For other databases, continue follow the instructions in the [README.md](https://github.com/dondi/GRNsight/tree/main/database/README.md#3-populate-data-into-database) outside of this directory.
