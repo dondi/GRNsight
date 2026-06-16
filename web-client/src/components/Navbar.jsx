@@ -121,6 +121,7 @@ export default function Navbar({}) {
     setOpenMenu(null);
   };
 
+
   const handleFileUpload = async event => {
     const file = event.target.files?.[0];
     const validationError = validateUploadFile(file);
@@ -539,9 +540,23 @@ export default function Navbar({}) {
         pad="15px"
         dropContent={
           <div className="dropdown-menu" onClickCapture={handleDropContentClick}>
-            <DropdownMenuButton text="Getting Started" />
-            <DropdownMenuButton text="GRNsight Wiki" />
-            <DropdownMenuButton text="About GRNsight" />
+            <DropdownMenuButton
+              text="Getting Started"
+              href={
+                "https://dondi.github.io/GRNsight/documentation.html#gettingStarted"
+              }
+              onClick={() => setOpenMenu(null)}
+            />
+            <DropdownMenuButton
+              text="GRNsight Wiki"
+              href={"https://github.com/dondi/GRNsight/wiki"}
+              onClick={() => setOpenMenu(null)}
+            />
+            <DropdownMenuButton
+              text="About GRNsight"
+              href={"https://dondi.github.io/GRNsight/about.html"}
+              onClick={() => setOpenMenu(null)}
+            />
           </div>
         }
       />
