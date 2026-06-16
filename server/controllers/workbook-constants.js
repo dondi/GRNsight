@@ -464,8 +464,7 @@ module.exports = {
                       ].join(" ")
                     : [
                           `GRNsight has detected that there are extra genes in the imported workbook's '${sheetName}' sheet.`,
-                          `The genes in the '${sheetName}' sheet need to match the genes in the 'network' sheet`,
-                          "to use this workbook` as an input file for GRNmap,",
+                          `The genes in the '${sheetName}' sheet should match the genes in the 'network' sheet from the GRNmap output`,
                           "but will not affect the display of the graph in GRNsight.",
                           `The extra genes are: ${extraGenes}.`,
                       ].join(" "),
