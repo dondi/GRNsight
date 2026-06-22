@@ -66,13 +66,24 @@ module.exports = {
 
         MISSING_ALL_GENES_AND_VALUES: function (sheetName, isAllGenesMissing) {
             const missingType = isAllGenesMissing ? "genes and values" : "values";
+            const sheetNameSegments = sheetName.split("_");
+            const prefix = sheetName.includes("optimized");
             return {
                 warningCode: `MISSING_ALL_${missingType.toUpperCase()}_${sheetName.toUpperCase()}`,
-                errorDescription: [
-                    `There were no ${missingType} supplied`,
-                    `in the "${sheetName}" sheet in the exported workbook.`,
-                    `GRNsight is checking because a ${sheetName.split("_")[0] + " " + sheetName.split("_")[1]} value should have been provided as GRNmap output, but will not affect the display of the graph in GRNsight.`,
-                ].join(" "),
+                errorDescription: prefix
+                    ? [
+                          `There were no ${missingType} supplied`,
+                          `in the "${sheetName}" sheet in the exported workbook.`,
+                          "GRNsight is checking",
+                          `because a ${sheetNameSegments[0]} ${sheetNameSegments[1]} value`,
+                          "should have been provided as GRNmap output,",
+                          "but will not affect the display of the graph in GRNsight.",
+                      ].join(" ")
+                    : [
+                          `There were no ${missingType} supplied`,
+                          `in the "${sheetName}" sheet in the exported workbook.`,
+                          `GRNsight has supplied ${dataSourceForTwoColumnSheet[sheetName]}.`,
+                      ].join(" "),
             };
         },
 
