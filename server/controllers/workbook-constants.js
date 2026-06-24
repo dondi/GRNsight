@@ -458,9 +458,9 @@ module.exports = {
                 errorDescription: prefix
                     ? [
                           `GRNsight has detected that there are extra genes in the imported workbook's '${sheetName}' sheet.`,
-                          `The genes in the ${sheetName} sheet should match the genes `,
-                          "in the 'network' sheet when outputted from the GRNmap,",
-                          "but will not affect the display of the graph in GRNsight.",
+                          `GRNsight is checking because the genes in the '${sheetName}' sheet should have matched the genes `,
+                          "in the 'network' sheet from the GRNmap output,",
+                          "but this will not affect the display of the graph in GRNsight.",
                           `The extra genes are: ${extraGenes}.`,
                       ].join(" ")
                     : [
