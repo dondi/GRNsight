@@ -50,18 +50,21 @@ module.exports = {
 
         MISSING_OR_EMPTY_TWO_COLUMN_SHEET: function (sheetName, isMissing) {
             const prefix = sheetName.includes("optimized");
+            const nameSegment = sheetName.split("_");
 
             return {
                 warningCode: `MISSING_OR_EMPTY_${sheetName.toUpperCase()}_SHEET`,
                 errorDescription: prefix
                     ? [
                           `There were no genes and values supplied in the ${sheetName} in the exported workbook.`,
-                          `GRNsight is checking because a ${sheetName.split("_")[1] + " " + sheetName.split("_")[2]} value should have been provided as GRNmap output,`,
+                          `GRNsight is checking because a ${nameSegment[1]} ${nameSegment[2]} `,
+                          `value should have been provided as GRNmap output,`,
                           "but will not affect the display of the graph in GRNsight.",
                       ].join(" ")
                     : [
                           `The "${sheetName}" sheet was empty in the exported workbook.`,
-                          `GRNsight is checking because a ${sheetName.split("_")[1] + " " + sheetName.split("_")[2]} value should have been provided as GRNmap output,`,
+                          `GRNsight is checking because a ${nameSegment[0]} ${nameSegment[1]}`,
+                          `value should have been provided as GRNmap output,`,
                           `but will not affect the display of the graph in GRNsight.`,
                       ].join(" "),
             };
