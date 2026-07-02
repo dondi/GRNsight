@@ -158,4 +158,20 @@ describe("expression-data-import-tests", function () {
             );
         });
     });
+
+    describe("blank-sheets", function () {
+        it("should return an error with network sheet", function () {
+            test.emptyNetworkWorkbookError(
+                "test-files/expression-data-test-sheets/empty-network-xlsx-with-network-tab.xlsx",
+                1
+            );
+        });
+
+        it("should return an error with expression sheet", function () {
+            test.emptyExpressionWorkbookError(
+                "test-files/expression-data-test-sheets/expression-sheet-blank.xlsx",
+                1
+            );
+        });
+    });
 });

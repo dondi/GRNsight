@@ -124,6 +124,20 @@ var missingNetworkError = function (input, frequency) {
     }
 };
 
+var emptyNetworkWorkbookError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = spreadsheetController.crossSheetInteractions(sheet);
+
+    assert.equal(frequency, workbook.errors.length);
+};
+
+var emptyExpressionWorkbookError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = parseExpressionSheet(sheet);
+
+    assert.equal(frequency, workbook.errors.length);
+};
+
 var specialCharacterError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
@@ -946,6 +960,8 @@ exports.corruptGeneError = corruptGeneError;
 exports.unknownError = unknownError;
 exports.missingValueError = missingValueError;
 exports.missingNetworkError = missingNetworkError;
+exports.emptyNetworkWorkbookError = emptyNetworkWorkbookError;
+exports.emptyExpressionWorkbookError = emptyExpressionWorkbookError;
 exports.workbookSizeError = workbookSizeError;
 exports.warningsCountError = warningsCountError;
 exports.invalidDataTypeError = invalidDataTypeError;
