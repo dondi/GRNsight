@@ -128,14 +128,14 @@ var emptyNetworkWorkbookError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = spreadsheetController.crossSheetInteractions(sheet);
 
-    assert.equal(frequency, workbook.errors.length);
+    assert.equal(workbook.errors.length, frequency);
 };
 
 var emptyExpressionWorkbookError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseExpressionSheet(sheet);
 
-    assert.equal(frequency, workbook.errors.length);
+    assert.equal(workbook.expression.wt_log2_expression.errors.length, frequency);
 };
 
 var specialCharacterError = function (input, frequency) {
