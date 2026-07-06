@@ -502,6 +502,13 @@ const missingAllGenesInTwoColumnSheetWarning = (input, frequency, sheetName, exp
     testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode, expectedText);
 };
 
+const missingGenesAndValuesWarningWhenImporting = (input, frequency) => {
+    const sheet = xlsx.parse(input);
+    const workbook = spreadsheetController.crossSheetInteractions(sheet);
+
+    assert.equal(workbook.warnings.length, frequency);
+};
+
 const missingAllValuesForGenes = function (input, frequency, sheetName, expectedText) {
     const expectedWarningCode = `MISSING_ALL_VALUES_${sheetName.toUpperCase()}`;
     testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode, expectedText);
@@ -1006,6 +1013,7 @@ exports.someGenesMissingValuesWarning = someGenesMissingValuesWarning;
 exports.extraGenesInTwoColumnSheetWarning = extraGenesInTwoColumnSheetWarning;
 exports.missingGeneIdsWithValuesInTwoColumnSheetWarning =
     missingGeneIdsWithValuesInTwoColumnSheetWarning;
+exports.missingGenesAndValuesWarningWhenImporting = missingGenesAndValuesWarningWhenImporting;
 exports.wrongGeneOrderInTwoColumnSheetWarning = wrongGeneOrderInTwoColumnSheetWarning;
 exports.wrongGeneIdsWarning = wrongGeneIdsWarning;
 

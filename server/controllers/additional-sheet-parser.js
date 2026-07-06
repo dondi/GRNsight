@@ -237,6 +237,7 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
     };
 
     if (!sheet.data || sheet.data.length === 0) {
+        addWarning(output, constants.warnings.missingAllGenesAndValues(sheet.name, true));
         return output;
     }
 
