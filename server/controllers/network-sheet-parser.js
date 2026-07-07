@@ -335,11 +335,10 @@ exports.workbookType = function (workbookFile) {
             sheet.name.toLowerCase() === "network_optimized_weights"
         ) {
             let cellA1 = "";
-            try {
-                cellA1 = sheet.data[0][0];
-            } catch (err) {
-                return (workbookType = undefined);
+            if (sheet.data == null || sheet.data.length === 0 || sheet.data[0].length === 0) {
+                return;
             }
+            cellA1 = sheet.data[0][0];
 
             if (cellA1 === CELL_A1_GRN) {
                 workbookType = NETWORK_GRN_MODE;

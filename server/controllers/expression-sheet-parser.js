@@ -60,12 +60,12 @@ var parseExpressionSheet = function (sheet) {
     // Check to see if the sheet is blank
     let idLabel = "";
 
-    try {
-        idLabel = sheet.data[0][0];
-    } catch (err) {
+    if (sheet.data == null || sheet.data.length === 0 || sheet.data[0].length === 0) {
         addExpError(expressionData, constants.errors.emptyWorkbookError());
         return expressionData;
     }
+
+    idLabel = sheet.data[0][0];
 
     // Check that id label is correct. Throw error if not.
     if (idLabel !== "id") {
