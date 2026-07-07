@@ -305,18 +305,18 @@ describe("additional-sheet-parser", function () {
             );
         });
 
-        it("should not return any warnings when two-column sheets are blank", function () {
-            test.noWarningsForAdditionalSheet(
+        it("should return 1 warning when two-column sheets are blank", function () {
+            test.missingGenesAndValuesWarningWhenImporting(
                 "test-files/additional-sheet-test-files/deg-rates-sheet-blank.xlsx",
-                "degradation_rates"
+                1
             );
-            test.noWarningsForAdditionalSheet(
+            test.missingGenesAndValuesWarningWhenImporting(
                 "test-files/additional-sheet-test-files/prod-rates-sheet-blank.xlsx",
-                "production_rates"
+                1
             );
-            test.noWarningsForAdditionalSheet(
+            test.missingGenesAndValuesWarningWhenImporting(
                 "test-files/additional-sheet-test-files/threshold_b-sheet-blank.xlsx",
-                "threshold_b"
+                1
             );
         });
 
