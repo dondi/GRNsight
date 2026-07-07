@@ -55,14 +55,24 @@ export const filenameWithExtension = function (mode, genes, edges, type, extensi
         filename = filename.substr(0, filename.length - currentExtension[0].length);
     }
     if (mode === NETWORK_GRN_MODE && extension === "xlsx") {
-        source = $("input[name=expressionSource]:checked")[0].value;
-        if (source === "none") {
+        const anyExpressionChecked = $("input[name=workbookSheets]:checked")
+            .toArray()
+            .some(
+                el => el.value && (el.value.includes("expression") || el.value.includes("sigma"))
+            );
+
+        if (anyExpressionChecked) {
+            source = $("input[name=expressionSource]:checked")[0].value;
+            if (source === "none") {
+                source = null;
+            } else if (source === "userInput") {
+                // only demos will have an expression source
+                source = grnState.workbook.expression.source
+                    ? grnState.workbook.expression.source
+                    : "user-data";
+            }
+        } else {
             source = null;
-        } else if (source === "userInput") {
-            // only demos will have an expression source
-            source = grnState.workbook.expression.source
-                ? grnState.workbook.expression.source
-                : "user-data";
         }
     }
 
