@@ -568,10 +568,7 @@ export const upload = function () {
                         <label for='exportExcelExpressionSource-noneRadio' id='exportExcelExpressionSource-none' class='export-radio-label'>None</label>
                     </li>
     `;
-        if (
-            Object.keys(grnState.workbook.expression).length > 0 &&
-            grnState.workbook.expression.hasOwnProperty("source")
-        ) {
+        if (grnState.workbook.expressionNames && grnState.workbook.expressionNames.length > 0) {
             const isChecked = grnState.nodeColoring.nodeColoringEnabled ? `checked="true"` : "";
             result += `
                         <li>
