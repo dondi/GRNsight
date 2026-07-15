@@ -663,9 +663,10 @@ export const upload = function () {
             </li>
             `;
         let networkOptimizedWeights = networks[1];
-        result =
-            result +
-            `
+        if (networkOptimizedWeights[0]) {
+            result =
+                result +
+                `
             <li class=\'export-excel-workbook-sheet-option\'>
                 <input type=\'checkbox\' name=\'workbookSheets\' ${networkOptimizedWeights[0] ? 'checked="true"' : ""} value=\"${networkOptimizedWeights[1]}\" id=\'exportExcelWorkbookSheet-${networkOptimizedWeights[1]}\' class=\'export-checkbox\' ${networkOptimizedWeights[0] ? "" : "disabled"}/>
                 <label for=\'exportExcelWorkbookSheet-${networkOptimizedWeights[1]}\' id=\'exportExcelWorkbookSheet-${networkOptimizedWeights[1]}-label\' class=\'export-checkbox-label\' >
@@ -673,6 +674,7 @@ export const upload = function () {
                 </label>
             </li>
             `;
+        }
         let networkWeights = networks[2];
         result =
             result +
