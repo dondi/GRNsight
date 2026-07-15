@@ -98,9 +98,7 @@ var parseNetworkSheet = function (sheet, network) {
     try {
         cellA1 = sheet.data[0][0];
     } catch (err) {
-        const row = 0;
-        const column = 0;
-        addError(network, constants.errors.missingValueError(row, column));
+        addError(network, constants.errors.idLabelError(sheet.name));
         return network;
     }
 
@@ -261,8 +259,7 @@ var parseNetworkSheet = function (sheet, network) {
                                     }
                                 }
                             } catch (err) {
-                                addError(network, constants.errors.missingValueError(row, column));
-                                // SHOULD BE: addError(network, constants.errors.unknownFileError);
+                                addError(network, constants.errors.unknownError);
                                 return network;
                             }
                         }

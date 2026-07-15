@@ -59,7 +59,10 @@ var parseExpressionSheet = function (sheet) {
 
     // Check to see if the sheet is blank
     if (!sheet.data || sheet.data.length === 0 || sheet.data[0].length === 0) {
-        addExpError(expressionData, constants.errors.emptyWorkbookError());
+        addExpWarning(
+            expressionData,
+            constants.warnings.emptyExpressionWorkbookWarning(sheet.name)
+        );
         return expressionData;
     }
 

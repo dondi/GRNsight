@@ -399,6 +399,22 @@ module.exports = {
             };
         },
 
+        emptyExpressionWorkbookWarning: function (sheetName) {
+            const expressionWorkbook = sheetName.includes("expression");
+            return {
+                warningCode: "BLANK_EXPRESSION_SHEET",
+                errorDescription: expressionWorkbook
+                    ? [
+                          `The imported ${sheetName} sheet is blank,`,
+                          `so the nodes will not display expression data from that sheet. This will not affect the functionality of GRNsight.`,
+                      ].join(" ")
+                    : [
+                          `The imported ${sheetName} sheet is blank`,
+                          `This will not affect the display of the graph.`,
+                      ].join(" "),
+            };
+        },
+
         unrecognizedSheetWarning: function (sheetName) {
             return {
                 warningCode: "UNRECOGNIZED_SHEET",
@@ -475,6 +491,30 @@ module.exports = {
                           "as an input file for GRNmap, but will not affect the display of the graph in GRNsight.",
                           `The extra genes are: ${extraGenes}.`,
                       ].join(" "),
+            };
+        },
+
+        geneMismatchWarning: function (sheetName) {
+            return {
+                warningCode: "GENE_MISMATCH",
+                errorDescription: `Gene names in column A of the "${sheetName}" sheet do not 
+                match the order of those in the network sheet. This will not affect the functionality of the graph in GRNsight.`,
+            };
+        },
+
+        extraGeneNamesWarning: function (sheetName) {
+            return {
+                warningCode: "EXTRA_GENE_NAME",
+                errorDescription: `Gene names in column A of the "${sheetName}" sheet have 
+                one or more extra genes than those listed in the network sheet. This will not affect the functionality of the graph in GRNsight.`,
+            };
+        },
+
+        missingGeneNamesWarning: function (sheetName) {
+            return {
+                warningCode: "MISSING_GENE_NAME",
+                errorDescription: `Gene names in column A of the "${sheetName}"
+                    sheet are missing one or more genes from the network sheet. This will not affect the functionality of the graph in GRNsight.`,
             };
         },
 
@@ -749,38 +789,6 @@ module.exports = {
                 possibleCause: `The cell at ${colLetter} ${rowNum} contains data that is outside the matrix.`,
                 suggestedFix:
                     "Please remove all extraneous data from outside the matrix and ensure matrix is correct",
-            };
-        },
-
-        geneMismatchError: function (sheetName) {
-            return {
-                errorCode: "GENE_MISMATCH",
-                possibleCause: `Gene names in column A of the "${sheetName}" sheet do not 
-                match the order of those in the network sheet.`,
-                suggestedFix: `Please ensure that the gene names are in the same order 
-                as those in both the "network" sheet and the 
-                "network_optimized_weights" sheet.`,
-            };
-        },
-
-        extraGeneNamesError: function (sheetName) {
-            return {
-                errorCode: "EXTRA_GENE_NAME",
-                possibleCause: `Gene names in column A of the "${sheetName}" sheet have 
-                one or more extra genes than those listed in the network sheet.`,
-                suggestedFix: `Please ensure that the genes in the "${sheetName}" sheet are
-                the same as the genes in the "network" sheet and the "network_optimized_weights" sheet.`,
-            };
-        },
-
-        missingGeneNamesError: function (sheetName) {
-            return {
-                errorCode: "MISSING_GENE_NAME",
-                possibleCause: `Gene names in column A of the "${sheetName}"
-                    sheet are missing one or more genes from the network sheet.`,
-                suggestedFix: `Please ensure that the genes in the "${sheetName}"
-                     are the same as the genes in the "network" sheet and the 
-                    "network_optimized_weights" sheet.`,
             };
         },
 
