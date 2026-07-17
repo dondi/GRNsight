@@ -568,10 +568,7 @@ export const upload = function () {
                         <label for='exportExcelExpressionSource-noneRadio' id='exportExcelExpressionSource-none' class='export-radio-label'>None</label>
                     </li>
     `;
-        if (
-            Object.keys(grnState.workbook.expression).length > 0 &&
-            grnState.workbook.expression.hasOwnProperty("source")
-        ) {
+        if (grnState.workbook.expressionNames && grnState.workbook.expressionNames.length > 0) {
             const isChecked = grnState.nodeColoring.nodeColoringEnabled ? `checked="true"` : "";
             result += `
                         <li>
@@ -772,7 +769,7 @@ export const upload = function () {
                     <ul class=\'exportExcelWorkbookSheets\' id=\'export-excel-workbook-sheet-list\' style=\"list-style-type:none;\">
                         <p class=\'export-excel-workbook-sheet-option-subheader\'> Network Sheets </p>
                         <li class=\'export-excel-workbook-sheet-option\'>
-                            <input type=\'checkbox\' name=\'workbookSheets\' checked=\"true\" value=\"network\" id=\'exportExcelWorkbookSheet-network\' class=\'export-checkbox\'/>
+                            <input type=\'checkbox\' name=\'workbookSheets\' checked=\"true\" value=\"network\" id=\'exportExcelWorkbookSheet-network\' class=\'export-checkbox\' disabled/>
                             <label for=\'exportExcelWorkbookSheet-network\' id=\'exportExcelWorkbookSheet-network-label\' class=\'export-checkbox-label\' >
                                 network
                             </label>
