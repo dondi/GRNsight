@@ -416,16 +416,16 @@ module.exports = {
             const prefix = sheetName.includes("optimized");
             return {
                 warningCode: `MISSING_GENES_AND_VALUES_${sheetName.toUpperCase()}`,
-                errorDescription: !prefix
+                errorDescription: prefix
                     ? [
+                          `There were no genes and values supplied in the ${sheetName} sheet in the imported workbook`,
+                          grnMapInputSuppliedWarningMessage(sheetName, value),
+                      ].join(" ")
+                    : [
                           `GRNsight has detected that there are missing genes and ${valuesForEachTwoColSheet[sheetName]}`,
                           `in the imported workbook's ${sheetName} sheet.`,
                           grnMapInputSuppliedWarningMessage(sheetName, value),
                           `The missing genes and values are: ${missingGenes}.`,
-                      ].join(" ")
-                    : [
-                          `There were no genes and values supplied in the ${sheetName} sheet in the imported workbook`,
-                          grnMapInputSuppliedWarningMessage(sheetName, value),
                       ].join(" "),
             };
         },
