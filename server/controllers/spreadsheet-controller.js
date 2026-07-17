@@ -210,7 +210,7 @@ var crossSheetInteractions = function (workbookFile) {
 
     additionalData.meta.data.workbookType = parseNetworkSheet.workbookType(workbookFile);
     if (additionalData.meta.data.workbookType === undefined) {
-        addWarning(workbook, constants.warnings.noWorkbookTypeDetected);
+        addError(workbook, constants.errors.missingNetworkError);
         additionalData.meta.data.workbookType = NETWORK_GRN_MODE;
     } else if (!supportWorkbookType(additionalData.meta.data.workbookType)) {
         addWarning(
@@ -312,16 +312,16 @@ var crossSheetInteractions = function (workbookFile) {
                         workbook.genes[i].name !==
                         expressionData.expression[sheet.name].columnGeneNames[i]
                     ) {
-                        addError(workbook, constants.errors.geneMismatchError(sheet.name));
+                        addWarning(workbook, constants.warnings.geneMismatchWarning(sheet.name));
                         break;
                     }
                 }
             } else {
                 if (extraWorkbookGenes.size > 0) {
-                    addError(workbook, constants.errors.missingGeneNamesError(sheet.name));
+                    addWarning(workbook, constants.warnings.missingGeneNamesWarning(sheet.name));
                 }
                 if (extraExpressionGenes.size > 0) {
-                    addError(workbook, constants.errors.extraGeneNamesError(sheet.name));
+                    addWarning(workbook, constants.warnings.extraGeneNamesWarning(sheet.name));
                 }
             }
         }

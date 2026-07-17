@@ -124,6 +124,13 @@ var missingNetworkError = function (input, frequency) {
     }
 };
 
+var emptyNetworkWorkbookError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = spreadsheetController.crossSheetInteractions(sheet);
+
+    assert.equal(workbook.errors.length, frequency);
+};
+
 var specialCharacterError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
@@ -200,16 +207,6 @@ var emptyRowError = function (input, frequency) {
     }
 };
 
-var geneMismatchError = function (input, frequency) {
-    var sheet = xlsx.parse(input);
-    var workbook = spreadsheetController.crossSheetInteractions(sheet);
-    var geneMismatchCount = workbook.errors.filter(function (x) {
-        return x.errorCode === "GENE_MISMATCH";
-    });
-
-    assert.equal(geneMismatchCount.length, frequency);
-};
-
 var idLabelError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseExpressionSheet(sheet);
@@ -268,26 +265,6 @@ var labelError = function (input, frequency) {
             "extra_gene_name" || "missing_a_gene_name"
         );
     }
-};
-
-var missingGeneNameError = function (input, frequency) {
-    var sheet = xlsx.parse(input);
-    var workbook = spreadsheetController.crossSheetInteractions(sheet);
-    var missingGeneCount = workbook.errors.filter(function (x) {
-        return x.errorCode === "MISSING_GENE_NAME";
-    });
-
-    assert.equal(missingGeneCount.length, frequency);
-};
-
-var extraGeneNameError = function (input, frequency) {
-    var sheet = xlsx.parse(input);
-    var workbook = spreadsheetController.crossSheetInteractions(sheet);
-    var extraGeneCount = workbook.errors.filter(function (x) {
-        return x.errorCode === "EXTRA_GENE_NAME";
-    });
-
-    assert.equal(extraGeneCount.length, frequency);
 };
 
 var negativeTimePointError = function (input, frequency) {
@@ -403,6 +380,36 @@ var invalidMatrixDataWarning = function (input, frequency) {
     });
 
     assert.equal(invalidDataCount.length, frequency);
+};
+
+var geneMismatchWarning = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = spreadsheetController.crossSheetInteractions(sheet);
+    var geneMismatchCount = workbook.warnings.filter(function (x) {
+        return x.warningCode === "GENE_MISMATCH";
+    });
+
+    assert.equal(geneMismatchCount.length, frequency);
+};
+
+var missingGeneNameWarning = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = spreadsheetController.crossSheetInteractions(sheet);
+    var missingGeneCount = workbook.warnings.filter(function (x) {
+        return x.warningCode === "MISSING_GENE_NAME";
+    });
+
+    assert.equal(missingGeneCount.length, frequency);
+};
+
+var extraGeneNameWarning = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = spreadsheetController.crossSheetInteractions(sheet);
+    var extraGeneCount = workbook.warnings.filter(function (x) {
+        return x.warningCode === "EXTRA_GENE_NAME";
+    });
+
+    assert.equal(extraGeneCount.length, frequency);
 };
 
 var missingTargetWarning = function (input, frequency) {
@@ -726,6 +733,13 @@ var unknownOptimizationParameterWarning = function (input, frequency) {
     assert.equal(unknownOptimizationParameterWarningCount, frequency);
 };
 
+var emptyExpressionWorkbookWarning = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = parseExpressionSheet(sheet);
+
+    assert.equal(workbook.expression.wt_log2_expression.warnings.length, frequency);
+};
+
 var invalidOptimizationParameterWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseAdditionalSheet(sheet);
@@ -946,6 +960,7 @@ exports.corruptGeneError = corruptGeneError;
 exports.unknownError = unknownError;
 exports.missingValueError = missingValueError;
 exports.missingNetworkError = missingNetworkError;
+exports.emptyNetworkWorkbookError = emptyNetworkWorkbookError;
 exports.workbookSizeError = workbookSizeError;
 exports.warningsCountError = warningsCountError;
 exports.invalidDataTypeError = invalidDataTypeError;
@@ -956,10 +971,7 @@ exports.specialCharacterError = specialCharacterError;
 exports.emptyExpressionColumnError = emptyExpressionColumnError;
 exports.emptyExpressionRowError = emptyExpressionRowError;
 exports.missingColumnHeaderError = missingColumnHeaderError;
-exports.geneMismatchError = geneMismatchError;
 exports.labelError = labelError;
-exports.missingGeneNameError = missingGeneNameError;
-exports.extraGeneNameError = extraGeneNameError;
 exports.negativeTimePointError = negativeTimePointError;
 exports.nonMonotonicTimePointsError = nonMonotonicTimePointsError;
 exports.nonNumericalTimePointError = nonNumericalTimePointError;
@@ -972,6 +984,9 @@ exports.twoColumnInvalidGeneLengthError = twoColumnInvalidGeneLengthError;
 exports.twoColumnSpecialCharacterError = twoColumnSpecialCharacterError;
 exports.twoColumnInvalidDataTypeError = twoColumnInvalidDataTypeError;
 
+exports.extraGeneNameWarning = extraGeneNameWarning;
+exports.missingGeneNameWarning = missingGeneNameWarning;
+exports.geneMismatchWarning = geneMismatchWarning;
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;
 exports.missingSourceWarning = missingSourceWarning;
@@ -1000,6 +1015,7 @@ exports.optimizationDiagnosticsExtraneousDataWarning = optimizationDiagnosticsEx
 exports.incorrectMSEGeneHeaderWarning = incorrectMSEGeneHeaderWarning;
 exports.incorrectMSEHeaderWarning = incorrectMSEHeaderWarning;
 exports.missingMSEDataWarning = missingMSEDataWarning;
+exports.emptyExpressionWorkbookWarning = emptyExpressionWorkbookWarning;
 exports.invalidMSEDataWarning = invalidMSEDataWarning;
 exports.unrecognizedSheetWarning = unrecognizedSheetWarning;
 exports.missingGenesAndValuesInTwoColumnSheetsWarning =

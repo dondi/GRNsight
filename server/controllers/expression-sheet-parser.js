@@ -1,4 +1,4 @@
-// Parses "optimization_paramters," expression data sheets, and 2-column sheets
+// Parses "optimization_parameters," expression data sheets, and 2-column sheets
 // from GRNmap input or output workbook
 
 var constants = require(__dirname + "/workbook-constants");
@@ -57,8 +57,18 @@ var parseExpressionSheet = function (sheet) {
         columnGeneNames: [],
     };
 
-    // Check that id label is correct. Throw error if not.
+    // Check to see if the sheet is blank
+    if (!sheet.data || sheet.data.length === 0 || sheet.data[0].length === 0) {
+        addExpWarning(
+            expressionData,
+            constants.warnings.emptyExpressionWorkbookWarning(sheet.name)
+        );
+        return expressionData;
+    }
+
     const idLabel = sheet.data[0][0];
+
+    // Check that id label is correct. Throw error if not.
     if (idLabel !== "id") {
         addExpError(expressionData, constants.errors.idLabelError(sheet.name));
     }

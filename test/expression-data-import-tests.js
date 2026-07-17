@@ -27,7 +27,7 @@ describe("expression-data-import-tests", function () {
 
     describe("GENE_MISMATCH", function () {
         it("Gene names in column A do not match the order of those in network sheet.", function () {
-            test.geneMismatchError(
+            test.geneMismatchWarning(
                 "test-files/expression-data-test-sheets/expression_sheet_wrong_order_gene_names.xlsx",
                 1
             );
@@ -45,7 +45,7 @@ describe("expression-data-import-tests", function () {
 
     describe("MISSING_GENE_NAME", function () {
         it("Gene names in column A are missing a gene name listed in the network sheet.", function () {
-            test.missingGeneNameError(
+            test.missingGeneNameWarning(
                 "test-files/expression-data-test-sheets/expression_sheet_missing_gene_name.xlsx",
                 1
             );
@@ -54,7 +54,7 @@ describe("expression-data-import-tests", function () {
 
     describe("EXTRA_GENE_NAME", function () {
         it("Gene names in column A have an extra gene name than those listed in the network sheet.", function () {
-            test.extraGeneNameError(
+            test.extraGeneNameWarning(
                 "test-files/expression-data-test-sheets/expression_sheet_extra_gene_name.xlsx",
                 1
             );
@@ -155,6 +155,22 @@ describe("expression-data-import-tests", function () {
             test.noErrors(
                 "test-files/expression-data-test-sheets/expression_sheet_different_number_of_columns.xlsx",
                 0
+            );
+        });
+    });
+
+    describe("blank-sheets", function () {
+        it("should return an error with network sheet", function () {
+            test.emptyNetworkWorkbookError(
+                "test-files/expression-data-test-sheets/empty-network-xlsx-with-network-tab.xlsx",
+                2
+            );
+        });
+
+        it("should return a warning with expression sheet", function () {
+            test.emptyExpressionWorkbookWarning(
+                "test-files/expression-data-test-sheets/expression-sheet-blank.xlsx",
+                1
             );
         });
     });

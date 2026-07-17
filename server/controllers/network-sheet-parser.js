@@ -98,9 +98,7 @@ var parseNetworkSheet = function (sheet, network) {
     try {
         cellA1 = sheet.data[0][0];
     } catch (err) {
-        const row = 0;
-        const column = 0;
-        addError(network, constants.errors.missingValueError(row, column));
+        addError(network, constants.errors.idLabelError(sheet.name));
         return network;
     }
 
@@ -261,8 +259,7 @@ var parseNetworkSheet = function (sheet, network) {
                                     }
                                 }
                             } catch (err) {
-                                addError(network, constants.errors.missingValueError(row, column));
-                                // SHOULD BE: addError(network, constants.errors.unknownFileError);
+                                addError(network, constants.errors.unknownError);
                                 return network;
                             }
                         }
@@ -334,6 +331,9 @@ exports.workbookType = function (workbookFile) {
             sheet.name.toLowerCase() === "network" ||
             sheet.name.toLowerCase() === "network_optimized_weights"
         ) {
+            if (!sheet.data || sheet.data.length === 0 || sheet.data[0].length === 0) {
+                return;
+            }
             const cellA1 = sheet.data[0][0];
 
             if (cellA1 === CELL_A1_GRN) {
