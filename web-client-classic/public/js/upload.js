@@ -854,9 +854,16 @@ export const upload = function () {
             $("#exportExcelExpressionSource-userInput").html(grnState.name);
             $("#exportExcelWorkbookSheets").html("Select Workbook Sheets to Export:");
             let source = $("input[name=expressionSource]:checked")[0].value;
+            
+            const selectedSheetsBySource = {};
+            
             $("#exportExcelForm").on("change", function () {
                 const selectedValue = $("input[name=expressionSource]:checked")[0].value;
                 if (selectedValue !== source) {
+                    selectedSheetsBySource[source] = [];
+                    $("input[name='workbookSheets']:checked").each(function () { 
+                        selectedSheetsBySource[source].push($(this).vale)
+                    })
                     source = selectedValue;
                     $(".export-excel-workbook-sheet-option-subheader").remove();
                     handleExpressionSheetsFromSource(source);
