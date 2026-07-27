@@ -2,7 +2,7 @@ import { updaters } from "./graph";
 import { updateApp, identifySpeciesMenu } from "./update-app";
 import { saveSvgAsPng } from "save-svg-as-png";
 import { jsPDF } from "jspdf";
-import { Canvg } from "canvg";
+import Canvg from "canvg";
 import { filenameWithExtension } from "./upload";
 import { determineWorkbookType } from "./upload";
 
