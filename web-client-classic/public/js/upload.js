@@ -763,7 +763,8 @@ export const upload = function () {
                         $(".export-excel-workbook-sheet-option-subheader").remove();
                         handleExpressionSheetsFromSource(source);
                     }
-                });
+                }
+            );
         } else if (grnState.mode === NETWORK_PPI_MODE) {
             const source = "userInput";
             $("#exportExcelForm").remove();
