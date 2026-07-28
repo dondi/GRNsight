@@ -508,10 +508,10 @@ export const upload = function () {
 
     const createHTMLforGRNForm = () => {
         return `
-        <form id='exportExcelForm'>
+        <form id="exportExcelForm">
             <div class='form-group export-form-group'>
                 <p id='exportExcelExpressionSources'></p>
-                <ul class='exportExcelWorkbookSheets' id='export-excel-workbook-sheet-list' style="list-style-type:none; padding-left:0;"></ul>
+                <ul class='exportExcelWorkbookSheets' id='export-excel-workbook-sheet-list'></ul>
             </div>
         </form>
     `;
@@ -527,7 +527,7 @@ export const upload = function () {
         ];
 
         let result = `
-        <li class=\'export-excel-workbook-sheet-option export-excel-workbook-sheet-option-subheader\'>
+        <li class=\"export-excel-workbook-sheet-option export-excel-workbook-sheet-option-subheader\">
             <input type=\'checkbox\' name=\'workbookSheets\' checked=\"true\" value=\"select all\" id=\'exportExcelWorkbookSheet-All\' class=\'export-checkbox\' />
             <label for=\'exportExcelWorkbookSheet-All\' id=\'exportExcelWorkbookSheet-All-label\' class=\'export-checkbox-label\'>
                 Select All
