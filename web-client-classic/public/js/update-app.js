@@ -988,6 +988,15 @@ export const updateApp = grnState => {
         $(NODE_COLORING_NAVBAR_OPTIONS).removeClass("hidden");
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).addClass("hidden");
+        $(NODE_COLORING_SIDEBAR_BODY).find("input, select, button").prop("disabled, false");
+        $(NODE_COLORING_MENU).removeClass("hidden");
+        $(TOP_DATASET_SELECTION_SIDEBAR).val(grnState.nodeColoring.topDataset);
+        $(BOTTOM_DATASET_SELECTION_SIDEBAR).val(grnState.nodeColoring.bottomDataset);
+        $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", grnState.nodeColoring.averageTopDataset);
+        $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop(
+            "checked",
+            grnState.nodeColoring.averageBottomDataset
+        );
         $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).addClass("hidden");
         $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).addClass("hidden");
         if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
@@ -1022,7 +1031,21 @@ export const updateApp = grnState => {
             }
         }
     } else if (grnState.workbook !== null && !grnState.nodeColoring.nodeColoringEnabled) {
-        $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
+        grnState.nodeColoring.showMenu = true;
+        // $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
+        $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
+        $(NODE_COLORING_SIDEBAR_BODY).find("input, select, button").prop("disabled", true);
+        // $(`${NODE_COLORING_SIDEBAR_BODY} input, ${NODE_COLORING_SIDEBAR_BODY} button`).prop(
+        //     "disabled",
+        //     true
+        // );
+        $(TOP_DATASET_SELECTION_SIDEBAR).val(grnState.nodeColoring.topDataset);
+        $(BOTTOM_DATASET_SELECTION_SIDEBAR).val(grnState.nodeColoring.bottomDataset);
+        $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", grnState.nodeColoring.averageTopDataset);
+        $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop(
+            "checked",
+            grnState.nodeColoring.averageBottomDataset
+        );
         $(NODE_COLORING_MENU).addClass("disabled");
         $(NODE_COLORING_NAVBAR_OPTIONS).addClass("hidden");
         $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
