@@ -509,9 +509,9 @@ export const upload = function () {
     const createHTMLforGRNForm = () => {
         return `
         <form id="exportExcelForm">
-            <div class='form-group export-form-group'>
-                <p id='exportExcelExpressionSources'></p>
-                <ul class='exportExcelWorkbookSheets' id='export-excel-workbook-sheet-list'></ul>
+            <div class="form-group export-form-group">
+                <p id="exportExcelExpressionSources"></p>
+                <ul class="exportExcelWorkbookSheets" id="export-excel-workbook-sheet-list"></ul>
             </div>
         </form>
     `;
@@ -527,14 +527,14 @@ export const upload = function () {
         ];
 
         let result = `
-        <li class=\"export-excel-workbook-sheet-option export-excel-workbook-sheet-option-subheader\">
-            <input type=\'checkbox\' name=\'workbookSheets\' checked=\"true\" value=\"select all\" id=\'exportExcelWorkbookSheet-All\' class=\'export-checkbox\' />
-            <label for=\'exportExcelWorkbookSheet-All\' id=\'exportExcelWorkbookSheet-All-label\' class=\'export-checkbox-label\'>
+        <li class="export-excel-workbook-sheet-option export-excel-workbook-sheet-option-subheader">
+            <input type="checkbox" name="workbookSheets" checked="true" value="select all" id="exportExcelWorkbookSheet-All" class="export-checkbox" />
+            <label for="exportExcelWorkbookSheet-All" id="exportExcelWorkbookSheet-All-label" class="export-checkbox-label">
                 Select All
             </label>
         </li>
 
-        <p class=\'export-excel-workbook-sheet-option-subheader\'> Network Sheets </p>
+        <p class="export-excel-workbook-sheet-option-subheader"> Network Sheets </p>
     `;
         const optionalAdditionalSheets = [
             "optimization_parameters",
@@ -561,30 +561,30 @@ export const upload = function () {
         // append each network sheet individually for unique handling
         let network = networks[0];
         result += `
-        <li class=\'export-excel-workbook-sheet-option\'>
-            <input type=\'checkbox\' name=\'workbookSheets\' checked=\'true\' value=\"${network[1]}\" id=\'exportExcelWorkbookSheet-${network[1]}\' class=\'export-checkbox\' disabled/>
-            <label for=\'exportExcelWorkbookSheet-${network[1]}\' class=\'export-checkbox-label\'>${network[1]}</label>
+        <li class="export-excel-workbook-sheet-option">
+            <input type="checkbox" name="workbookSheets" checked="true" value="${network[1]}" id="exportExcelWorkbookSheet-${network[1]}" class="export-checkbox" disabled/>
+            <label for="exportExcelWorkbookSheet-${network[1]}" class="export-checkbox-label">${network[1]}</label>
         </li>
     `;
         let networkOptimizedWeights = networks[1];
         if (networkOptimizedWeights[0]) {
             result += `
-            <li class=\'export-excel-workbook-sheet-option\'>
-                <input type=\'checkbox\' name=\'workbookSheets\' checked="true" value=\"${networkOptimizedWeights[1]}\" id=\'exportExcelWorkbookSheet-${networkOptimizedWeights[1]}\' class=\'export-checkbox\'/>
-                <label for=\'exportExcelWorkbookSheet-${networkOptimizedWeights[1]}\' class=\'export-checkbox-label\'>${networkOptimizedWeights[1]}</label>
+            <li class="export-excel-workbook-sheet-option">
+                <input type="checkbox" name="workbookSheets" checked="true" value="${networkOptimizedWeights[1]}" id="exportExcelWorkbookSheet-${networkOptimizedWeights[1]}" class="export-checkbox"/>
+                <label for="exportExcelWorkbookSheet-${networkOptimizedWeights[1]}" class="export-checkbox-label">${networkOptimizedWeights[1]}</label>
             </li>
         `;
         }
 
         let networkWeights = networks[2];
         result += `
-        <li class=\'export-excel-workbook-sheet-option\'>
-            <input type=\'checkbox\' name=\'workbookSheets\' checked=\'true\' value=\"${networkWeights[1]}\" id=\'exportExcelWorkbookSheet-${networkWeights[1]}\' class=\'export-checkbox\'/>
-            <label for=\'exportExcelWorkbookSheet-${networkWeights[1]}\' class=\'export-checkbox-label\'>${networkWeights[1]}</label>
+        <li class="export-excel-workbook-sheet-option">
+            <input type="checkbox" name="workbookSheets" checked="true" value="${networkWeights[1]}" id="exportExcelWorkbookSheet-${networkWeights[1]}" class="export-checkbox"/>
+            <label for="exportExcelWorkbookSheet-${networkWeights[1]}" class="export-checkbox-label">${networkWeights[1]}</label>
         </li>
     `;
 
-        result += `<p class=\'export-excel-workbook-sheet-option-subheader\'> Expression Sheets </p>`;
+        result += `<p class="export-excel-workbook-sheet-option-subheader"> Expression Sheets </p>`;
 
         let dropdownOptions = `<option value="none">None</option>`;
         if (grnState.workbook.expressionNames && grnState.workbook.expressionNames.length > 0) {
@@ -595,9 +595,9 @@ export const upload = function () {
         }
 
         result += `
-        <li class=\'export-excel-workbook-sheet-option export-source-select\'>
-            <label class=\'export-checkbox-label\'>Expression Data Source:</label>
-            <select id=\'expressionSourceDropdown\' name=\'expressionSource\' class=\'dropdown-export\'>
+        <li class="export-excel-workbook-sheet-option export-source-select">
+            <label class="export-checkbox-label">Expression Data Source:</label>
+            <select id="expressionSourceDropdown" name="expressionSource" class="dropdown-export">
                 ${dropdownOptions}
             </select>
         </li>
@@ -606,9 +606,9 @@ export const upload = function () {
         if (source === "userInput" && grnState.workbook.expressionNames) {
             for (let expression of grnState.workbook.expressionNames) {
                 result += `
-            <li class=\'export-excel-workbook-sheet-option\'>
-                <input type=\'checkbox\' name=\'workbookSheets\' checked=\"true\" value=\"${expression}\" id=\'exportExcelWorkbookSheet-${expression}\' class=\'export-checkbox\' />
-                <label for=\'exportExcelWorkbookSheet-${expression}\' class=\'export-checkbox-label\'>${expression}</label>
+            <li class="export-excel-workbook-sheet-option">
+                <input type="checkbox" name="workbookSheets" checked="true" value="${expression}" id="exportExcelWorkbookSheet-${expression}" class="export-checkbox" />
+                <label for="exportExcelWorkbookSheet-${expression}" class="export-checkbox-label">${expression}</label>
             </li>
             `;
             }
@@ -618,23 +618,23 @@ export const upload = function () {
             );
             for (let sheet of expressionSheets) {
                 result += `
-            <li class=\'export-excel-workbook-sheet-option\'>
-                <input type=\'checkbox\' name=\'workbookSheets\' checked=\"true\" value=\"${sheet.slice(sheet.lastIndexOf("_") + 1) + "_log2_expression"}\" id=\'exportExcelWorkbookSheet-${sheet}\' class=\'export-checkbox\' />
-                <label for=\'exportExcelWorkbookSheet-${sheet}\' class=\'export-checkbox-label\'>${sheet.slice(sheet.lastIndexOf("_") + 1) + "_log2_expression"}</label>
+            <li class="export-excel-workbook-sheet-option">
+                <input type="checkbox" name="workbookSheets" checked="true" value="${sheet.slice(sheet.lastIndexOf("_") + 1) + "_log2_expression"}" id="exportExcelWorkbookSheet-${sheet}" class="export-checkbox" />
+                <label for="exportExcelWorkbookSheet-${sheet}" class="export-checkbox-label">${sheet.slice(sheet.lastIndexOf("_") + 1) + "_log2_expression"}</label>
             </li>`;
             }
             result += `
-            <div class=\'expression-db-loader\'></div>
-            <div class=\'expression-db-loader-text\'>Expression Database is Loading</div>
+            <div class="expression-db-loader"></div>
+            <div class="expression-db-loader-text">Expression Database is Loading</div>
         `;
         }
 
-        result += `<p class=\'export-excel-workbook-sheet-option-subheader\'> Additional Sheets </p>`;
+        result += `<p class="export-excel-workbook-sheet-option-subheader"> Additional Sheets </p>`;
         for (let sheet of additionalsheets) {
             result += `
-        <li class=\'export-excel-workbook-sheet-option\'>
-            <input type=\'checkbox\' name=\'workbookSheets\' checked=\"true\" value=\"${sheet}\" id=\'exportExcelWorkbookSheet-${sheet}\' class=\'export-checkbox\' />
-            <label for=\'exportExcelWorkbookSheet-${sheet}\' class=\'export-checkbox-label\'>${sheet}</label>
+        <li class="export-excel-workbook-sheet-option">
+            <input type="checkbox" name="workbookSheets" checked="true" value="${sheet}" id="exportExcelWorkbookSheet-${sheet}" class="export-checkbox" />
+            <label for="exportExcelWorkbookSheet-${sheet}" class="export-checkbox-label">${sheet}</label>
         </li>
         `;
         }
