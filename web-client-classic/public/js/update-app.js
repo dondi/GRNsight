@@ -524,7 +524,6 @@ const updatetoGridLayout = () => {};
 // Node Coloring Functions
 const showNodeColoringMenus = () => {
     $(NODE_COLORING_SIDEBAR_PANEL).removeClass("disabled");
-    $(NODE_COLORING_SIDEBAR_PANEL).addClass("in");
     $(NODE_COLORING_MENU).removeClass("disabled");
     $(NODE_COLORING_MENU_CLASS).removeClass("disabled");
     $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "collapse");
@@ -532,7 +531,6 @@ const showNodeColoringMenus = () => {
 
 const disableNodeColoringMenus = () => {
     $(NODE_COLORING_SIDEBAR_PANEL).addClass("disabled");
-    $(NODE_COLORING_SIDEBAR_PANEL).removeClass("in");
     $(NODE_COLORING_MENU_CLASS).addClass("disabled");
     $(NODE_COLORING_MENU).addClass("disabled");
     $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "");
@@ -931,6 +929,8 @@ export const updateApp = grnState => {
         hasExpressionData(grnState.workbook.expression)
     ) {
         grnState.nodeColoring.showMenu = true;
+        $(NODE_COLORING_SIDEBAR_BODY).find("input,select, button").prop("disabled", false);
+        $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
         $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
         $(`${NODE_COLORING_TOGGLE_MENU} span`).addClass("glyphicon-ok");
@@ -988,7 +988,7 @@ export const updateApp = grnState => {
         $(NODE_COLORING_NAVBAR_OPTIONS).removeClass("hidden");
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).addClass("hidden");
-        $(NODE_COLORING_SIDEBAR_BODY).find("input, select, button").prop("disabled, false");
+        $(NODE_COLORING_SIDEBAR_BODY).find("input, select, button").prop("disabled", false);
         $(NODE_COLORING_MENU).removeClass("hidden");
         $(TOP_DATASET_SELECTION_SIDEBAR).val(grnState.nodeColoring.topDataset);
         $(BOTTOM_DATASET_SELECTION_SIDEBAR).val(grnState.nodeColoring.bottomDataset);
