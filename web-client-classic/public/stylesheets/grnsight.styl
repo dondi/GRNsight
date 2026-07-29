@@ -616,27 +616,73 @@ path.mousezone
   margin-left: auto;
 }
 
+.export-form-group
+  padding: 0 4px
+
+.exportExcelWorkbookSheets
+  margin: 0
+
+.export-excel-workbook-sheet-option
+  display: flex
+  align-items: center
+  margin-bottom: 2px
+  padding-left: 20px
+
+.export-excel-workbook-sheet-option:not(.export-excel-workbook-sheet-option-subheader)
+  padding-left: 40px
+
 .export-excel-workbook-sheet-option-subheader
-  margin-left: -20px
+  margin-left: 0
+  margin-top: 2px
+  margin-bottom: -.4px
+  padding-left: 20px
 
-.export-radio-group li
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 8px;
+.export-excel-workbook-sheet-option-subheader:first-child
+  margin-top: 5px
 
-.export-radio
-  margin-top: 10px;
-  margin-right: 8px;
-  flex-shrink: 0;
+.export-excel-workbook-sheet-option.export-source-select
+  display: block
+  padding-left: 20px
+  margin-bottom: 2px
 
-.export-radio-label
-  flex: 1;
-  word-wrap: break-word;
-  line-height: 1.4;
+.export-excel-workbook-sheet-option.export-source-select .export-checkbox-label
+  display: block
+  font-weight: normal
+  margin-bottom: 8px
 
-.export-radio-label.disabled
-  color: #AAA
-  
+.export-checkbox
+  margin: 0 15px 0 0
+  flex-shrink: 0
+
+.export-checkbox-label
+  flex: 1
+  word-wrap: break-word
+  line-height: 1.4
+  font-weight: bold
+  position: relative
+  top: 5px
+  margin-left: 10px
+
+
+.dropdown-export
+  margin-left: 8px
+  padding: 4px 8px
+  text-overflow: ellipsis
+  overflow: hidden
+  max-width: 100%
+
+#exportExcelExpressionSheetSources
+    margin-bottom: 2px
+
+#expressionSourceDropdown
+  margin-left: 0
+  margin-top: 2px
+  display: inline-block
+  width: fit-content
+  min-width: auto 
+
+#exportExcelModal > .modal-dialog
+  width: 640px
 
 # demoSourceDropdown > option {
   direction: ltr;
