@@ -188,6 +188,7 @@ export const setupHandlers = grnState => {
     const exportPDF = async (svgElement, name) => {
         if (svgElement) {
             svgElement = svgElement.replace(/\r?\n|\r/g, "").trim();
+            svgElement = svgElement.replace(/marker-end="url\([^)]+\)"/g, "");
         }
 
         let canvas = document.createElement("canvas");
