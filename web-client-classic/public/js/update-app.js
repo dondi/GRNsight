@@ -942,7 +942,7 @@ export const updateApp = grnState => {
             displayPPINodeColorWarning(grnState.ppiNodeColorWarningDisplayed);
             grnState.ppiNodeColorWarningDisplayed = true;
         }
-        
+
         if (
             (grnState.database.expressionDatasets || []).includes(
                 grnState.nodeColoring.topDataset
