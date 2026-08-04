@@ -303,7 +303,7 @@ export const upload = function () {
         const hasExpressionData = Object.keys(finalExportSheets.expression).length > 0;
         if (!hasExpressionData) {
             // No expression sheets selected - proceed directly to export
-            if (finalExportSheets["optimization_parameters"]) {
+            if (finalExportSheets["optimization_parameters"] === null) {
                 finalExportSheets["optimization_parameters"] =
                     updateOptimizationParameters(finalExportSheets);
             }
