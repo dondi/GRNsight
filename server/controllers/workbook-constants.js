@@ -406,7 +406,7 @@ module.exports = {
                 errorDescription: expressionWorkbook
                     ? [
                           `The imported ${sheetName} sheet is blank,`,
-                          `so the nodes will not display expression data from that sheet. This will not affect the functionality of GRNsight.`,
+                          `so the nodes will not display expression data from that sheet.`,
                       ].join(" ")
                     : [
                           `The imported ${sheetName} sheet is blank`,
