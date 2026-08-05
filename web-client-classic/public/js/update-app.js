@@ -1092,12 +1092,6 @@ export const updateApp = grnState => {
         updaters.renderNodeColoring();
     }
 
-    // if (grnState.nodeColoring.showMenu) {
-    //     showNodeColoringMenus();
-    // } else {
-    //     disableNodeColoringMenus();
-    // }
-
     updateLogFoldChangeMaxValue();
     updateTopDataset();
     updateBottomDataset();
