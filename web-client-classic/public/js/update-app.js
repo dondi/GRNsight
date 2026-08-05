@@ -532,13 +532,6 @@ const showNodeColoringMenus = () => {
     $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "collapse");
 };
 
-const disableNodeColoringMenus = () => {
-    $(NODE_COLORING_SIDEBAR_PANEL).addClass("disabled");
-    $(NODE_COLORING_MENU_CLASS).addClass("disabled");
-    $(NODE_COLORING_MENU).addClass("disabled");
-    $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "");
-};
-
 const isNewWorkbook = name => {
     return grnState.nodeColoring.lastDataset === null || grnState.nodeColoring.lastDataset !== name;
 };
