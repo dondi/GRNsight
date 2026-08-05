@@ -922,6 +922,13 @@ export const updateApp = grnState => {
         hasExpressionData(grnState.workbook.expression)
     ) {
         grnState.nodeColoring.showMenu = true;
+        $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
+        $(NODE_COLORING_SIDEBAR_BODY).find("input, select, button").prop("disabled", false);
+        $(NODE_COLORING_NAVBAR_OPTIONS).removeClass("disabled");
+        $(NODE_COLORING_NAVBAR_OPTIONS).find("li").removeClass("disabled");
+        $("#node-coloring-toggle-menu").parent().removeClass("disabled");
+        $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).prop("disabled", false);
+
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
         $(`${NODE_COLORING_TOGGLE_MENU} span`).addClass("glyphicon-ok");
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
@@ -966,6 +973,14 @@ export const updateApp = grnState => {
         }
 
         grnState.nodeColoring.showMenu = true;
+
+        $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
+        $(NODE_COLORING_SIDEBAR_BODY).find("input, select, button").prop("disabled", false);
+        $(NODE_COLORING_NAVBAR_OPTIONS).removeClass("disabled");
+        $(NODE_COLORING_NAVBAR_OPTIONS).find("li").removeClass("disabled");
+        $("#node-coloring-toggle-menu").parent().removeClass("disabled");
+        $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).prop("disabled", false);
+
         grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset
             ? grnState.nodeColoring.topDataset
             : "Dahlquist_2018_wt";
@@ -984,6 +999,8 @@ export const updateApp = grnState => {
             grnState.nodeColoring.averageBottomDataset
         );
 
+        enableNodeColoringUI();
+
         if (grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
             loadExpressionDatabase(true);
         } else if (
@@ -992,7 +1009,6 @@ export const updateApp = grnState => {
         ) {
             loadExpressionDatabase(false);
         } else {
-            enableNodeColoringUI();
             // There is as problem here! When a dataset from the database is used to do node coloring,
             // but then the layout of the graph is changed (force graph to grid layout, for instance),
             // node coloring goes away, seemingly inexplicably.
