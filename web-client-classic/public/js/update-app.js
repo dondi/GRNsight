@@ -846,9 +846,6 @@ export const updateApp = grnState => {
         // made a choice and we will let the choice stick.
         if (hasExpressionData(grnState.workbook.expression)) {
             resetDatasetDropdownMenus(grnState.workbook);
-            // if (grnState.nodeColoring.nodeColoringEnabled === undefined) {
-            //     grnState.nodeColoring.nodeColoringEnabled = false;
-            // }
 
             if (isNewWorkbook(name)) {
                 grnState.nodeColoring.showMenu = true;
@@ -971,13 +968,17 @@ export const updateApp = grnState => {
             (!grnState.nodeColoring.bottomDataSameAsTop &&
                 grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined)
         ) {
+            updaters.removeNodeColoring();
             resetDatasetDropdownMenus(grnState.workbook);
         }
 
         grnState.nodeColoring.showMenu = true;
-        grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset || "Dahlquist_2018_wt";
-        grnState.nodeColoring.bottomDataset =
-            grnState.nodeColoring.bottomDataset || "Dahlquist_2018_wt";
+        grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset
+            ? grnState.nodeColoring.topDataset
+            : "Dahlquist_2018_wt";
+        grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset
+            ? grnState.nodeColoring.bottomDataset
+            : "Dahlquist_2018_wt";
 
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
         $(`${NODE_COLORING_TOGGLE_MENU} span`).addClass("glyphicon-ok");
