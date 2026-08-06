@@ -163,7 +163,7 @@ describe("expression-data-import-tests", function () {
         it("should return an error with network sheet", function () {
             test.emptyNetworkWorkbookError(
                 "test-files/expression-data-test-sheets/empty-network-xlsx-with-network-tab.xlsx",
-                2
+                1
             );
         });
 

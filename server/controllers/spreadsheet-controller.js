@@ -210,7 +210,15 @@ var crossSheetInteractions = function (workbookFile) {
 
     additionalData.meta.data.workbookType = parseNetworkSheet.workbookType(workbookFile);
     if (additionalData.meta.data.workbookType === undefined) {
-        addError(workbook, constants.errors.missingNetworkError);
+        let networkErrorPresent;
+        for (let i = 0; i < workbook.errors.length; i++) {
+            if (workbook.errors[i].errorCode === "MISSING_NETWORK") {
+                networkErrorPresent = true;
+            }
+        }
+        if (!networkErrorPresent) {
+            addError(workbook, constants.errors.missingNetworkError);
+        }
         additionalData.meta.data.workbookType = NETWORK_GRN_MODE;
     } else if (!supportWorkbookType(additionalData.meta.data.workbookType)) {
         addWarning(
