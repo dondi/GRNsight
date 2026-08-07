@@ -409,7 +409,7 @@ module.exports = {
                           `so the nodes will not display expression data from that sheet.`,
                       ].join(" ")
                     : [
-                          `The imported ${sheetName} sheet is blank`,
+                          `The imported ${sheetName} sheet is blank.`,
                           `This will not affect the display of the graph.`,
                       ].join(" "),
             };
