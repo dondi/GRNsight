@@ -5,7 +5,7 @@ var constants = require(__dirname + "/workbook-constants");
 
 const EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
 
-const addExpWarning = (workbook, message) => {
+const addExpressionWarning = (workbook, message) => {
     let warningsCount;
     if (!Object.keys(workbook).includes("warnings")) {
         warningsCount = 0;
@@ -22,7 +22,7 @@ const addExpWarning = (workbook, message) => {
     }
 };
 
-const addExpError = (workbook, message) => {
+const addExpressionError = (workbook, message) => {
     const errorsCount = workbook.errors.length;
     const MAX_ERRORS = 20;
     if (errorsCount < MAX_ERRORS) {
@@ -59,7 +59,7 @@ var parseExpressionSheet = function (sheet) {
 
     // Check to see if the sheet is blank
     if (!sheet.data || sheet.data.length === 0 || sheet.data[0].length === 0) {
-        addExpWarning(
+        addExpressionWarning(
             expressionData,
             constants.warnings.emptyExpressionWorkbookWarning(sheet.name)
         );
@@ -70,21 +70,24 @@ var parseExpressionSheet = function (sheet) {
 
     // Check that id label is correct. Throw error if not.
     if (idLabel !== "id") {
-        addExpError(expressionData, constants.errors.idLabelError(sheet.name));
+        addExpressionError(expressionData, constants.errors.idLabelError(sheet.name));
     }
     expressionData.timePoints = sheet.data[0].slice(1);
     const numberOfDataPoints = expressionData.timePoints.length;
     let compareTimePoint = 0;
     for (let i = 0; i < numberOfDataPoints; i++) {
         if (isNaN(expressionData.timePoints[i]) && expressionData.timePoints[i] !== undefined) {
-            addExpError(
+            addExpressionError(
                 expressionData,
                 constants.errors.nonNumericalTimePointsError(i + 1, sheet.name)
             );
         } else if (expressionData.timePoints[i] < 0) {
-            addExpError(expressionData, constants.errors.negativeTimePointError(i + 1, sheet.name));
+            addExpressionError(
+                expressionData,
+                constants.errors.negativeTimePointError(i + 1, sheet.name)
+            );
         } else if (expressionData.timePoints[i] < compareTimePoint) {
-            addExpError(
+            addExpressionError(
                 expressionData,
                 constants.errors.nonMonotonicTimePointsError(i + 1, sheet.name)
             );
@@ -118,7 +121,7 @@ var parseExpressionSheet = function (sheet) {
         let columnChecker = new Array(rowLength).fill(0);
         Object.values(expressionData.data).forEach(function (row) {
             if (row.length !== rowLength) {
-                addExpWarning(
+                addExpressionWarning(
                     expressionData,
                     constants.warnings.extraneousDataWarning(sheet.name, row)
                 );
@@ -127,7 +130,7 @@ var parseExpressionSheet = function (sheet) {
             if (rowCounter === 0) {
                 for (let i = 0; i < rowLength; i++) {
                     if (sheet.data[0][i] === undefined) {
-                        addExpError(
+                        addExpressionError(
                             expressionData,
                             constants.errors.missingColumnHeaderError(sheet.name)
                         );
@@ -146,7 +149,7 @@ var parseExpressionSheet = function (sheet) {
             for (let i = 0; i <= rowLength; i++) {
                 if (i === rowLength) {
                     if (nonnullCount === 0) {
-                        addExpError(
+                        addExpressionError(
                             expressionData,
                             constants.errors.emptyExpressionRowError(i, sheet.name)
                         );
@@ -163,7 +166,7 @@ var parseExpressionSheet = function (sheet) {
         // check for empty columns
         for (var i = 0; i < columnChecker.length; i++) {
             if (columnChecker[i] === 0) {
-                addExpError(
+                addExpressionError(
                     expressionData,
                     constants.errors.emptyExpressionColumnError(i, sheet.name)
                 );
