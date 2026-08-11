@@ -517,14 +517,17 @@ export const upload = function () {
     `;
     };
 
-    const createHTMLforSheets = (source, savedSheets) => {
+    const createHTMLforSheets = (source, checkedStateByValue) => {
         $(".export-excel-workbook-sheet-option").remove();
 
         const getCheckedAttr = (sheetValue, defaultState = true) => {
-            if (savedSheets) {
-                return savedSheets.includes(sheetValue) ? 'checked="true"' : "";
-            }
-            return defaultState ? 'checked="true"' : "";
+            return Object.prototype.hasOwnProperty.call(checkedStateByValue, sheetValue)
+                ? checkedStateByValue[sheetValue]
+                    ? 'checked="true"'
+                    : ""
+                : defaultState
+                  ? 'checked="true"'
+                  : "";
         };
 
         const sources = [
@@ -689,7 +692,7 @@ export const upload = function () {
         return result;
     };
 
-    var handleWorkbookSheetCheckboxBehaviour = () => {
+    var handleWorkbookSheetCheckboxBehaviour = checkedStateByValue => {
         const syncSelectAll = () => {
             const selectAll = $("#exportExcelWorkbookSheet-All");
             if (!selectAll.length) return;
@@ -701,42 +704,29 @@ export const upload = function () {
 
         $("input[name=workbookSheets]")
             .not($("#exportExcelWorkbookSheet-All"))
-            .on("click", () => {
+            .on("click", function () {
+                checkedStateByValue[this.value] = this.checked;
                 syncSelectAll();
-
-                let anyExpressionChecked = false;
-                for (let i in allSheets) {
-                    if (
-                        typeof allSheets[i] === "object" &&
-                        allSheets[i].id !== "exportExcelWorkbookSheet-All" &&
-                        allSheets[i].checked &&
-                        allSheets[i].value &&
-                        (allSheets[i].value.includes("expression") ||
-                            allSheets[i].value.includes("sigma"))
-                    ) {
-                        anyExpressionChecked = true;
-                        break;
-                    }
-                }
-                if (!anyExpressionChecked) {
-                    $("#exportExcelExpressionSource-noneRadio").val("none").trigger("change");
-                }
             });
+
         $("#exportExcelWorkbookSheet-All").on("click", () => {
             const allSheets = $("input[name=workbookSheets]").not(":disabled");
             const selectAll = $("#exportExcelWorkbookSheet-All");
             for (let i in allSheets) {
                 if (typeof allSheets[i] === "object") {
                     allSheets[i].checked = selectAll[0].checked;
+                    checkedStateByValue[allSheets[i].value] = selectAll[0].checked;
                 }
             }
         });
         syncSelectAll();
     };
 
-    const handleExpressionSheetsFromSource = function (source, savedSheets) {
-        $("#export-excel-workbook-sheet-list").append(createHTMLforSheets(source, savedSheets));
-        handleWorkbookSheetCheckboxBehaviour();
+    const handleExpressionSheetsFromSource = function (source, checkedStateByValue) {
+        $("#export-excel-workbook-sheet-list").append(
+            createHTMLforSheets(source, checkedStateByValue)
+        );
+        handleWorkbookSheetCheckboxBehaviour(checkedStateByValue);
         $("#Export-Excel-Button").off("click");
         $("#Export-Excel-Button").on(
             "click",
@@ -758,16 +748,9 @@ export const upload = function () {
                 source = "userInput";
             }
 
-            const selectedSheetsBySource = {};
+            const checkedStateByValue = {};
 
-            const saveCurrentState = () => {
-                selectedSheetsBySource[source] = [];
-                $("input[name='workbookSheets']:checked").each(function () {
-                    selectedSheetsBySource[source].push($(this).val());
-                });
-            };
-
-            handleExpressionSheetsFromSource(source);
+            handleExpressionSheetsFromSource(source, checkedStateByValue);
 
             $("#export-excel-workbook-sheet-list").off("change", "#expressionSourceDropdown");
             $("#export-excel-workbook-sheet-list").on(
@@ -776,10 +759,9 @@ export const upload = function () {
                 function () {
                     const selectedValue = $(this).val();
                     if (selectedValue !== source) {
-                        saveCurrentState();
                         source = selectedValue;
                         $(".export-excel-workbook-sheet-option-subheader").remove();
-                        handleExpressionSheetsFromSource(source, selectedSheetsBySource[source]);
+                        handleExpressionSheetsFromSource(source, checkedStateByValue);
                     }
                 }
             );
