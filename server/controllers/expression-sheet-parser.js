@@ -55,6 +55,7 @@ var parseExpressionSheet = function (sheet) {
         warnings: [],
         timePoints: [],
         columnGeneNames: [],
+        data: {},
     };
 
     // Check to see if the sheet is blank

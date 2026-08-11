@@ -1292,7 +1292,10 @@ export var drawGraph = function (workbook) {
                 .append("g")
                 .selectAll(".coloring")
                 .data(function () {
-                    if (grnState.workbook.expression[dataset]) {
+                    if (
+                        grnState.workbook.expression[dataset] &&
+                        grnState.workbook.expression[dataset].data
+                    ) {
                         const geneName = adjustGeneNameForExpression(p);
                         if (grnState.workbook.expression[dataset].data[geneName]) {
                             const result = getExpressionData(geneName, dataset, average);

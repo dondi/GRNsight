@@ -136,7 +136,7 @@ var crossSheetInteractions = function (workbookFile) {
         typeof networkOptimizedWeights === "object" &&
         Object.keys(networkOptimizedWeights).length > 0
     ) {
-        // Base workbook is a clone of the prefered Optimized weights sheet
+        // Base workbook is a clone of the preferred Optimized weights sheet
         workbook = deepClone(networkOptimizedWeights, false);
         // Add errors from network sheet if it exists
         if (network && typeof network === "object" && Object.keys(network).length > 0) {
@@ -326,11 +326,29 @@ var crossSheetInteractions = function (workbookFile) {
                 }
             } else {
                 if (extraWorkbookGenes.size > 0) {
-                    addWarning(workbook, constants.warnings.missingGeneNamesWarning(sheet.name));
                 }
-                if (extraExpressionGenes.size > 0) {
-                    addWarning(workbook, constants.warnings.extraGeneNamesWarning(sheet.name));
+                let warningPresent;
+                for (let i = 0; i < workbook.warnings.length; i++) {
+                    if (workbook.warnings[i].warningCode === "BLANK_EXPRESSION_SHEET") {
+                        warningPresent = true;
+                    }
                 }
+                if (!warningPresent) {
+                    if (!sheet.data || sheet.data.length === 0 || sheet.data[0].length === 0) {
+                        addWarning(
+                            workbook,
+                            constants.warnings.emptyExpressionWorkbookWarning(sheet.name)
+                        );
+                    } else {
+                        addWarning(
+                            workbook,
+                            constants.warnings.missingGeneNamesWarning(sheet.name)
+                        );
+                    }
+                }
+            }
+            if (extraExpressionGenes.size > 0) {
+                addWarning(workbook, constants.warnings.extraGeneNamesWarning(sheet.name));
             }
         }
     });
