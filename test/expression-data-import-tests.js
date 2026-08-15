@@ -174,4 +174,25 @@ describe("expression-data-import-tests", function () {
             );
         });
     });
+
+    describe("missing-one-value", function () {
+        it("Should return a warning with one missing value in expression sheet.", function () {
+            test.noWarnings(
+                "test-files/expression-data-test-sheets/expression_sheet_edges_missing-one-value.xlsx",
+                0
+            );
+        });
+        it("Should return a warning with one missing value in optimized expression sheet.", function () {
+            test.noWarnings(
+                "test-files/expression-data-test-sheets/optimized_expression_sheet_missing_one_value.xlsx",
+                0
+            );
+        });
+        it("Should return a warning with one missing value in sigma sheet.", function () {
+            test.noWarnings(
+                "test-files/expression-data-test-sheets/sigma_sheet_missing_one_value.xlsx",
+                0
+            );
+        });
+    });
 });
