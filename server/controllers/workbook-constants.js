@@ -438,7 +438,7 @@ module.exports = {
                           grnMapInputSuppliedWarningMessage(sheetName, value),
                       ].join(" ")
                     : [
-                          `GRNsight has detected that there are missing genes and ${valuesForEachTwoColSheet[sheetName]}`,
+                          `GRNsight has detected that there are missing genes and values for ${valuesForEachTwoColSheet[sheetName]}`,
                           `in the imported workbook's ${sheetName} sheet.`,
                           grnMapInputSuppliedWarningMessage(sheetName, value),
                           `The missing genes and values are: ${missingGenes}.`,
@@ -446,16 +446,26 @@ module.exports = {
             };
         },
 
-        missingAllGenesAndValues: function (sheetName, isAllGenesMissing) {
+        missingAllGenesAndValues: function (sheetName, isAllGenesMissing, missingGenes) {
             const missingType = isAllGenesMissing ? "genes and values" : "values";
-            const value = `a ${valuesForEachTwoColSheet[sheetName].replace(/s$/, "")}`;
+            const value = `A ${valuesForEachTwoColSheet[sheetName].replace(/s$/, "")}`;
+            const nameSegment = sheetName.split("_");
 
             return {
                 warningCode: `MISSING_ALL_${missingType.replace(/ /g, "_").toUpperCase()}_${sheetName.toUpperCase()}`,
-                errorDescription: [
-                    `There were no ${missingType} supplied in the "${sheetName}" sheet in the imported workbook.`,
-                    grnMapInputSuppliedWarningMessage(sheetName, value),
-                ].join(" "),
+                errorDescription:
+                    missingType === "values"
+                        ? [
+                              `GRNsight has detected that there are missing ${missingType}`,
+                              `for ${nameSegment[0]} ${nameSegment[1]} in the imported workbook's "${sheetName}" sheet.`,
+                              `${value} will need to be supplied to use this workbook as an`,
+                              `input file for GRNmap but will not affect the display of the graph in GRNsight.`,
+                              `The missing ${missingType} are: ${missingGenes}.`,
+                          ].join(" ")
+                        : [
+                              `There were no ${missingType} supplied in the "${sheetName}" sheet in the imported workbook.`,
+                              grnMapInputSuppliedWarningMessage(sheetName, value),
+                          ].join(" "),
             };
         },
 

@@ -27,10 +27,19 @@ const getChosenTwoColumnSheets = chosenSheets => {
 const findWarningByCode = (warningsList, code) => warningsList.find(w => w.warningCode === code);
 const toExportWarningFromImportWarning = importWarning => {
     if (!importWarning) return null;
+
+    const additionalExportText = "because they were missing in the imported workbook.";
+    const oldImportWarningText = importWarning.errorDescription;
+    const newImportWarningText =
+        oldImportWarningText
+            .substring(0, importWarning.errorDescription.indexOf("sheet"))
+            .replace(/\bimported\b/gi, "exported") +
+        additionalExportText +
+        importWarning.errorDescription.slice(importWarning.errorDescription.indexOf("sheet") + 6);
+
     return {
         ...importWarning,
-        // TODO: Need to also include that the warning is there because of the imported workbook
-        errorDescription: importWarning.errorDescription.replace(/\bimported\b/gi, "exported"),
+        errorDescription: newImportWarningText,
     };
 };
 const migrateImportWarnings = (workbookWarnings, codes) => {

@@ -216,18 +216,30 @@ const applyTwoColumnSheetWarnings = (
             constants.warnings.missingAllGenesAndValues(sheetName, /*isAllGenesMissing=*/ true)
         );
     } else if (missingGenes.length > 0) {
-        warningsToAdd.push(
-            constants.warnings.missingGenesAndValuesWarningWhenImporting(
-                sheetName,
-                missingGenes.join(", ")
-            )
-        );
+        let geneIdWarningPresent;
+        for (let i = 0; i < warningsToAdd.length; i++) {
+            if (warningsToAdd[i].warningCode.includes("MISSING_GENE_IDS_WITH_VALUES")) {
+                geneIdWarningPresent = true;
+            }
+        }
+        if (!geneIdWarningPresent) {
+            warningsToAdd.push(
+                constants.warnings.missingGenesAndValuesWarningWhenImporting(
+                    sheetName,
+                    missingGenes.join(", ")
+                )
+            );
+        }
     }
 
     // Check missing values
     if (genesInSheet.length > 0 && genesMissingValue.length === genesInSheet.length) {
         warningsToAdd.push(
-            constants.warnings.missingAllGenesAndValues(sheetName, /*isAllGenesMissing=*/ false)
+            constants.warnings.missingAllGenesAndValues(
+                sheetName,
+                /*isAllGenesMissing=*/ false,
+                genesMissingValue.join(", ")
+            )
         );
     } else if (genesMissingValue.length > 0) {
         warningsToAdd.push(
