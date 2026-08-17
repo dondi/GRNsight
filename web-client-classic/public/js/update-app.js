@@ -713,7 +713,7 @@ const resetDatasetDropdownMenus = workbook => {
     }
 
     // Add expression database options
-    (grnState.database.expressionDatasets ?? []).forEach(option =>
+    (grnState.database.expressionDatasets || []).forEach(option =>
         grnState.nodeColoring.nodeColoringOptions.databaseExpressions.push({
             value: [option],
         })
@@ -941,14 +941,14 @@ export const updateApp = grnState => {
         }
 
         if (
-            (grnState.database.expressionDatasets ?? []).includes(
+            (grnState.database.expressionDatasets || []).includes(
                 grnState.nodeColoring.topDataset
             ) &&
             grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined
         ) {
             loadExpressionDatabase(true);
         } else if (
-            (grnState.database.expressionDatasets ?? []).includes(
+            (grnState.database.expressionDatasets || []).includes(
                 grnState.nodeColoring.bottomDataset
             ) &&
             !grnState.nodeColoring.bottomDataSameAsTop &&
