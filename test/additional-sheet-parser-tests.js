@@ -510,7 +510,7 @@ describe("additional-sheet-parser", function () {
                     for (const fileName of cases[sheetName]) {
                         test.missingGeneIdsWithValuesInTwoColumnSheetWarning(
                             `${folder}${fileName}`,
-                            2,
+                            1,
                             sheetName,
                             expectedText
                         );

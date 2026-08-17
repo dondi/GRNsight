@@ -28,14 +28,14 @@ const findWarningByCode = (warningsList, code) => warningsList.find(w => w.warni
 const toExportWarningFromImportWarning = importWarning => {
     if (!importWarning) return null;
 
-    const additionalExportText = "because they were missing in the imported workbook.";
+    const additionalExportText = " because it was incorrect in the imported workbook.";
     const oldImportWarningText = importWarning.errorDescription;
     const newImportWarningText =
         oldImportWarningText
-            .substring(0, importWarning.errorDescription.indexOf("sheet"))
+            .substring(0, oldImportWarningText.indexOf("sheet") + 5)
             .replace(/\bimported\b/gi, "exported") +
         additionalExportText +
-        importWarning.errorDescription.slice(importWarning.errorDescription.indexOf("sheet") + 6);
+        oldImportWarningText.substring(oldImportWarningText.indexOf("sheet") + 6);
 
     return {
         ...importWarning,
@@ -119,6 +119,9 @@ export const buildPreFetchTwoColumnWarnings = ({
             `MISSING_GENES_AND_VALUES_${sheetUpperName}`,
             `EXTRA_GENES_${sheetUpperName}`,
             `MISSING_VALUES_${sheetUpperName}`,
+            `MISSING_GENE_IDS_WITH_VALUES_${sheetUpperName}`,
+            `MISSING_COLUMN_HEADER_${sheetName.toUpperCase()}`,
+            `INCORRECT_COLUMN_HEADER_${sheetName.toUpperCase()}`,
         ];
         warningsToAdd.push(...migrateImportWarnings(workbookWarnings, importWarningCodesToMigrate));
 

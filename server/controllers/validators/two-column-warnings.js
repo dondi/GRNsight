@@ -202,6 +202,25 @@ const applyTwoColumnSheetWarnings = (
         );
     }
 
+    // Check to see if there are mismatch gene IDs
+    console.log("workbook contents", workbook);
+    console.log("genes in network", genesInNetwork);
+
+    let genesWithMismatchedIds;
+    const geneIDs = Object.keys(workbook.data);
+    for (let gene in geneIDs) {
+        console.log("gene", gene);
+        if (!(gene in genesInNetwork)) {
+            genesWithMismatchedIds.push(gene);
+        }
+    }
+
+    if (genesWithMismatchedIds.length > 0) {
+        warningsToAdd.push(
+            constants.warnings.mismatchGeneIDWithValues(sheetName, genesWithMismatchedIds)
+        );
+    }
+
     if (!genesInNetwork || genesInNetwork.length === 0) {
         addWarnings(workbook, warningsToAdd);
         return;
@@ -218,7 +237,10 @@ const applyTwoColumnSheetWarnings = (
     } else if (missingGenes.length > 0) {
         let geneIdWarningPresent;
         for (let i = 0; i < warningsToAdd.length; i++) {
-            if (warningsToAdd[i].warningCode.includes("MISSING_GENE_IDS_WITH_VALUES")) {
+            if (
+                warningsToAdd[i].warningCode.includes("MISSING_GENE_IDS_WITH_VALUES") ||
+                warningsToAdd[i].warningCode.includes("MISMATCH_GENE_IDS_WITH_VALUES")
+            ) {
                 geneIdWarningPresent = true;
             }
         }

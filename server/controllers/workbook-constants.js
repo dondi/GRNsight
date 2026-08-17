@@ -541,6 +541,19 @@ module.exports = {
             };
         },
 
+        mismatchGeneIDWithValues: function (sheetName, valuesMissingGeneIds) {
+            return {
+                warningCode: `MISMATCH_GENE_IDS_WITH_VALUES_${sheetName.toUpperCase()}`,
+                errorDescription: [
+                    `GRNsight has detected that there are gene IDs in the imported workbook's ${sheetName.toUpperCase()}`,
+                    `sheet that do not match the gene IDs in the "network" sheet. The gene IDs in the ${sheetName} sheet need`,
+                    "to match the gene IDs in the `network` sheet to use this workbook as an input file for GRNmap but will",
+                    "not affect the display of the graph in GRNsight.",
+                    `The mismatched IDs are for genes: ${valuesMissingGeneIds.join(", ")}.`,
+                ],
+            };
+        },
+
         wrongGeneOrder: function (sheetName) {
             const prefix = sheetName.includes("optimized");
 
