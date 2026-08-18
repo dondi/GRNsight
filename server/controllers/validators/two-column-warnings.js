@@ -202,21 +202,6 @@ const applyTwoColumnSheetWarnings = (
         );
     }
 
-    // Check to see if there are mismatch gene IDs
-    let genesWithMismatchedIds = [];
-    const geneIDs = Object.keys(workbook.data);
-    geneIDs.forEach(gene => {
-        if (!genesInNetwork.includes(gene)) {
-            genesWithMismatchedIds.push(gene);
-        }
-    });
-
-    if (genesWithMismatchedIds.length > 0) {
-        warningsToAdd.push(
-            constants.warnings.mismatchGeneIDWithValues(sheetName, genesWithMismatchedIds)
-        );
-    }
-
     if (!genesInNetwork || genesInNetwork.length === 0) {
         addWarnings(workbook, warningsToAdd);
         return;
