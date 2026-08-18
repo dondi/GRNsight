@@ -231,9 +231,10 @@ export const upload = function () {
                 : null;
             const simTimepoints =
                 expTimepoints && expTimepoints.length > 0
-                    ? Array.from(Array(expTimepoints[expTimepoints.length - 1] + 1).keys()).filter(
-                          x => x % 5 === 0
-                      )
+                    ? Array.from(
+                          { length: expTimepoints[expTimepoints.length - 1] + 1 },
+                          (_, index) => index
+                      ).filter(timepoint => timepoint % 5 === 0)
                     : null;
             const strain =
                 expression.length > 0 ? expression.map(x => removeExpressionSuffix(x)) : null;
@@ -411,11 +412,9 @@ export const upload = function () {
                 finalExportSheets.expression[sheet] =
                     source === "userInput" ? grnState.workbook.expression[sheet] : null;
                 if (finalExportSheets.expression[sheet]) {
-                    for (let warning of finalExportSheets.expression[sheet].warnings) {
-                        if (warning.warningCode === "BLANK_EXPRESSION_SHEET") {
-                            finalExportSheets.warnings.push(warning);
-                        }
-                    }
+                    finalExportSheets.expression[sheet].warnings
+                        .filter(({ warningCode }) => warningCode === "BLANK_EXPRESSION_SHEET")
+                        .forEach(warning => finalExportSheets.warnings.push(warning));
                 }
             } else {
                 finalExportSheets.two_column_sheets[sheet] = grnState.workbook.twoColumnSheets
