@@ -229,11 +229,13 @@ export const upload = function () {
                       return a - b;
                   })
                 : null;
-            const simTimepoints = expTimepoints
-                ? Array.from(Array(expTimepoints[expTimepoints.length - 1] + 1).keys()).filter(
-                      x => x % 5 === 0
-                  )
-                : null;
+            const simTimepoints =
+                expTimepoints && expTimepoints.length > 0
+                    ? Array.from(
+                          { length: expTimepoints[expTimepoints.length - 1] + 1 },
+                          (_, index) => index
+                      ).filter(timepoint => timepoint % 5 === 0)
+                    : null;
             const strain =
                 expression.length > 0 ? expression.map(x => removeExpressionSuffix(x)) : null;
             if (expTimepoints) {
@@ -409,6 +411,11 @@ export const upload = function () {
             } else if (isExpressionSheet(sheet)) {
                 finalExportSheets.expression[sheet] =
                     source === "userInput" ? grnState.workbook.expression[sheet] : null;
+                if (finalExportSheets.expression[sheet]) {
+                    finalExportSheets.expression[sheet].warnings
+                        .filter(({ warningCode }) => warningCode === "BLANK_EXPRESSION_SHEET")
+                        .forEach(warning => finalExportSheets.warnings.push(warning));
+                }
             } else {
                 finalExportSheets.two_column_sheets[sheet] = grnState.workbook.twoColumnSheets
                     ? grnState.workbook.twoColumnSheets[sheet]
