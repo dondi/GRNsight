@@ -122,6 +122,7 @@ export const buildPreFetchTwoColumnWarnings = ({
             `MISSING_GENE_IDS_WITH_VALUES_${sheetUpperName}`,
             `MISSING_COLUMN_HEADER_${sheetName.toUpperCase()}`,
             `INCORRECT_COLUMN_HEADER_${sheetName.toUpperCase()}`,
+            `MISMATCH_GENE_IDS_WITH_VALUES_${sheetName.toUpperCase()}`,
         ];
         warningsToAdd.push(...migrateImportWarnings(workbookWarnings, importWarningCodesToMigrate));
 
