@@ -350,6 +350,19 @@ module.exports = {
                           `Cell A1 should contain the text <b>${expectedA1}</b>,`,
                           `and cell B1 should contain the text <b>${expectedB1}</b>, exactly.`,
                       ].join(" "),
+                exportErrorDescription: prefix
+                    ? [
+                          `GRNsight has detected that the headers are ${headerStatus} in the workbook's <b>${sheetName}</b> sheet because they were incorrect in the imported workbook.`,
+                          `Cell A1 should contain the text <b>${expectedA1}</b>, and cell B1 should contain the text <b>${expectedB1}</b>, exactly.`,
+                          `GRNsight is checking because these headers should have been provided by the GRNmap output, but they will not affect the display of the graph in GRNsight.`,
+                      ].join(" ")
+                    : [
+                          `GRNsight has detected that the headers are ${headerStatus} in the workbook's <b>${sheetName}</b> sheet because they were incorrect in the imported workbook.`,
+                          "The headers will need to be corrected to use this workbook as an input file for GRNmap,",
+                          "but will not affect the display of the graph in GRNsight.",
+                          `Cell A1 should contain the text <b>${expectedA1}</b>,`,
+                          `and cell B1 should contain the text <b>${expectedB1}</b>, exactly.`,
+                      ].join(" "),
             };
         },
 
@@ -443,11 +456,22 @@ module.exports = {
                           grnMapInputSuppliedWarningMessage(sheetName, value),
                           `The missing genes and values are: ${missingGenes}.`,
                       ].join(" "),
+                exportErrorDescription: prefix
+                    ? [
+                          `There were no genes and values supplied in the ${sheetName} sheet in the exported workbook`,
+                          grnMapInputSuppliedWarningMessage(sheetName, value),
+                      ].join(" ")
+                    : [
+                          `GRNsight has detected that there are missing genes and values for ${valuesForEachTwoColSheet[sheetName]}`,
+                          `in the exported workbook's ${sheetName} sheet.`,
+                          grnMapInputSuppliedWarningMessage(sheetName, value),
+                          `The missing genes and values are: ${missingGenes}.`,
+                      ].join(" "),
             };
         },
 
-        missingAllGenesAndValues: function (sheetName, isAllGenesMissing, missingGenes) {
-            const missingType = isAllGenesMissing ? "genes and values" : "values";
+        missingAllGenesAndValues: function ({ sheetName, allGenesMissing, missingGenes }) {
+            const missingType = allGenesMissing ? "genes and values" : "values";
             const value = `A ${valuesForEachTwoColSheet[sheetName].replace(/s$/, "")}`;
             const nameSegment = sheetName.split("_");
 
@@ -479,6 +503,11 @@ module.exports = {
                     grnMapInputSuppliedWarningMessage(sheetName, value),
                     `The genes with missing values are: ${genes}.`,
                 ].join(" "),
+                exportErrorDescription: [
+                    `GRNsight has detected that there are missing values for ${value} in the exported workbook's "${sheetName}" sheet because they were missing in the imported workbook.`,
+                    grnMapInputSuppliedWarningMessage(sheetName, value),
+                    `The genes with missing values are: ${genes}.`,
+                ].join(" "),
             };
         },
 
@@ -499,6 +528,23 @@ module.exports = {
                           `GRNsight has detected that there are extra genes in the imported workbook's '${sheetName}' sheet.`,
                           `The genes in the '${sheetName}' sheet need to match the genes in the 'network' sheet to use this workbook`,
                           "as an input file for GRNmap, but will not affect the display of the graph in GRNsight.",
+                          `The extra genes are: ${extraGenes}.`,
+                      ].join(" "),
+                exportErrorDescription: prefix
+                    ? [
+                          `GRNsight has detected that there are extra genes in the exported workbook's '${sheetName}' sheet`,
+                          `because they were there in the imported workbook.`,
+                          `GRNsight is checking because the genes in the '${sheetName}' sheet should have matched the genes `,
+                          "in the 'network' sheet from the GRNmap output,",
+                          "but this will not affect the display of the graph in GRNsight.",
+                          `The extra genes are: ${extraGenes}.`,
+                      ].join(" ")
+                    : [
+                          `GRNsight has detected that there are extra genes in the exported workbook's '${sheetName}' sheet`,
+                          `because they were there in the imported workbook.`,
+                          `The genes in the '${sheetName}' sheet need to match the genes in the 'network'`,
+                          `sheet to use this workbook as an input file for GRNmap,`,
+                          `but will not affect the display of the graph in GRNsight.`,
                           `The extra genes are: ${extraGenes}.`,
                       ].join(" "),
             };
@@ -535,6 +581,12 @@ module.exports = {
                 errorDescription: [
                     "GRNsight has detected that there are missing gene IDs",
                     `in the imported workbook's ${sheetName} sheet.`,
+                    grnMapInputSuppliedWarningMessage(sheetName, value),
+                    `The values with missing gene IDs are ${valuesMissingGenes}.`,
+                ].join(" "),
+                exportErrorDescription: [
+                    "GRNsight has detected that there are missing gene IDs",
+                    `in the exported workbook's ${sheetName} sheet because they were missing in the imported workbook.`,
                     grnMapInputSuppliedWarningMessage(sheetName, value),
                     `The values with missing gene IDs are ${valuesMissingGenes}.`,
                 ].join(" "),

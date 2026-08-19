@@ -27,19 +27,9 @@ const getChosenTwoColumnSheets = chosenSheets => {
 const findWarningByCode = (warningsList, code) => warningsList.find(w => w.warningCode === code);
 const toExportWarningFromImportWarning = importWarning => {
     if (!importWarning) return null;
-
-    const additionalExportText = " because it was incorrect in the imported workbook.";
-    const oldImportWarningText = importWarning.errorDescription;
-    const newImportWarningText =
-        oldImportWarningText
-            .substring(0, oldImportWarningText.indexOf("sheet") + 5)
-            .replace(/\bimported\b/gi, "exported") +
-        additionalExportText +
-        oldImportWarningText.substring(oldImportWarningText.indexOf("sheet") + 6);
-
     return {
         ...importWarning,
-        errorDescription: newImportWarningText,
+        errorDescription: importWarning.exportErrorDescription,
     };
 };
 const migrateImportWarnings = (workbookWarnings, codes) => {
