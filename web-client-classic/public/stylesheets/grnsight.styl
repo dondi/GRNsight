@@ -318,6 +318,18 @@ nav.navbar.navbar-default
 .dropdown a.with-input>*:last-child, #node-coloring-navbar-options a.with-input > *:last-child
     margin-left:auto
 
+
+.dropdown-menu > li.disabled > a {
+    color: #999999
+    cursor: not-allowed
+    pointer-events: none
+}
+
+.dropdown-menu > li.disabled > a:hover,
+.dropdown-menu > li.disabled > a:focus {
+    color: #999999
+    background-color: transparent
+}
 // Graph statistics styling is due to absolute position and size of grnsight-container
 .graph-statistics-container
   margin-top: 256px
