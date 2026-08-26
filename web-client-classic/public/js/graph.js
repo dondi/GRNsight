@@ -1474,7 +1474,13 @@ export var drawGraph = function (workbook) {
         if ($(".weightedGraphOptions").hasClass("hidden")) {
             $(".weightedGraphOptions").removeClass("hidden");
         }
+
         $(".weightedGraphOptionsMenu").removeClass("disabled");
+
+        if (!grnState.colorOptimal) {
+            $(".weightedGraphOptionsMenu.edge-coloring-dependent").addClass("disabled");
+        }
+
         var setWeightsVisability = function () {
             var WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver";
             var WEIGHTS_HIDE_CLASS = ".weightsNever";
