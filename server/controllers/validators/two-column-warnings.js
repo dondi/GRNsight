@@ -213,21 +213,34 @@ const applyTwoColumnSheetWarnings = (
     // Check missing genes
     if (missingGenes.length === genesInNetwork.length) {
         warningsToAdd.push(
-            constants.warnings.missingAllGenesAndValues(sheetName, /*isAllGenesMissing=*/ true)
+            constants.warnings.missingAllGenesAndValues({
+                sheetName: sheetName,
+                allGenesMissing: true,
+                missingGenes: genesMissingValue.join(", "),
+            })
         );
     } else if (missingGenes.length > 0) {
-        warningsToAdd.push(
-            constants.warnings.missingGenesAndValuesWarningWhenImporting(
-                sheetName,
-                missingGenes.join(", ")
-            )
+        const geneIdWarningPresent = warningsToAdd.some(({ warningCode }) =>
+            warningCode.includes("MISSING_GENE_IDS_WITH_VALUES")
         );
+        if (!geneIdWarningPresent) {
+            warningsToAdd.push(
+                constants.warnings.missingGenesAndValuesWarningWhenImporting(
+                    sheetName,
+                    missingGenes.join(", ")
+                )
+            );
+        }
     }
 
     // Check missing values
     if (genesInSheet.length > 0 && genesMissingValue.length === genesInSheet.length) {
         warningsToAdd.push(
-            constants.warnings.missingAllGenesAndValues(sheetName, /*isAllGenesMissing=*/ false)
+            constants.warnings.missingAllGenesAndValues({
+                sheetName: sheetName,
+                allGenesMissing: false,
+                missingGenes: genesMissingValue.join(", "),
+            })
         );
     } else if (genesMissingValue.length > 0) {
         warningsToAdd.push(

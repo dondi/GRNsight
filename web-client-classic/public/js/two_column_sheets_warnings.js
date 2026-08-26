@@ -29,8 +29,7 @@ const toExportWarningFromImportWarning = importWarning => {
     if (!importWarning) return null;
     return {
         ...importWarning,
-        // TODO: Need to also include that the warning is there because of the imported workbook
-        errorDescription: importWarning.errorDescription.replace(/\bimported\b/gi, "exported"),
+        errorDescription: importWarning.exportErrorDescription,
     };
 };
 const migrateImportWarnings = (workbookWarnings, codes) => {
@@ -110,6 +109,9 @@ export const buildPreFetchTwoColumnWarnings = ({
             `MISSING_GENES_AND_VALUES_${sheetUpperName}`,
             `EXTRA_GENES_${sheetUpperName}`,
             `MISSING_VALUES_${sheetUpperName}`,
+            `MISSING_GENE_IDS_WITH_VALUES_${sheetUpperName}`,
+            `MISSING_COLUMN_HEADER_${sheetName.toUpperCase()}`,
+            `INCORRECT_COLUMN_HEADER_${sheetName.toUpperCase()}`,
         ];
         warningsToAdd.push(...migrateImportWarnings(workbookWarnings, importWarningCodesToMigrate));
 

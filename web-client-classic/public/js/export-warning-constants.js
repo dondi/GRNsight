@@ -57,15 +57,11 @@ module.exports = {
                 errorDescription: prefix
                     ? [
                           `There were no genes and values supplied in the ${sheetName} in the exported workbook.`,
-                          `GRNsight is checking because a ${nameSegment[1]} ${nameSegment[2]} `,
-                          `value should have been provided as GRNmap output,`,
-                          "but will not affect the display of the graph in GRNsight.",
+                          grnMapInputSuppliedWarningMessage(sheetName, value),
                       ].join(" ")
                     : [
-                          `The "${sheetName}" sheet was empty in the exported workbook.`,
-                          `GRNsight is checking because a ${nameSegment[0]} ${nameSegment[1]}`,
-                          `value should have been provided as GRNmap output,`,
-                          `but will not affect the display of the graph in GRNsight.`,
+                          `There was no "${sheetName}" sheet in the imported workbook.`,
+                          `GRNsight has supplied ${dataSourceForTwoColumnSheet[sheetName]}.`,
                       ].join(" "),
             };
         },
@@ -85,11 +81,18 @@ module.exports = {
                           "should have been provided as GRNmap output,",
                           "but will not affect the display of the graph in GRNsight.",
                       ].join(" ")
-                    : [
-                          `There were no ${missingType} supplied`,
-                          `in the "${sheetName}" sheet in the exported workbook.`,
-                          `GRNsight has supplied ${dataSourceForTwoColumnSheet[sheetName]}.`,
-                      ].join(" "),
+                    : missingType === "values"
+                      ? [
+                            `GRNsight has detected that there are missing ${missingType} for`,
+                            `${sheetNameSegments[0]} ${sheetNameSegments[1]}`,
+                            `in the exported workbook's "${sheetName}" sheet`,
+                            "because they were missing in the imported workbook.",
+                            `GRNsight has supplied ${dataSourceForTwoColumnSheet[sheetName]}.`,
+                        ].join(" ")
+                      : [
+                            `The ${sheetName} was empty in the imported workbook.`,
+                            `GRNsight has supplied ${dataSourceForTwoColumnSheet[sheetName]}.`,
+                        ].join(" "),
             };
         },
 
