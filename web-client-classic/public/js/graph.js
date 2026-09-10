@@ -1233,7 +1233,9 @@ export var drawGraph = function (workbook) {
                     href:
                         "info?" +
                         $.param({
-                            symbol: grnState.mode === NETWORK_PPI_MODE ? gene.name.replace(/p$/i, "").toUpperCase() : gene.name,
+                            symbol: grnState.mode === NETWORK_PPI_MODE 
+                            ? gene.name.replace(/p$/i, "").toUpperCase()
+                            : gene.name,
                             species: grnState.genePageData.species,
                             jaspar: grnState.genePageData.taxonJaspar,
                             uniprot: grnState.genePageData.taxonUniprot,
