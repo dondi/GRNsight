@@ -229,11 +229,13 @@ export const upload = function () {
                       return a - b;
                   })
                 : null;
-            const simTimepoints = expTimepoints
-                ? Array.from(Array(expTimepoints[expTimepoints.length - 1] + 1).keys()).filter(
-                      x => x % 5 === 0
-                  )
-                : null;
+            const simTimepoints =
+                expTimepoints && expTimepoints.length > 0
+                    ? Array.from(
+                          { length: expTimepoints[expTimepoints.length - 1] + 1 },
+                          (_, index) => index
+                      ).filter(timepoint => timepoint % 5 === 0)
+                    : null;
             const strain =
                 expression.length > 0 ? expression.map(x => removeExpressionSuffix(x)) : null;
             if (expTimepoints) {
@@ -303,7 +305,7 @@ export const upload = function () {
         const hasExpressionData = Object.keys(finalExportSheets.expression).length > 0;
         if (!hasExpressionData) {
             // No expression sheets selected - proceed directly to export
-            if (finalExportSheets["optimization_parameters"]) {
+            if (finalExportSheets["optimization_parameters"] === null) {
                 finalExportSheets["optimization_parameters"] =
                     updateOptimizationParameters(finalExportSheets);
             }
@@ -409,6 +411,11 @@ export const upload = function () {
             } else if (isExpressionSheet(sheet)) {
                 finalExportSheets.expression[sheet] =
                     source === "userInput" ? grnState.workbook.expression[sheet] : null;
+                if (finalExportSheets.expression[sheet]) {
+                    finalExportSheets.expression[sheet].warnings
+                        .filter(({ warningCode }) => warningCode === "BLANK_EXPRESSION_SHEET")
+                        .forEach(warning => finalExportSheets.warnings.push(warning));
+                }
             } else {
                 finalExportSheets.two_column_sheets[sheet] = grnState.workbook.twoColumnSheets
                     ? grnState.workbook.twoColumnSheets[sheet]
@@ -508,17 +515,27 @@ export const upload = function () {
 
     const createHTMLforGRNForm = () => {
         return `
-        <form id='exportExcelForm'>
-            <div class='form-group export-form-group'>
-                <p id='exportExcelExpressionSources'></p>
-                <ul class='exportExcelWorkbookSheets' id='export-excel-workbook-sheet-list' style="list-style-type:none; padding-left:0;"></ul>
+        <form id="exportExcelForm">
+            <div class="form-group export-form-group">
+                <p id="exportExcelExpressionSources"></p>
+                <ul class="exportExcelWorkbookSheets" id="export-excel-workbook-sheet-list"></ul>
             </div>
         </form>
     `;
     };
 
-    const createHTMLforSheets = source => {
+    const createHTMLforSheets = (source, checkedStateByValue) => {
         $(".export-excel-workbook-sheet-option").remove();
+
+        const getCheckedAttr = (sheetValue, defaultState = true) => {
+            return Object.prototype.hasOwnProperty.call(checkedStateByValue, sheetValue)
+                ? checkedStateByValue[sheetValue]
+                    ? 'checked="true"'
+                    : ""
+                : defaultState
+                  ? 'checked="true"'
+                  : "";
+        };
 
         const sources = [
             ...new Set(
@@ -527,14 +544,14 @@ export const upload = function () {
         ];
 
         let result = `
-        <li class=\'export-excel-workbook-sheet-option export-excel-workbook-sheet-option-subheader\'>
-            <input type=\'checkbox\' name=\'workbookSheets\' checked=\"true\" value=\"select all\" id=\'exportExcelWorkbookSheet-All\' class=\'export-checkbox\' />
-            <label for=\'exportExcelWorkbookSheet-All\' id=\'exportExcelWorkbookSheet-All-label\' class=\'export-checkbox-label\'>
+        <li class="export-excel-workbook-sheet-option export-excel-workbook-sheet-option-subheader">
+            <input type="checkbox" name="workbookSheets" checked="true" value="select all" id="exportExcelWorkbookSheet-All" class="export-checkbox" />
+            <label for="exportExcelWorkbookSheet-All" id="exportExcelWorkbookSheet-All-label" class="export-checkbox-label">
                 Select All
             </label>
         </li>
 
-        <p class=\'export-excel-workbook-sheet-option-subheader\'> Network Sheets </p>
+        <p class="export-excel-workbook-sheet-option-subheader"> Network Sheets </p>
     `;
         const optionalAdditionalSheets = [
             "optimization_parameters",
@@ -561,30 +578,30 @@ export const upload = function () {
         // append each network sheet individually for unique handling
         let network = networks[0];
         result += `
-        <li class=\'export-excel-workbook-sheet-option\'>
-            <input type=\'checkbox\' name=\'workbookSheets\' checked=\'true\' value=\"${network[1]}\" id=\'exportExcelWorkbookSheet-${network[1]}\' class=\'export-checkbox\' disabled/>
-            <label for=\'exportExcelWorkbookSheet-${network[1]}\' class=\'export-checkbox-label\'>${network[1]}</label>
+        <li class="export-excel-workbook-sheet-option">
+            <input type="checkbox" name="workbookSheets" checked="true" value="${network[1]}" id="exportExcelWorkbookSheet-${network[1]}" class="export-checkbox" disabled/>
+            <label for="exportExcelWorkbookSheet-${network[1]}" class="export-checkbox-label">${network[1]}</label>
         </li>
     `;
         let networkOptimizedWeights = networks[1];
         if (networkOptimizedWeights[0]) {
             result += `
-            <li class=\'export-excel-workbook-sheet-option\'>
-                <input type=\'checkbox\' name=\'workbookSheets\' checked="true" value=\"${networkOptimizedWeights[1]}\" id=\'exportExcelWorkbookSheet-${networkOptimizedWeights[1]}\' class=\'export-checkbox\'/>
-                <label for=\'exportExcelWorkbookSheet-${networkOptimizedWeights[1]}\' class=\'export-checkbox-label\'>${networkOptimizedWeights[1]}</label>
+            <li class="export-excel-workbook-sheet-option">
+                <input type="checkbox" name="workbookSheets" ${getCheckedAttr(networkOptimizedWeights[1])} value="${networkOptimizedWeights[1]}" id="exportExcelWorkbookSheet-${networkOptimizedWeights[1]}" class="export-checkbox"/>
+                <label for="exportExcelWorkbookSheet-${networkOptimizedWeights[1]}" class="export-checkbox-label">${networkOptimizedWeights[1]}</label>
             </li>
         `;
         }
 
         let networkWeights = networks[2];
         result += `
-        <li class=\'export-excel-workbook-sheet-option\'>
-            <input type=\'checkbox\' name=\'workbookSheets\' checked=\'true\' value=\"${networkWeights[1]}\" id=\'exportExcelWorkbookSheet-${networkWeights[1]}\' class=\'export-checkbox\'/>
-            <label for=\'exportExcelWorkbookSheet-${networkWeights[1]}\' class=\'export-checkbox-label\'>${networkWeights[1]}</label>
+        <li class="export-excel-workbook-sheet-option">
+            <input type="checkbox" name="workbookSheets" ${getCheckedAttr(networkWeights[1])} value="${networkWeights[1]}" id="exportExcelWorkbookSheet-${networkWeights[1]}" class="export-checkbox"/>
+            <label for="exportExcelWorkbookSheet-${networkWeights[1]}" class="export-checkbox-label">${networkWeights[1]}</label>
         </li>
     `;
 
-        result += `<p class=\'export-excel-workbook-sheet-option-subheader\'> Expression Sheets </p>`;
+        result += `<p class="export-excel-workbook-sheet-option-subheader"> Expression Sheets </p>`;
 
         let dropdownOptions = `<option value="none">None</option>`;
         if (grnState.workbook.expressionNames && grnState.workbook.expressionNames.length > 0) {
@@ -595,9 +612,9 @@ export const upload = function () {
         }
 
         result += `
-        <li class=\'export-excel-workbook-sheet-option export-source-select\'>
-            <label class=\'export-checkbox-label\'>Expression Data Source:</label>
-            <select id=\'expressionSourceDropdown\' name=\'expressionSource\' class=\'dropdown-export\'>
+        <li class="export-excel-workbook-sheet-option export-source-select">
+            <label class="export-checkbox-label">Expression Data Source:</label>
+            <select id="expressionSourceDropdown" name="expressionSource" class="dropdown-export">
                 ${dropdownOptions}
             </select>
         </li>
@@ -606,35 +623,36 @@ export const upload = function () {
         if (source === "userInput" && grnState.workbook.expressionNames) {
             for (let expression of grnState.workbook.expressionNames) {
                 result += `
-            <li class=\'export-excel-workbook-sheet-option\'>
-                <input type=\'checkbox\' name=\'workbookSheets\' checked=\"true\" value=\"${expression}\" id=\'exportExcelWorkbookSheet-${expression}\' class=\'export-checkbox\' />
-                <label for=\'exportExcelWorkbookSheet-${expression}\' class=\'export-checkbox-label\'>${expression}</label>
-            </li>
-            `;
+        <li class="export-excel-workbook-sheet-option">
+            <input type="checkbox" name="workbookSheets" ${getCheckedAttr(expression)} value="${expression}" id="exportExcelWorkbookSheet-${expression}" class="export-checkbox" />
+            <label for="exportExcelWorkbookSheet-${expression}" class="export-checkbox-label">${expression}</label>
+        </li>
+        `;
             }
         } else if (source !== "none") {
             const expressionSheets = grnState.database.expressionDatasets.filter(s =>
                 s.includes(source)
             );
             for (let sheet of expressionSheets) {
+                const sheetValue = sheet.slice(sheet.lastIndexOf("_") + 1) + "_log2_expression";
                 result += `
-            <li class=\'export-excel-workbook-sheet-option\'>
-                <input type=\'checkbox\' name=\'workbookSheets\' checked=\"true\" value=\"${sheet.slice(sheet.lastIndexOf("_") + 1) + "_log2_expression"}\" id=\'exportExcelWorkbookSheet-${sheet}\' class=\'export-checkbox\' />
-                <label for=\'exportExcelWorkbookSheet-${sheet}\' class=\'export-checkbox-label\'>${sheet.slice(sheet.lastIndexOf("_") + 1) + "_log2_expression"}</label>
-            </li>`;
+        <li class="export-excel-workbook-sheet-option">
+            <input type="checkbox" name="workbookSheets" ${getCheckedAttr(sheetValue)} value="${sheetValue}" id="exportExcelWorkbookSheet-${sheet}" class="export-checkbox" />
+            <label for="exportExcelWorkbookSheet-${sheet}" class="export-checkbox-label">${sheetValue}</label>
+        </li>`;
             }
             result += `
-            <div class=\'expression-db-loader\'></div>
-            <div class=\'expression-db-loader-text\'>Expression Database is Loading</div>
+            <div class="expression-db-loader"></div>
+            <div class="expression-db-loader-text">Expression Database is Loading</div>
         `;
         }
 
-        result += `<p class=\'export-excel-workbook-sheet-option-subheader\'> Additional Sheets </p>`;
+        result += `<p class="export-excel-workbook-sheet-option-subheader"> Additional Sheets </p>`;
         for (let sheet of additionalsheets) {
             result += `
-        <li class=\'export-excel-workbook-sheet-option\'>
-            <input type=\'checkbox\' name=\'workbookSheets\' checked=\"true\" value=\"${sheet}\" id=\'exportExcelWorkbookSheet-${sheet}\' class=\'export-checkbox\' />
-            <label for=\'exportExcelWorkbookSheet-${sheet}\' class=\'export-checkbox-label\'>${sheet}</label>
+        <li class="export-excel-workbook-sheet-option">
+            <input type="checkbox" name="workbookSheets" ${getCheckedAttr(sheet)} value="${sheet}" id="exportExcelWorkbookSheet-${sheet}" class="export-checkbox" />
+            <label for="exportExcelWorkbookSheet-${sheet}" class="export-checkbox-label">${sheet}</label>
         </li>
         `;
         }
@@ -681,7 +699,7 @@ export const upload = function () {
         return result;
     };
 
-    var handleWorkbookSheetCheckboxBehaviour = () => {
+    var handleWorkbookSheetCheckboxBehaviour = checkedStateByValue => {
         const syncSelectAll = () => {
             const selectAll = $("#exportExcelWorkbookSheet-All");
             if (!selectAll.length) return;
@@ -693,42 +711,29 @@ export const upload = function () {
 
         $("input[name=workbookSheets]")
             .not($("#exportExcelWorkbookSheet-All"))
-            .on("click", () => {
+            .on("click", function () {
+                checkedStateByValue[this.value] = this.checked;
                 syncSelectAll();
-
-                let anyExpressionChecked = false;
-                for (let i in allSheets) {
-                    if (
-                        typeof allSheets[i] === "object" &&
-                        allSheets[i].id !== "exportExcelWorkbookSheet-All" &&
-                        allSheets[i].checked &&
-                        allSheets[i].value &&
-                        (allSheets[i].value.includes("expression") ||
-                            allSheets[i].value.includes("sigma"))
-                    ) {
-                        anyExpressionChecked = true;
-                        break;
-                    }
-                }
-                if (!anyExpressionChecked) {
-                    $("#exportExcelExpressionSource-noneRadio").val("none").trigger("change");
-                }
             });
+
         $("#exportExcelWorkbookSheet-All").on("click", () => {
             const allSheets = $("input[name=workbookSheets]").not(":disabled");
             const selectAll = $("#exportExcelWorkbookSheet-All");
             for (let i in allSheets) {
                 if (typeof allSheets[i] === "object") {
                     allSheets[i].checked = selectAll[0].checked;
+                    checkedStateByValue[allSheets[i].value] = selectAll[0].checked;
                 }
             }
         });
         syncSelectAll();
     };
 
-    const handleExpressionSheetsFromSource = function (source) {
-        $("#export-excel-workbook-sheet-list").append(createHTMLforSheets(source));
-        handleWorkbookSheetCheckboxBehaviour();
+    const handleExpressionSheetsFromSource = function (source, checkedStateByValue) {
+        $("#export-excel-workbook-sheet-list").append(
+            createHTMLforSheets(source, checkedStateByValue)
+        );
+        handleWorkbookSheetCheckboxBehaviour(checkedStateByValue);
         $("#Export-Excel-Button").off("click");
         $("#Export-Excel-Button").on(
             "click",
@@ -750,7 +755,9 @@ export const upload = function () {
                 source = "userInput";
             }
 
-            handleExpressionSheetsFromSource(source);
+            const checkedStateByValue = {};
+
+            handleExpressionSheetsFromSource(source, checkedStateByValue);
 
             $("#export-excel-workbook-sheet-list").off("change", "#expressionSourceDropdown");
             $("#export-excel-workbook-sheet-list").on(
@@ -761,7 +768,7 @@ export const upload = function () {
                     if (selectedValue !== source) {
                         source = selectedValue;
                         $(".export-excel-workbook-sheet-option-subheader").remove();
-                        handleExpressionSheetsFromSource(source);
+                        handleExpressionSheetsFromSource(source, checkedStateByValue);
                     }
                 }
             );

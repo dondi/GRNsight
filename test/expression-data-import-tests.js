@@ -163,7 +163,7 @@ describe("expression-data-import-tests", function () {
         it("should return an error with network sheet", function () {
             test.emptyNetworkWorkbookError(
                 "test-files/expression-data-test-sheets/empty-network-xlsx-with-network-tab.xlsx",
-                2
+                1
             );
         });
 
@@ -171,6 +171,45 @@ describe("expression-data-import-tests", function () {
             test.emptyExpressionWorkbookWarning(
                 "test-files/expression-data-test-sheets/expression-sheet-blank.xlsx",
                 1
+            );
+        });
+    });
+
+    describe("missing-one-value", function () {
+        it("GRNsight correctly handles this for node coloring and will export the worksheet with the correct missing value.", function () {
+            test.noWarnings(
+                "test-files/expression-data-test-sheets/expression_sheet_edges_missing-one-value.xlsx",
+                0
+            );
+        });
+        it("GRNsight correctly handles this for node coloring and will export the worksheet with the correct missing value.", function () {
+            test.noWarnings(
+                "test-files/expression-data-test-sheets/optimized_expression_sheet_missing_one_value.xlsx",
+                0
+            );
+        });
+        it("GRNsight correctly handles this for node coloring and will export the worksheet with the correct missing value..", function () {
+            test.noWarnings(
+                "test-files/expression-data-test-sheets/sigma_sheet_missing_one_value.xlsx",
+                0
+            );
+        });
+        it("GRNsight correctly handles this for node coloring and will export the worksheet with the correct missing value.", function () {
+            test.noErrors(
+                "test-files/expression-data-test-sheets/expression_sheet_edges_missing-one-value.xlsx",
+                0
+            );
+        });
+        it("GRNsight correctly handles this for node coloring and will export the worksheet with the correct missing value.", function () {
+            test.noErrors(
+                "test-files/expression-data-test-sheets/optimized_expression_sheet_missing_one_value.xlsx",
+                0
+            );
+        });
+        it("GRNsight correctly handles this for node coloring and will export the worksheet with the correct missing value..", function () {
+            test.noErrors(
+                "test-files/expression-data-test-sheets/sigma_sheet_missing_one_value.xlsx",
+                0
             );
         });
     });

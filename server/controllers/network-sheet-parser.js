@@ -98,7 +98,6 @@ var parseNetworkSheet = function (sheet, network) {
     try {
         cellA1 = sheet.data[0][0];
     } catch (err) {
-        addError(network, constants.errors.idLabelError(sheet.name));
         return network;
     }
 

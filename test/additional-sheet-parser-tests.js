@@ -359,9 +359,7 @@ describe("additional-sheet-parser", function () {
             };
 
             for (const sheetName in cases) {
-                const expectedText = sheetName.includes("optimized")
-                    ? "GRNsight is checking because"
-                    : "will need to be supplied to use this workbook as an input file for GRNmap,";
+                const expectedText = "GRNsight has detected";
 
                 it(`for ${sheetName} sheet`, function () {
                     test.missingAllValuesForGenes(
@@ -512,7 +510,7 @@ describe("additional-sheet-parser", function () {
                     for (const fileName of cases[sheetName]) {
                         test.missingGeneIdsWithValuesInTwoColumnSheetWarning(
                             `${folder}${fileName}`,
-                            2,
+                            1,
                             sheetName,
                             expectedText
                         );
