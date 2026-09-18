@@ -39,22 +39,22 @@ var parseNetworkSheet = sheet => {
 var noErrors = function (input) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
-    assert.equal(0, workbook.errors.length);
+    assert.equal(workbook.errors.length, 0);
 };
 
 var duplicateGeneError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
 
-    assert.equal(frequency, workbook.errors.length);
+    assert.equal(workbook.errors.length, frequency);
 
     for (var i = 0; i < frequency; i++) {
-        assert.equal("DUPLICATE_GENE", workbook.errors[i].errorCode);
+        assert.equal(workbook.errors[i].errorCode, "DUPLICATE_GENE");
     }
 
     /* TO DO:
   workbook.errors.forEach(function (error) {
-    assert.equal("DUPLICATE_GENE", error.errorCode);
+    assert.equal(error.errorCode, "DUPLICATE_GENE");
   });
   */
 };
@@ -73,10 +73,10 @@ var invalidGeneLengthError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
 
-    assert.equal(frequency, workbook.errors.length);
+    assert.equal(workbook.errors.length, frequency);
 
     for (var i = 0; i < frequency; i++) {
-        assert.equal("INVALID_GENE_LENGTH", workbook.errors[i].errorCode);
+        assert.equal(workbook.errors[i].errorCode, "INVALID_GENE_LENGTH");
     }
 };
 
@@ -84,10 +84,10 @@ var corruptGeneError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
 
-    assert.equal(frequency, workbook.errors.length);
+    assert.equal(workbook.errors.length, frequency);
 
     for (var i = 0; i < frequency; i++) {
-        assert.equal("CORRUPT_GENE", workbook.errors[i].errorCode);
+        assert.equal(workbook.errors[i].errorCode, "CORRUPT_GENE");
     }
 };
 
@@ -95,10 +95,10 @@ var unknownError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
 
-    assert.equal(frequency, workbook.errors.length);
+    assert.equal(workbook.errors.length, frequency);
 
     for (var i = 0; i < frequency; i++) {
-        assert.equal("UNKNOWN_ERROR", workbook.errors[i].errorCode);
+        assert.equal(workbook.errors[i].errorCode, "UNKNOWN_ERROR");
     }
 };
 
@@ -106,10 +106,10 @@ var missingValueError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
 
-    assert.equal(frequency, workbook.errors.length);
+    assert.equal(workbook.errors.length, frequency);
 
     for (var i = 0; i < frequency; i++) {
-        assert.equal("MISSING_VALUE", workbook.errors[i].errorCode);
+        assert.equal(workbook.errors[i].errorCode, "MISSING_VALUE");
     }
 };
 
@@ -117,21 +117,28 @@ var missingNetworkError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
 
-    assert.equal(frequency, workbook.errors.length);
+    assert.equal(workbook.errors.length, frequency);
 
     for (var i = 0; i < frequency; i++) {
-        assert.equal("MISSING_NETWORK", workbook.errors[i].errorCode);
+        assert.equal(workbook.errors[i].errorCode, "MISSING_NETWORK");
     }
+};
+
+var emptyNetworkWorkbookError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = spreadsheetController.crossSheetInteractions(sheet);
+
+    assert.equal(workbook.errors.length, frequency);
 };
 
 var specialCharacterError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
 
-    assert.equal(frequency, workbook.errors.length);
+    assert.equal(workbook.errors.length, frequency);
 
     for (var i = 0; i < frequency; i++) {
-        assert.equal("INVALID_CHARACTER", workbook.errors[i].errorCode);
+        assert.equal(workbook.errors[i].errorCode, "INVALID_CHARACTER");
     }
 };
 
@@ -139,10 +146,10 @@ var invalidDataTypeError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
 
-    assert.equal(frequency, workbook.errors.length);
+    assert.equal(workbook.errors.length, frequency);
 
     for (var i = 0; i < frequency; i++) {
-        assert.equal("INVALID_CELL_DATA_TYPE", workbook.errors[i].errorCode);
+        assert.equal(workbook.errors[i].errorCode, "INVALID_CELL_DATA_TYPE");
     }
 };
 
@@ -150,10 +157,10 @@ var workbookSizeError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
 
-    assert.equal(frequency, workbook.errors.length);
+    assert.equal(workbook.errors.length, frequency);
 
     for (var i = 0; i < frequency; i++) {
-        assert.equal("INVALID_NETWORK_SIZE", workbook.errors[i].errorCode);
+        assert.equal(workbook.errors[i].errorCode, "INVALID_NETWORK_SIZE");
     }
 };
 
@@ -162,10 +169,10 @@ var checkForGene = function (test, frequency, input) {
     var workbook = parseNetworkSheet(sheet);
 
     assert.equal(
-        frequency,
         workbook.genes.filter(function (gene) {
             return gene.name === test;
-        }).length
+        }).length,
+        frequency
     );
 };
 
@@ -176,7 +183,7 @@ var warningsCountError = function (input, frequency) {
         return x.errorCode === "WARNINGS_OVERLOAD";
     });
 
-    assert.equal(frequency, warningsCountErrorArray.length);
+    assert.equal(warningsCountErrorArray.length, frequency);
 };
 
 var errorsCountError = function (input, frequency) {
@@ -186,39 +193,29 @@ var errorsCountError = function (input, frequency) {
         return x.errorCode === "ERRORS_OVERLOAD";
     });
 
-    assert.equal(frequency, errorsCountErrorArray.length);
+    assert.equal(errorsCountErrorArray.length, frequency);
 };
 
 var emptyRowError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
 
-    assert.equal(frequency, workbook.errors.length);
+    assert.equal(workbook.errors.length, frequency);
 
     for (var i = 0; i < frequency; i++) {
-        assert.equal("EMPTY_ROW", workbook.errors[i].errorCode);
+        assert.equal(workbook.errors[i].errorCode, "EMPTY_ROW");
     }
-};
-
-var geneMismatchError = function (input, frequency) {
-    var sheet = xlsx.parse(input);
-    var workbook = spreadsheetController.crossSheetInteractions(sheet);
-    var geneMismatchCount = workbook.errors.filter(function (x) {
-        return x.errorCode === "GENE_MISMATCH";
-    });
-
-    assert.equal(frequency, geneMismatchCount.length);
 };
 
 var idLabelError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseExpressionSheet(sheet);
-    assert.equal(frequency, workbook.expression.wt_log2_expression.errors.length);
+    assert.equal(workbook.expression.wt_log2_expression.errors.length, frequency);
 
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-            "MISLABELED_ID_CELL",
-            workbook.expression.wt_log2_expression.errors[i].errorCode
+            workbook.expression.wt_log2_expression.errors[i].errorCode,
+            "MISLABELED_ID_CELL"
         );
     }
 };
@@ -226,11 +223,11 @@ var idLabelError = function (input, frequency) {
 var missingColumnHeaderError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var exp = parseExpressionSheet(sheet);
-    assert.equal(frequency, exp["expression"]["wt_log2_expression"]["errors"].length);
+    assert.equal(exp["expression"]["wt_log2_expression"]["errors"].length, frequency);
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-            "MISSING_COLUMN_HEADER",
-            exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
+            exp["expression"]["wt_log2_expression"]["errors"][i].errorCode,
+            "MISSING_COLUMN_HEADER"
         );
     }
 };
@@ -238,11 +235,11 @@ var missingColumnHeaderError = function (input, frequency) {
 var emptyExpressionColumnError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var exp = parseExpressionSheet(sheet);
-    assert.equal(frequency, exp["expression"]["wt_log2_expression"]["errors"].length);
+    assert.equal(exp["expression"]["wt_log2_expression"]["errors"].length, frequency);
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-            "EMPTY_COLUMN",
-            exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
+            exp["expression"]["wt_log2_expression"]["errors"][i].errorCode,
+            "EMPTY_COLUMN"
         );
     }
 };
@@ -250,10 +247,10 @@ var emptyExpressionColumnError = function (input, frequency) {
 var emptyExpressionRowError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var exp = parseExpressionSheet(sheet);
-    assert.equal(frequency, exp["expression"]["wt_log2_expression"]["errors"].length);
+    assert.equal(exp["expression"]["wt_log2_expression"]["errors"].length, frequency);
 
     for (var i = 0; i < frequency; i++) {
-        assert.equal("EMPTY_ROW", exp["expression"]["wt_log2_expression"]["errors"][i].errorCode);
+        assert.equal(exp["expression"]["wt_log2_expression"]["errors"][i].errorCode, "EMPTY_ROW");
     }
 };
 
@@ -261,43 +258,23 @@ var emptyExpressionRowError = function (input, frequency) {
 var labelError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var exp = parseExpressionSheet(sheet);
-    assert.equal(frequency, exp["expression"]["wt_log2_expression"]["errors"].length);
+    assert.equal(exp["expression"]["wt_log2_expression"]["errors"].length, frequency);
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-            "extra_gene_name" || "missing_a_gene_name",
-            exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
+            exp["expression"]["wt_log2_expression"]["errors"][i].errorCode,
+            "extra_gene_name" || "missing_a_gene_name"
         );
     }
-};
-
-var missingGeneNameError = function (input, frequency) {
-    var sheet = xlsx.parse(input);
-    var workbook = spreadsheetController.crossSheetInteractions(sheet);
-    var missingGeneCount = workbook.errors.filter(function (x) {
-        return x.errorCode === "MISSING_GENE_NAME";
-    });
-
-    assert.equal(frequency, missingGeneCount.length);
-};
-
-var extraGeneNameError = function (input, frequency) {
-    var sheet = xlsx.parse(input);
-    var workbook = spreadsheetController.crossSheetInteractions(sheet);
-    var extraGeneCount = workbook.errors.filter(function (x) {
-        return x.errorCode === "EXTRA_GENE_NAME";
-    });
-
-    assert.equal(frequency, extraGeneCount.length);
 };
 
 var negativeTimePointError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var exp = parseExpressionSheet(sheet);
-    assert.equal(frequency, exp["expression"]["wt_log2_expression"]["errors"].length);
+    assert.equal(exp["expression"]["wt_log2_expression"]["errors"].length, frequency);
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-            "NEGATIVE_TIME_POINT",
-            exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
+            exp["expression"]["wt_log2_expression"]["errors"][i].errorCode,
+            "NEGATIVE_TIME_POINT"
         );
     }
 };
@@ -305,11 +282,11 @@ var negativeTimePointError = function (input, frequency) {
 var nonMonotonicTimePointsError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var exp = parseExpressionSheet(sheet);
-    assert.equal(frequency, exp["expression"]["wt_log2_expression"]["errors"].length);
+    assert.equal(exp["expression"]["wt_log2_expression"]["errors"].length, frequency);
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-            "NON_MONOTONIC_TIME_POINTS",
-            exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
+            exp["expression"]["wt_log2_expression"]["errors"][i].errorCode,
+            "NON_MONOTONIC_TIME_POINTS"
         );
     }
 };
@@ -317,11 +294,11 @@ var nonMonotonicTimePointsError = function (input, frequency) {
 var nonNumericalTimePointError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var exp = parseExpressionSheet(sheet);
-    assert.equal(frequency, exp["expression"]["wt_log2_expression"]["errors"].length);
+    assert.equal(exp["expression"]["wt_log2_expression"]["errors"].length, frequency);
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-            "NON_NUMERICAL_TIME_POINT",
-            exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
+            exp["expression"]["wt_log2_expression"]["errors"][i].errorCode,
+            "NON_NUMERICAL_TIME_POINT"
         );
     }
 };
@@ -333,7 +310,7 @@ var emptyRowDataError = function (input, frequency) {
         return x.errorCode === "EMPTY_ROW_DATA";
     });
 
-    assert.equal(frequency, emptyRowDataCount.length);
+    assert.equal(emptyRowDataCount.length, frequency);
 };
 
 var emptyMatrixDataError = function (input, frequency) {
@@ -343,7 +320,7 @@ var emptyMatrixDataError = function (input, frequency) {
         return x.errorCode === "EMPTY_MATRIX_DATA";
     });
 
-    assert.equal(frequency, emptyMatrixDataCount.length);
+    assert.equal(emptyMatrixDataCount.length, frequency);
 };
 
 var emptyColumnDataError = function (input, frequency) {
@@ -353,7 +330,7 @@ var emptyColumnDataError = function (input, frequency) {
         return x.errorCode === "EMPTY_COLUMN_DATA";
     });
 
-    assert.equal(frequency, emptyRowDataCount.length);
+    assert.equal(emptyRowDataCount.length, frequency);
 };
 
 var emptyColumnError = function (input, frequency) {
@@ -363,7 +340,7 @@ var emptyColumnError = function (input, frequency) {
         return x.errorCode === "EMPTY_COLUMN";
     });
 
-    assert.equal(frequency, emptyRowDataCount.length);
+    assert.equal(emptyRowDataCount.length, frequency);
 };
 
 // WARNING TEST FUNCTIONS:
@@ -372,7 +349,7 @@ var noWarnings = function (input) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
 
-    assert.equal(0, workbook.warnings.length);
+    assert.equal(workbook.warnings.length, 0);
 };
 
 const noWarningsForAdditionalSheet = function (input, sheetName) {
@@ -392,7 +369,7 @@ var missingSourceWarning = function (input, frequency) {
         return x.warningCode === "MISSING_SOURCE";
     });
 
-    assert.equal(frequency, missingSourceCount.length);
+    assert.equal(missingSourceCount.length, frequency);
 };
 
 var invalidMatrixDataWarning = function (input, frequency) {
@@ -402,7 +379,37 @@ var invalidMatrixDataWarning = function (input, frequency) {
         return x.warningCode === "INVALID_DATA";
     });
 
-    assert.equal(frequency, invalidDataCount.length);
+    assert.equal(invalidDataCount.length, frequency);
+};
+
+var geneMismatchWarning = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = spreadsheetController.crossSheetInteractions(sheet);
+    var geneMismatchCount = workbook.warnings.filter(function (x) {
+        return x.warningCode === "GENE_MISMATCH";
+    });
+
+    assert.equal(geneMismatchCount.length, frequency);
+};
+
+var missingGeneNameWarning = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = spreadsheetController.crossSheetInteractions(sheet);
+    var missingGeneCount = workbook.warnings.filter(function (x) {
+        return x.warningCode === "MISSING_GENE_NAME";
+    });
+
+    assert.equal(missingGeneCount.length, frequency);
+};
+
+var extraGeneNameWarning = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = spreadsheetController.crossSheetInteractions(sheet);
+    var extraGeneCount = workbook.warnings.filter(function (x) {
+        return x.warningCode === "EXTRA_GENE_NAME";
+    });
+
+    assert.equal(extraGeneCount.length, frequency);
 };
 
 var missingTargetWarning = function (input, frequency) {
@@ -412,7 +419,7 @@ var missingTargetWarning = function (input, frequency) {
         return x.warningCode === "MISSING_TARGET";
     });
 
-    assert.equal(frequency, missingTargetCount.length);
+    assert.equal(missingTargetCount.length, frequency);
 };
 
 var randomDataWarning = function (input, frequency) {
@@ -422,7 +429,7 @@ var randomDataWarning = function (input, frequency) {
         return x.warningCode === "RANDOM_DATA";
     });
 
-    assert.equal(frequency, randomDataCount.length);
+    assert.equal(randomDataCount.length, frequency);
 };
 
 var emptyRowWarning = function (input, frequency) {
@@ -432,7 +439,7 @@ var emptyRowWarning = function (input, frequency) {
         return x.warningCode === "EMPTY_ROW";
     });
 
-    assert.equal(frequency, emptyRowCount.length);
+    assert.equal(emptyRowCount.length, frequency);
 };
 
 var invalidNetworkSizeWarning = function (input, frequency) {
@@ -442,7 +449,7 @@ var invalidNetworkSizeWarning = function (input, frequency) {
         return x.warningCode === "INVALID_NETWORK_SIZE";
     });
 
-    assert.equal(frequency, invalidworkbookSizeCount.length);
+    assert.equal(invalidworkbookSizeCount.length, frequency);
 };
 
 var extraneousDataWarning = function (input, frequency) {
@@ -454,7 +461,7 @@ var extraneousDataWarning = function (input, frequency) {
         }
     );
 
-    assert.equal(frequency, extraneousDataCount.length);
+    assert.equal(extraneousDataCount.length, frequency);
 };
 
 var missingExpressionWarning = function (input, frequency) {
@@ -464,7 +471,7 @@ var missingExpressionWarning = function (input, frequency) {
         return x.warningCode === "MISSING_EXPRESSION_SHEET";
     });
 
-    assert.equal(frequency, missingExpressionCount.length);
+    assert.equal(missingExpressionCount.length, frequency);
 };
 
 var incorrectlyNamedExpressionSheetWarning = function (input, frequency) {
@@ -474,7 +481,7 @@ var incorrectlyNamedExpressionSheetWarning = function (input, frequency) {
         return x.warningCode === "INCORRECTLY_NAMED_EXPRESSION_SHEET";
     });
 
-    assert.equal(frequency, incorrectlyNamedSheetCount.length);
+    assert.equal(incorrectlyNamedSheetCount.length, frequency);
 };
 
 var incorrectlyNamedSheetWarning = function (input, frequency) {
@@ -484,7 +491,7 @@ var incorrectlyNamedSheetWarning = function (input, frequency) {
         return x.warningCode === "INCORRECTLY_NAMED_SHEET";
     });
 
-    assert.equal(frequency, incorrectlyNamedSheetCount.length);
+    assert.equal(incorrectlyNamedSheetCount.length, frequency);
 };
 
 const unrecognizedSheetWarning = (input, frequency) => {
@@ -500,6 +507,13 @@ const unrecognizedSheetWarning = (input, frequency) => {
 const missingAllGenesInTwoColumnSheetWarning = (input, frequency, sheetName, expectedText) => {
     const expectedWarningCode = `MISSING_ALL_GENES_AND_VALUES_${sheetName.toUpperCase()}`;
     testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode, expectedText);
+};
+
+const missingGenesAndValuesWarningWhenImporting = (input, frequency) => {
+    const sheet = xlsx.parse(input);
+    const workbook = spreadsheetController.crossSheetInteractions(sheet);
+
+    assert.equal(workbook.warnings.length, frequency);
 };
 
 const missingAllValuesForGenes = function (input, frequency, sheetName, expectedText) {
@@ -717,6 +731,13 @@ var unknownOptimizationParameterWarning = function (input, frequency) {
         x => x.warningCode === "UNKNOWN_OPTIMIZATION_PARAMETER"
     ).length;
     assert.equal(unknownOptimizationParameterWarningCount, frequency);
+};
+
+var emptyExpressionWorkbookWarning = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = parseExpressionSheet(sheet);
+
+    assert.equal(workbook.expression.wt_log2_expression.warnings.length, frequency);
 };
 
 var invalidOptimizationParameterWarning = function (input, frequency) {
@@ -939,6 +960,7 @@ exports.corruptGeneError = corruptGeneError;
 exports.unknownError = unknownError;
 exports.missingValueError = missingValueError;
 exports.missingNetworkError = missingNetworkError;
+exports.emptyNetworkWorkbookError = emptyNetworkWorkbookError;
 exports.workbookSizeError = workbookSizeError;
 exports.warningsCountError = warningsCountError;
 exports.invalidDataTypeError = invalidDataTypeError;
@@ -949,10 +971,7 @@ exports.specialCharacterError = specialCharacterError;
 exports.emptyExpressionColumnError = emptyExpressionColumnError;
 exports.emptyExpressionRowError = emptyExpressionRowError;
 exports.missingColumnHeaderError = missingColumnHeaderError;
-exports.geneMismatchError = geneMismatchError;
 exports.labelError = labelError;
-exports.missingGeneNameError = missingGeneNameError;
-exports.extraGeneNameError = extraGeneNameError;
 exports.negativeTimePointError = negativeTimePointError;
 exports.nonMonotonicTimePointsError = nonMonotonicTimePointsError;
 exports.nonNumericalTimePointError = nonNumericalTimePointError;
@@ -965,6 +984,9 @@ exports.twoColumnInvalidGeneLengthError = twoColumnInvalidGeneLengthError;
 exports.twoColumnSpecialCharacterError = twoColumnSpecialCharacterError;
 exports.twoColumnInvalidDataTypeError = twoColumnInvalidDataTypeError;
 
+exports.extraGeneNameWarning = extraGeneNameWarning;
+exports.missingGeneNameWarning = missingGeneNameWarning;
+exports.geneMismatchWarning = geneMismatchWarning;
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;
 exports.missingSourceWarning = missingSourceWarning;
@@ -993,6 +1015,7 @@ exports.optimizationDiagnosticsExtraneousDataWarning = optimizationDiagnosticsEx
 exports.incorrectMSEGeneHeaderWarning = incorrectMSEGeneHeaderWarning;
 exports.incorrectMSEHeaderWarning = incorrectMSEHeaderWarning;
 exports.missingMSEDataWarning = missingMSEDataWarning;
+exports.emptyExpressionWorkbookWarning = emptyExpressionWorkbookWarning;
 exports.invalidMSEDataWarning = invalidMSEDataWarning;
 exports.unrecognizedSheetWarning = unrecognizedSheetWarning;
 exports.missingGenesAndValuesInTwoColumnSheetsWarning =
@@ -1006,6 +1029,7 @@ exports.someGenesMissingValuesWarning = someGenesMissingValuesWarning;
 exports.extraGenesInTwoColumnSheetWarning = extraGenesInTwoColumnSheetWarning;
 exports.missingGeneIdsWithValuesInTwoColumnSheetWarning =
     missingGeneIdsWithValuesInTwoColumnSheetWarning;
+exports.missingGenesAndValuesWarningWhenImporting = missingGenesAndValuesWarningWhenImporting;
 exports.wrongGeneOrderInTwoColumnSheetWarning = wrongGeneOrderInTwoColumnSheetWarning;
 exports.wrongGeneIdsWarning = wrongGeneIdsWarning;
 

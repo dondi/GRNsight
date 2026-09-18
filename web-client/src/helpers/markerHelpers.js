@@ -3,7 +3,6 @@ import { getNodeWidth } from "./graphHelpers";
 import { EDGE_RED, EDGE_BLUE, EDGE_BLACK } from "./constants";
 // TODO: add description from web-client-classic
 export function normalize(d, maxWeight) {
-  // console.log("normalize value", Math.abs(d.value / maxWeight).toPrecision(4));
   return Math.abs(d.value / maxWeight).toPrecision(4);
 }
 

@@ -50,29 +50,49 @@ module.exports = {
 
         MISSING_OR_EMPTY_TWO_COLUMN_SHEET: function (sheetName, isMissing) {
             const prefix = sheetName.includes("optimized");
+            const nameSegment = sheetName.split("_");
 
             return {
                 warningCode: `MISSING_OR_EMPTY_${sheetName.toUpperCase()}_SHEET`,
-                errorDescription: [
-                    isMissing
-                        ? `There was no "${sheetName}" sheet in the imported workbook.`
-                        : `The "${sheetName}" sheet was empty in the exported workbook.`,
-                    prefix
-                        ? `GRNsight is checking because a ${sheetName.split("_")[1] + " " + sheetName.split("_")[2]} value should have been provided as GRNmap output, but will not affect the display of the graph in GRNsight.`
-                        : `GRNsight has supplied ${dataSourceForTwoColumnSheet[sheetName]}.`,
-                ].join(" "),
+                errorDescription: prefix
+                    ? [
+                          `There were no genes and values supplied in the ${sheetName} in the exported workbook.`,
+                          grnMapInputSuppliedWarningMessage(sheetName, value),
+                      ].join(" ")
+                    : [
+                          `There was no "${sheetName}" sheet in the imported workbook.`,
+                          `GRNsight has supplied ${dataSourceForTwoColumnSheet[sheetName]}.`,
+                      ].join(" "),
             };
         },
 
         MISSING_ALL_GENES_AND_VALUES: function (sheetName, isAllGenesMissing) {
             const missingType = isAllGenesMissing ? "genes and values" : "values";
+            const sheetNameSegments = sheetName.split("_");
+            const prefix = sheetName.includes("optimized");
             return {
                 warningCode: `MISSING_ALL_${missingType.toUpperCase()}_${sheetName.toUpperCase()}`,
-                errorDescription: [
-                    `There were no ${missingType} supplied`,
-                    `in the "${sheetName}" sheet in the exported workbook.`,
-                    `GRNsight has supplied ${dataSourceForTwoColumnSheet[sheetName]}.`,
-                ].join(" "),
+                errorDescription: prefix
+                    ? [
+                          `There were no ${missingType} supplied`,
+                          `in the "${sheetName}" sheet in the exported workbook.`,
+                          "GRNsight is checking",
+                          `because a ${sheetNameSegments[0]} ${sheetNameSegments[1]} value`,
+                          "should have been provided as GRNmap output,",
+                          "but will not affect the display of the graph in GRNsight.",
+                      ].join(" ")
+                    : missingType === "values"
+                      ? [
+                            `GRNsight has detected that there are missing ${missingType} for`,
+                            `${sheetNameSegments[0]} ${sheetNameSegments[1]}`,
+                            `in the exported workbook's "${sheetName}" sheet`,
+                            "because they were missing in the imported workbook.",
+                            `GRNsight has supplied ${dataSourceForTwoColumnSheet[sheetName]}.`,
+                        ].join(" ")
+                      : [
+                            `The ${sheetName} was empty in the imported workbook.`,
+                            `GRNsight has supplied ${dataSourceForTwoColumnSheet[sheetName]}.`,
+                        ].join(" "),
             };
         },
 

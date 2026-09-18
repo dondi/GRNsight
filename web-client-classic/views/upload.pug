@@ -332,7 +332,7 @@ html
                   div(class="network-source-section")
                     form(class='panelDropdownContainer')
                       label(for='speciesDropdown' class='info') Demo
-                      select(class="DemoSourceDropdown panelDropdown btn btn-default" id='demoSourceDropdown' href='#')
+                      select(class="DemoSourceDropdown panelDropdown btn btn-default" id='demoSourceDropdown' href='#', autocomplete="off")
                         option(value="none" selected="true" disabled hidden) Select a Demo
                         option(href='#' id='demoSourceDropdown-unweighted' class='unweighted' value='unweighted') Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)
                         option(href='#' id='demoSourceDropdown-weighted' class='weighted' value='weighted')  Demo #2: Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)

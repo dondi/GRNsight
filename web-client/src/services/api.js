@@ -13,6 +13,19 @@ const API_URL = import.meta.env.DEV
 
 const buildApiUrl = path => `${API_URL}/${path}`;
 
+const buildQueryUrl = (path, parameters = {}) => {
+  const searchParams = new URLSearchParams();
+
+  Object.entries(parameters).forEach(([key, value]) => {
+    if (value !== undefined && value !== null) {
+      searchParams.append(key, value);
+    }
+  });
+
+  const queryString = searchParams.toString();
+  return queryString ? `${path}?${queryString}` : path;
+};
+
 const parseResponse = async response => {
   let parsed = null;
 
@@ -98,3 +111,15 @@ export async function getWorkbookFromUrl(queryURL) {
   const workbook = await fetch(fullUrl);
   return await parseResponse(workbook);
 }
+
+export const queryNetworkDatabase = query => {
+  return getWorkbookFromUrl(buildQueryUrl("networkdb", query));
+};
+
+export const queryProteinProteinDatabase = query => {
+  return getWorkbookFromUrl(buildQueryUrl("proteindb", query));
+};
+
+export const uploadCustomWorkbook = workbook => {
+  return getWorkbookFromUrl(buildQueryUrl("upload-custom-workbook", workbook));
+};

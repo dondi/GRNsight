@@ -305,18 +305,18 @@ describe("additional-sheet-parser", function () {
             );
         });
 
-        it("should not return any warnings when two-column sheets are blank", function () {
-            test.noWarningsForAdditionalSheet(
+        it("should return 1 warning when two-column sheets are blank", function () {
+            test.missingGenesAndValuesWarningWhenImporting(
                 "test-files/additional-sheet-test-files/deg-rates-sheet-blank.xlsx",
-                "degradation_rates"
+                1
             );
-            test.noWarningsForAdditionalSheet(
+            test.missingGenesAndValuesWarningWhenImporting(
                 "test-files/additional-sheet-test-files/prod-rates-sheet-blank.xlsx",
-                "production_rates"
+                1
             );
-            test.noWarningsForAdditionalSheet(
+            test.missingGenesAndValuesWarningWhenImporting(
                 "test-files/additional-sheet-test-files/threshold_b-sheet-blank.xlsx",
-                "threshold_b"
+                1
             );
         });
 
@@ -359,9 +359,7 @@ describe("additional-sheet-parser", function () {
             };
 
             for (const sheetName in cases) {
-                const expectedText = sheetName.includes("optimized")
-                    ? "GRNsight is checking because"
-                    : "will need to be supplied to use this workbook as an input file for GRNmap,";
+                const expectedText = "GRNsight has detected";
 
                 it(`for ${sheetName} sheet`, function () {
                     test.missingAllValuesForGenes(
@@ -512,7 +510,7 @@ describe("additional-sheet-parser", function () {
                     for (const fileName of cases[sheetName]) {
                         test.missingGeneIdsWithValuesInTwoColumnSheetWarning(
                             `${folder}${fileName}`,
-                            2,
+                            1,
                             sheetName,
                             expectedText
                         );

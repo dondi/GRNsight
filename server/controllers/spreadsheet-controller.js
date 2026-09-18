@@ -136,7 +136,7 @@ var crossSheetInteractions = function (workbookFile) {
         typeof networkOptimizedWeights === "object" &&
         Object.keys(networkOptimizedWeights).length > 0
     ) {
-        // Base workbook is a clone of the prefered Optimized weights sheet
+        // Base workbook is a clone of the preferred Optimized weights sheet
         workbook = deepClone(networkOptimizedWeights, false);
         // Add errors from network sheet if it exists
         if (network && typeof network === "object" && Object.keys(network).length > 0) {
@@ -210,7 +210,15 @@ var crossSheetInteractions = function (workbookFile) {
 
     additionalData.meta.data.workbookType = parseNetworkSheet.workbookType(workbookFile);
     if (additionalData.meta.data.workbookType === undefined) {
-        addWarning(workbook, constants.warnings.noWorkbookTypeDetected);
+        let networkErrorPresent;
+        for (let i = 0; i < workbook.errors.length; i++) {
+            if (workbook.errors[i].errorCode === "MISSING_NETWORK") {
+                networkErrorPresent = true;
+            }
+        }
+        if (!networkErrorPresent) {
+            addError(workbook, constants.errors.missingNetworkError);
+        }
         additionalData.meta.data.workbookType = NETWORK_GRN_MODE;
     } else if (!supportWorkbookType(additionalData.meta.data.workbookType)) {
         addWarning(
@@ -312,17 +320,35 @@ var crossSheetInteractions = function (workbookFile) {
                         workbook.genes[i].name !==
                         expressionData.expression[sheet.name].columnGeneNames[i]
                     ) {
-                        addError(workbook, constants.errors.geneMismatchError(sheet.name));
+                        addWarning(workbook, constants.warnings.geneMismatchWarning(sheet.name));
                         break;
                     }
                 }
             } else {
                 if (extraWorkbookGenes.size > 0) {
-                    addError(workbook, constants.errors.missingGeneNamesError(sheet.name));
                 }
-                if (extraExpressionGenes.size > 0) {
-                    addError(workbook, constants.errors.extraGeneNamesError(sheet.name));
+                let warningPresent;
+                for (let i = 0; i < workbook.warnings.length; i++) {
+                    if (workbook.warnings[i].warningCode === "BLANK_EXPRESSION_SHEET") {
+                        warningPresent = true;
+                    }
                 }
+                if (!warningPresent) {
+                    if (!sheet.data || sheet.data.length === 0 || sheet.data[0].length === 0) {
+                        addWarning(
+                            workbook,
+                            constants.warnings.emptyExpressionWorkbookWarning(sheet.name)
+                        );
+                    } else {
+                        addWarning(
+                            workbook,
+                            constants.warnings.missingGeneNamesWarning(sheet.name)
+                        );
+                    }
+                }
+            }
+            if (extraExpressionGenes.size > 0) {
+                addWarning(workbook, constants.warnings.extraGeneNamesWarning(sheet.name));
             }
         }
     });

@@ -1233,7 +1233,10 @@ export var drawGraph = function (workbook) {
                     href:
                         "info?" +
                         $.param({
-                            symbol: gene.name,
+                            symbol:
+                                grnState.mode === NETWORK_PPI_MODE
+                                    ? gene.name.replace(/p$/i, "")
+                                    : gene.name,
                             species: grnState.genePageData.species,
                             jaspar: grnState.genePageData.taxonJaspar,
                             uniprot: grnState.genePageData.taxonUniprot,
@@ -1292,7 +1295,10 @@ export var drawGraph = function (workbook) {
                 .append("g")
                 .selectAll(".coloring")
                 .data(function () {
-                    if (grnState.workbook.expression[dataset]) {
+                    if (
+                        grnState.workbook.expression[dataset] &&
+                        grnState.workbook.expression[dataset].data
+                    ) {
                         const geneName = adjustGeneNameForExpression(p);
                         if (grnState.workbook.expression[dataset].data[geneName]) {
                             const result = getExpressionData(geneName, dataset, average);
@@ -1471,7 +1477,13 @@ export var drawGraph = function (workbook) {
         if ($(".weightedGraphOptions").hasClass("hidden")) {
             $(".weightedGraphOptions").removeClass("hidden");
         }
+
         $(".weightedGraphOptionsMenu").removeClass("disabled");
+
+        if (!grnState.colorOptimal) {
+            $(".weightedGraphOptionsMenu.edge-coloring-dependent").addClass("disabled");
+        }
+
         var setWeightsVisability = function () {
             var WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver";
             var WEIGHTS_HIDE_CLASS = ".weightsNever";
