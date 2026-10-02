@@ -2,7 +2,7 @@ import { updaters } from "./graph";
 import { updateApp, identifySpeciesMenu } from "./update-app";
 import { saveSvgAsPng } from "save-svg-as-png";
 import { jsPDF } from "jspdf";
-import Canvg from "canvg";
+import canvg from "canvg";
 import { filenameWithExtension } from "./upload";
 import { determineWorkbookType } from "./upload";
 
@@ -185,15 +185,19 @@ export const setupHandlers = grnState => {
         $("#exportAsSvg").attr("download", name);
     };
 
-    const exportPDF = async (svgElement, name) => {
-        if (svgElement) {
-            svgElement = svgElement.replace(/\r?\n|\r/g, "").trim();
-            svgElement = svgElement.replace(/marker-end="url\([^)]+\)"/g, "");
-        }
+    const exportPDF = async (svgContainerElement, name) => {
+        let source = svgContainerElement.cloneNode(true);
+        sourceAttributeSetter(source);
+        setInlineStyles(source);
+
+        let svgString = new XMLSerializer().serializeToString(source);
+        svgString = svgString.replace(/\r?\n|\r/g, "").trim();
+        svgString = svgString.replace(/marker-end="url\([^)]+\)"/g, "");
 
         let canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
-        const v = await Canvg.fromString(ctx, svgElement);
+
+        const v = await canvg.fromString(ctx, svgString);
         await v.render();
 
         const imgData = canvas.toDataURL("image/png");
@@ -265,7 +269,7 @@ export const setupHandlers = grnState => {
     });
 
     $(EXPORT_TO_PDF).click(async () => {
-        var svgContainer = document.getElementById("exportContainer").innerHTML;
+        var svgContainer = document.getElementById("exportContainer");
         var editedName = filenameWithExtension(
             grnState.mode,
             grnState.workbook.genes.length,
