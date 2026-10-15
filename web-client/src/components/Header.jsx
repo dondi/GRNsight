@@ -1,4 +1,5 @@
 import "../App.css";
+import packageJson from "../../package.json";
 export default function Header() {
   const formattedBuildDate = new Intl.DateTimeFormat("en-US", {
     day: "2-digit",
@@ -9,7 +10,7 @@ export default function Header() {
     <div id="header-container">
       <header>
         {`GRNsight React: `}
-        <span>{`v${import.meta.env.VITE_APP_VERSION} (${formattedBuildDate})`}</span>
+        <span>{`v${packageJson.version} (${formattedBuildDate})`}</span>
       </header>
       <div id="disclaimer">
         <span>Disclaimer:</span>
