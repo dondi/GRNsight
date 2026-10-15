@@ -223,3 +223,23 @@ export function calcAllWeights(data, colorOptimal) {
 export function calcMaxWeight(allWeights) {
   return Math.max(Math.abs(d3.max(allWeights)), Math.abs(d3.min(allWeights)));
 }
+
+function getLinkEndpointId(endpoint) {
+  if (endpoint !== null && typeof endpoint === "object") {
+    if ("id" in endpoint) return endpoint.id;
+    if ("index" in endpoint) return endpoint.index;
+  }
+  return endpoint;
+}
+
+export function getUniquePpiLinks(links) {
+  const seen = new Set();
+  return links.filter(link => {
+    const s = getLinkEndpointId(link.source);
+    const t = getLinkEndpointId(link.target);
+    const key = s <= t ? `${s}-${t}` : `${t}-${s}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
