@@ -61,6 +61,14 @@ export const generateNetwork = function () {
                 </button>
             </form>
         </div>
+        <div class='form-group' id='getNetworkStrainForm'>
+            <label for='network-strain' id='network-strain-label'>Strain</label>
+            <select class='network-dropdown btn btn-default' id='network-strain'>
+                <option value='S288c'>S288C</option>
+                <option value='W303'>W303</option>
+                <option value='CENPK'>CENPK</option>
+            </select>
+        </div>
         <div id=\'selected-genes-container\'>
             <p>Added ${geneProtein}s go below! Click on a ${geneProtein} to remove it.</p>
             <div id=\'selected-genes\'>
