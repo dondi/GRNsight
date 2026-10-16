@@ -186,18 +186,12 @@ export const setupHandlers = grnState => {
     };
 
     const exportPDF = async (svgContainerElement, name) => {
-        let source = svgContainerElement.cloneNode(true);
-        sourceAttributeSetter(source);
-        setInlineStyles(source);
-
-        let svgString = new XMLSerializer().serializeToString(source);
-        svgString = svgString.replace(/\r?\n|\r/g, "").trim();
-        svgString = svgString.replace(/marker-end="url\([^)]+\)"/g, "");
+        svgContainerElement = svgContainerElement.replace(/\r?\n|\r/g, "").trim();
 
         let canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
 
-        const v = await canvg.fromString(ctx, svgString);
+        const v = await canvg.fromString(ctx, svgContainerElement);
         await v.render();
 
         const imgData = canvas.toDataURL("image/png");
@@ -269,7 +263,7 @@ export const setupHandlers = grnState => {
     });
 
     $(EXPORT_TO_PDF).click(async () => {
-        var svgContainer = document.getElementById("exportContainer");
+        var svgContainer = document.getElementById("exportContainer").innerHTML;
         var editedName = filenameWithExtension(
             grnState.mode,
             grnState.workbook.genes.length,
