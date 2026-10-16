@@ -665,7 +665,7 @@ export const upload = function () {
                 result += `
                 <li class="export-excel-workbook-sheet-option disabled-option">
                     <input type="checkbox" name="workbookSheets" value="${sheet}" id="exportExcelWorkbookSheet-${sheet}" class="export-checkbox" disabled="disabled" />
-                    <label for="exportExcelWorkbookSheet-${sheet}" class="export-checkbox-label"">${sheet} (Unavailable for this Expression Data Source)</label>
+                    <label for="exportExcelWorkbookSheet-${sheet}" class="export-checkbox-label"">${sheet} (unavailable for this Expression Data Source)</label>
                 </li>
                 `;
             } else {
