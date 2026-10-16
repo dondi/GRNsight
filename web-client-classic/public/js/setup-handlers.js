@@ -2,7 +2,7 @@ import { updaters } from "./graph";
 import { updateApp, identifySpeciesMenu } from "./update-app";
 import { saveSvgAsPng } from "save-svg-as-png";
 import { jsPDF } from "jspdf";
-import { Canvg } from "canvg";
+import canvg from "canvg";
 import { filenameWithExtension } from "./upload";
 import { determineWorkbookType } from "./upload";
 
@@ -185,14 +185,13 @@ export const setupHandlers = grnState => {
         $("#exportAsSvg").attr("download", name);
     };
 
-    const exportPDF = async (svgElement, name) => {
-        if (svgElement) {
-            svgElement = svgElement.replace(/\r?\n|\r/g, "").trim();
-        }
+    const exportPDF = async (svgContainerElement, name) => {
+        svgContainerElement = svgContainerElement.replace(/\r?\n|\r/g, "").trim();
 
         let canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
-        const v = await Canvg.fromString(ctx, svgElement);
+
+        const v = await canvg.fromString(ctx, svgContainerElement);
         await v.render();
 
         const imgData = canvas.toDataURL("image/png");
