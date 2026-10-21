@@ -755,8 +755,7 @@ export const upload = function () {
             $("#exportExcelExpressionSources").html("Select Workbook Sheets to Export:");
 
             let source = "none";
-            const sourceName = grnState.name.split(" ");
-            if (sourceName[0] === "Demo") {
+            if (grnState.workbook.demo) {
                 source = "demo";
             } else if (
                 grnState.workbook.expressionNames &&
