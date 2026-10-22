@@ -431,6 +431,8 @@ export const upload = function () {
             production_rates: "ProductionRates",
             degradation_rates: "DegradationRates",
             threshold_b: "ThresholdB",
+            optimized_production_rates: "OptimizedProductionRates",
+            optimized_threshold_b: "OptimizedDegradationRates",
         };
 
         const { chosenTwoColumnSheets, sheetsToFetch, warningsToAdd } =
@@ -772,7 +774,12 @@ export const upload = function () {
             $("#exportExcelExpressionSources").html("Select Workbook Sheets to Export:");
 
             let source = "none";
-            if (grnState.workbook.expressionNames && grnState.workbook.expressionNames.length > 0) {
+            if (grnState.workbook.demo) {
+                source = "demo";
+            } else if (
+                grnState.workbook.expressionNames &&
+                grnState.workbook.expressionNames.length > 0
+            ) {
                 source = "userInput";
             }
 

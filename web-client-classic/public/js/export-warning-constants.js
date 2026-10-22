@@ -50,7 +50,7 @@ module.exports = {
 
         MISSING_OR_EMPTY_TWO_COLUMN_SHEET: function (sheetName, isMissing) {
             const prefix = sheetName.includes("optimized");
-            const nameSegment = sheetName.split("_");
+            const value = isMissing ? "missing" : "empty";
 
             return {
                 warningCode: `MISSING_OR_EMPTY_${sheetName.toUpperCase()}_SHEET`,
