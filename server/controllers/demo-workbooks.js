@@ -236,6 +236,7 @@ var demoWorkbook1 = function (path, res, app) {
         ],
         negativeWeights: [],
         sheetType: "unweighted",
+        demo: true,
         network: {
             genes: [
                 { name: "ACE2" },
@@ -1584,6 +1585,7 @@ var demoWorkbook2 = function (path, res, app) {
             -1.5733259134754158, -0.02279063304065471, -1.9832439149172112, -0.25954746744906587,
         ],
         sheetType: "weighted",
+        demo: true,
         network: {
             genes: [
                 { name: "ACE2" },
@@ -3917,6 +3919,7 @@ var demoWorkbook3 = function (path, res, app) {
         ],
         negativeWeights: [],
         sheetType: "unweighted",
+        demo: true,
         network: {
             genes: [
                 { name: "ABF1" },
@@ -4790,6 +4793,7 @@ var demoWorkbook4 = function (path, res, app) {
             -0.129252218618744, -0.750331369063822, -0.302673111220415,
         ],
         sheetType: "weighted",
+        demo: true,
         network: {
             genes: [
                 { name: "ABF1" },
@@ -6617,6 +6621,7 @@ var demoWorkbook5 = function (path, res, app) {
         ],
         negativeWeights: [],
         sheetType: "unweighted",
+        demo: true,
         meta: {
             data: {
                 workbookType: constants.NETWORK_PPI_MODE,
