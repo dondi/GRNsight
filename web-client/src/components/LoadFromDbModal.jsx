@@ -24,6 +24,7 @@ import {
   sortWorkbookGenes,
 } from "../helpers/loadFromDbHelpers";
 import "../App.css";
+import { dataCategories } from './mockData';
 
 export default function LoadFromDbModal({ margin }) {
   const { setDemoValue, setNetworkData, setNetworkMode } = useContext(GrnStateContext);
@@ -33,6 +34,13 @@ export default function LoadFromDbModal({ margin }) {
   const [searchValue, setSearchValue] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [customWorkbook, setCustomWorkbook] = useState(EMPTY_WORKBOOK);
+
+  const strainOptions = dataCategories.find(({ type }) => type === "Strain")?.options ?? []
+  const [selectedStrain, setSelectedStrain] = useState([]);
+
+  const annotationTypeOptions = dataCategories.find(({ type }) => type === "annotationType")?.options ?? []
+  const [selectedAnnotationType, setSelectedSAnnotationType] = useState([]);
+
 
   const sourceOptions = useMemo(() => {
     if (customWorkbook.type === NETWORK_PPI_MODE_SHORT) {
@@ -389,6 +397,64 @@ export default function LoadFromDbModal({ margin }) {
                       />
                     </Box>
                   </Box>
+
+                  <Box className="generate-network-row" direction="row" align="center" gap="15px">
+                      <Text className="generate-network-label" weight="bold">
+                        Strain
+                      </Text>
+                      <Box className="generate-network-select-wrap" flex>
+                        <Select
+                          className="generate-network-select"
+                          multiple
+                          options={strainOptions}
+                          value={selectedStrain}
+                          onChange={({ value }) => setSelectedStrain(value)}
+                          size="14px"
+                        />
+                      </Box>
+                      <Button
+                        label="Select all"
+                        onClick={() => setSelectedStrain(strainOptions)}
+                        />
+                    </Box>
+
+                    <Box className="selected-genes-container">
+                      <Box direction="row" wrap gap="xsmall">
+                        {selectedStrain.map(strain => (
+                          <Button
+                            key={strain}
+                            className="selected-gene-button"
+                            onClick={() =>
+                              setSelectedStrain(current =>
+                                current.filter(selected => selected !== strain)
+                              )
+                            }
+                            margin={{bottom: "20px"}}
+                          >
+                            <Box pad={{ horizontal: "10px", vertical: "8px" }}>
+                              <Text size="small" weight="bold">
+                                {strain}
+                              </Text>
+                            </Box>
+                          </Button>
+                        ))}
+                      </Box>
+                    </Box>
+
+                  <Box className="generate-network-row" direction="row" align="center" gap="15px">
+                      <Text className="generate-network-label" weight="bold">
+                        AnnotationType
+                      </Text>
+                      <Box className="generate-network-select-wrap" flex>
+                        <Select
+                          className="generate-network-select"
+                          options={annotationTypeOptions}
+                          value={selectedAnnotationType}
+                          onChange={({ value }) => setSelectedSAnnotationType(value)}
+                          size="14px"
+                        />
+                      </Box>
+                    </Box>
 
                   <Form
                     onSubmit={event => {
