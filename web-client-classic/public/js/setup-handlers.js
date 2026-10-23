@@ -187,6 +187,7 @@ export const setupHandlers = grnState => {
 
     const exportPDF = async (svgContainerElement, name) => {
         svgContainerElement = svgContainerElement.replace(/\r?\n|\r/g, "").trim();
+        svgContainerElement = svgContainerElement.replace(/marker-end="url\([^)]+\)"/g, "");
 
         let canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
@@ -262,7 +263,7 @@ export const setupHandlers = grnState => {
         exportSVG(svgContainer, editedName);
     });
 
-    $(EXPORT_TO_PDF).click(async () => {
+    $(EXPORT_TO_PDF).click(() => {
         var svgContainer = document.getElementById("exportContainer").innerHTML;
         var editedName = filenameWithExtension(
             grnState.mode,
