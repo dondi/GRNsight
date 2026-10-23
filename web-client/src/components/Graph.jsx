@@ -7,6 +7,7 @@ import {
   BOUNDARY_MARGIN,
   ZOOM_ADAPTIVE_MAX_SCALE,
   MINIMUM_NODE_WIDTH,
+  NETWORK_PPI_MODE_FULL,
   NODE_MARGIN,
   NODE_HEIGHT,
   NODE_TEXT_HEIGHT,
@@ -32,6 +33,7 @@ import {
   calcAllWeights,
   calcMaxWeight,
   getSelfReferringRadius,
+  getUniquePpiLinks,
 } from "../helpers/graphHelpers";
 import { createAllMarkers, getEdgeMarkerId } from "../helpers/markerHelpers";
 import {
@@ -328,10 +330,14 @@ export default function Graph() {
     });
     d3.select(".center").on("click", center);
 
+    // Get unique PPI links
+    const isPpi = getNetworkMode(workbook.meta.data.workbookType) === NETWORK_PPI_MODE_FULL;
+    const uniqueLinks = isPpi ? getUniquePpiLinks(workbook.links) : workbook.links;
+
     // Create links
     const link = boundingBoxContainer
       .selectAll(".link")
-      .data(workbook.links)
+      .data(uniqueLinks)
       .enter()
       .append("g")
       .attr("class", "link");

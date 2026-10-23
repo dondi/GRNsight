@@ -86,21 +86,20 @@ export const buildPreFetchTwoColumnWarnings = ({
         const isMissing = sheetData === null || sheetData === undefined;
         const isEmpty = !isMissing && Object.keys(sheetData.data || {}).length === 0;
 
+        if (sheetName.includes("optimized")) {
+            continue;
+        }
+
+        if (source === "userInput") {
+            const warning = buildMissingOrEmptyWarning({
+                sheetName,
+                isMissing,
+                exportWarningsConstants,
+                workbookWarnings,
+            });
+            warningsToAdd.push(warning);
+        }
         if (isMissing || isEmpty) {
-            if (source === "userInput") {
-                const warning = buildMissingOrEmptyWarning({
-                    sheetName,
-                    isMissing,
-                    exportWarningsConstants,
-                    workbookWarnings,
-                });
-                warningsToAdd.push(warning);
-            }
-
-            if (sheetName.includes("optimized")) {
-                continue;
-            }
-
             sheetsToFetch.push(sheetName);
         }
 
