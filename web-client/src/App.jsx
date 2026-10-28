@@ -34,6 +34,7 @@ function App() {
   const [adaptive, setAdaptive] = useState(true);
   const [networkData, setNetworkData] = useState(null);
   const [zoomPercent, setZoomPercent] = useState(ZOOM_DISPLAY_MIDDLE);
+  const [sheetType, setSheetType] = useState(null);
 
   // All state and setters bundled into a single value for context
   const grnState = {
@@ -73,6 +74,8 @@ function App() {
     setNetworkData,
     zoomPercent,
     setZoomPercent,
+    sheetType,
+    setSheetType,
   };
 
   useEffect(() => {
