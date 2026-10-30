@@ -79,6 +79,11 @@ export const buildPreFetchTwoColumnWarnings = ({
 
     const warningsToAdd = [];
     const sheetsToFetch = [];
+    let importWarningCodesToMigrate = [];
+
+    console.log("export warnings constants", exportWarningsConstants);
+    console.log("workbook warnings", workbookWarnings);
+    console.log("chosenSheets", chosenTwoColumnSheets);
 
     for (const sheetName of chosenTwoColumnSheets) {
         const sheetUpperName = sheetName.toUpperCase();
@@ -105,15 +110,18 @@ export const buildPreFetchTwoColumnWarnings = ({
         }
 
         // Carry import warning to export warning if applicable
-        const importWarningCodesToMigrate = [
+        importWarningCodesToMigrate = [
             `MISSING_GENES_AND_VALUES_${sheetUpperName}`,
             `EXTRA_GENES_${sheetUpperName}`,
             `MISSING_VALUES_${sheetUpperName}`,
             `MISSING_GENE_IDS_WITH_VALUES_${sheetUpperName}`,
             `MISSING_COLUMN_HEADER_${sheetName.toUpperCase()}`,
             `INCORRECT_COLUMN_HEADER_${sheetName.toUpperCase()}`,
+            `BLANK_EXPRESSION_SHEET`,
         ];
-        warningsToAdd.push(...migrateImportWarnings(workbookWarnings, importWarningCodesToMigrate));
+        console.log("warnings to column sheets: ", warningsToAdd);
+        console.log("workbook warnings: ", workbookWarnings);
+        // warningsToAdd.push(...migrateImportWarnings(workbookWarnings, importWarningCodesToMigrate));
 
         const wrongGeneOrder = wrongGeneOrderWarning(
             sheetName,
@@ -124,6 +132,8 @@ export const buildPreFetchTwoColumnWarnings = ({
             warningsToAdd.push(wrongGeneOrder);
         }
     }
+
+    warningsToAdd.push(...migrateImportWarnings(workbookWarnings, importWarningCodesToMigrate));
 
     return {
         chosenTwoColumnSheets,
