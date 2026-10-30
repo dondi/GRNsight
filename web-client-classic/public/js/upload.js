@@ -652,13 +652,32 @@ export const upload = function () {
         }
 
         result += `<p class="export-excel-workbook-sheet-option-subheader"> Additional Sheets </p>`;
+
         for (let sheet of additionalsheets) {
-            result += `
-        <li class="export-excel-workbook-sheet-option">
-            <input type="checkbox" name="workbookSheets" ${getCheckedAttr(sheet)} value="${sheet}" id="exportExcelWorkbookSheet-${sheet}" class="export-checkbox" />
-            <label for="exportExcelWorkbookSheet-${sheet}" class="export-checkbox-label">${sheet}</label>
-        </li>
-        `;
+            let isMissingOptimized = false;
+            if (sheet === "optimized_threshold_b" || sheet === "optimized_production_rates") {
+                const hasSheet =
+                    grnState.workbook.twoColumnSheets && grnState.workbook.twoColumnSheets[sheet];
+                if (!hasSheet) {
+                    isMissingOptimized = true;
+                }
+            }
+
+            if (isMissingOptimized) {
+                result += `
+                <li class="export-excel-workbook-sheet-option disabled-option">
+                    <input type="checkbox" name="workbookSheets" value="${sheet}" id="exportExcelWorkbookSheet-${sheet}" class="export-checkbox" disabled="disabled" />
+                    <label for="exportExcelWorkbookSheet-${sheet}" class="export-checkbox-label"">${sheet} (unavailable for this Expression Data Source)</label>
+                </li>
+                `;
+            } else {
+                result += `
+                <li class="export-excel-workbook-sheet-option">
+                    <input type="checkbox" name="workbookSheets" ${getCheckedAttr(sheet)} value="${sheet}" id="exportExcelWorkbookSheet-${sheet}" class="export-checkbox" />
+                    <label for="exportExcelWorkbookSheet-${sheet}" class="export-checkbox-label">${sheet}</label>
+                </li>
+                `;
+            }
         }
 
         return result;
