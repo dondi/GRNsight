@@ -2,7 +2,7 @@ import { updaters } from "./graph";
 import { updateApp, identifySpeciesMenu } from "./update-app";
 import { saveSvgAsPng } from "save-svg-as-png";
 import { jsPDF } from "jspdf";
-import { Canvg } from "canvg";
+import canvg from "canvg";
 import { filenameWithExtension } from "./upload";
 import { determineWorkbookType } from "./upload";
 
@@ -185,14 +185,19 @@ export const setupHandlers = grnState => {
         $("#exportAsSvg").attr("download", name);
     };
 
-    const exportPDF = async (svgElement, name) => {
-        if (svgElement) {
-            svgElement = svgElement.replace(/\r?\n|\r/g, "").trim();
-        }
+    const exportPDF = async (svgContainerElement, name) => {
+        const markerIds = [...svgContainerElement.matchAll(/<marker[^>]*\sid="([^"]+)"/g)].map(
+            m => m[1]
+        );
+        svgContainerElement = svgContainerElement.replace(
+            /marker-end="url\(#?([^)"']+)\)"/g,
+            (match, id) => (markerIds.includes(id) ? match : "")
+        );
 
         let canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
-        const v = await Canvg.fromString(ctx, svgElement);
+
+        const v = await canvg.fromString(ctx, svgContainerElement);
         await v.render();
 
         const imgData = canvas.toDataURL("image/png");
@@ -263,7 +268,7 @@ export const setupHandlers = grnState => {
         exportSVG(svgContainer, editedName);
     });
 
-    $(EXPORT_TO_PDF).click(async () => {
+    $(EXPORT_TO_PDF).click(() => {
         var svgContainer = document.getElementById("exportContainer").innerHTML;
         var editedName = filenameWithExtension(
             grnState.mode,
