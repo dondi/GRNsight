@@ -186,8 +186,13 @@ export const setupHandlers = grnState => {
     };
 
     const exportPDF = async (svgContainerElement, name) => {
-        svgContainerElement = svgContainerElement.replace(/\r?\n|\r/g, "").trim();
-        svgContainerElement = svgContainerElement.replace(/marker-end="url\([^)]+\)"/g, "");
+        const markerIds = [...svgContainerElement.matchAll(/<marker[^>]*\sid="([^"]+)"/g)].map(
+            m => m[1]
+        );
+        svgContainerElement = svgContainerElement.replace(
+            /marker-end="url\(#?([^)"']+)\)"/g,
+            (match, id) => (markerIds.includes(id) ? match : "")
+        );
 
         let canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
