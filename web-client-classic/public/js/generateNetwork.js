@@ -52,6 +52,48 @@ export const generateNetwork = function () {
         }
         result += `</select>
                 </div>
+        <div class='form-group' id='getNetworkStrainForm'>
+            <label for='network-strain-toggle' id='network-strain-label'>Strain</label>
+            <div class='multiselect-row'>
+                <div class='dropdown multiselect-dropdown' id='network-strain'>
+                    <button type='button' class='btn btn-default dropdown-toggle' id='network-strain-toggle'
+                            data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                        <span id='network-strain-text'>Multiple options selected</span>
+                        <span class='caret'></span>
+                    </button>
+                    <ul class='dropdown-menu multiselect-menu' id='network-strain-menu' data-multiselect='network-strain'>
+                        <li><a href='#' class='multiselect-select-all' id='network-strain-select-all'
+                            data-multiselect='network-strain'>Select all</a></li>
+                        <li><a href='#' class='multiselect-clear' id='network-strain-clear'
+                            data-multiselect='network-strain'>Clear</a></li>
+                        <li role='separator' class='divider'></li>
+                        <li><a href='#' class='multiselect-option selected' data-value='S288c'>S288C</a></li>
+                        <li><a href='#' class='multiselect-option selected' data-value='Other'>Other</a></li>
+                        <li><a href='#' class='multiselect-option selected' data-value='W303'>W303</a></li>
+                        <li><a href='#' class='multiselect-option selected' data-value='CENPK'>CENPK</a></li>
+                        <li><a href='#' class='multiselect-option selected' data-value='SK1'>SK1</a></li>
+                        <li><a href='#' class='multiselect-option selected' data-value='Sigma1278b'>Sigma1278b</a></li>
+                        <li><a href='#' class='multiselect-option selected' data-value='SEY6210'>SEY6210</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class='form-group' id='getNetworkAnnotationForm'>
+            <label for='network-annotation-toggle' id='network-annotation-label'>Annotation Type</label>
+            <div class='multiselect-row'>
+                <div class='dropdown multiselect-dropdown' id='network-annotation'>
+                    <button type='button' class='btn btn-default dropdown-toggle' id='network-annotation-toggle'
+                            data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                        <span id='network-annotation-text'>Multiple options selected</span>
+                        <span class='caret'></span>
+                    </button>
+                    <ul class='dropdown-menu multiselect-menu' id='network-annotation-menu' data-multiselect='network-annotation'>
+                        <li><a href='#' class='multiselect-option selected' data-value='high-throughput'>High-throughput</a></li>
+                        <li><a href='#' class='multiselect-option selected' data-value='manually-curated'>Manually curated</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         <div class=\'form-group\' id=\'getNetworkGenesForm\'>
             <form id=\'getNetworkGenesForm\' class=\'NetworkGenesForm\' >
                 <label for=\'network-search-bar\' id=\'network-source-label\'>Select ${geneProtein}</label>
@@ -60,14 +102,6 @@ export const generateNetwork = function () {
                     <span class=\'glyphicon glyphicon-search\'></span>
                 </button>
             </form>
-        </div>
-        <div class='form-group' id='getNetworkStrainForm'>
-            <label for='network-strain' id='network-strain-label'>Strain</label>
-            <select class='network-dropdown btn btn-default' id='network-strain'>
-                <option value='S288c'>S288C</option>
-                <option value='W303'>W303</option>
-                <option value='CENPK'>CENPK</option>
-            </select>
         </div>
         <div id=\'selected-genes-container\'>
             <p>Added ${geneProtein}s go below! Click on a ${geneProtein} to remove it.</p>
@@ -209,6 +243,8 @@ containing "-", "_", and alpha-numeric characters only`);
         $("#generateNetworkFooter-container").append(createHTMLforModalButtons());
         grnState.customWorkbook = {
             genes: {},
+            strains: [],
+            annotationTypes: [],
             type: NETWORK_GRN_MODE,
             source: null,
             sources: {
@@ -240,6 +276,8 @@ containing "-", "_", and alpha-numeric characters only`);
                         grnState.customWorkbook.type
                     )
                 );
+                updateMultiselectUI("network-strain");
+                updateMultiselectUI("network-annotation");
             })
             .catch(function (error) {
                 console.log(error.stack);
@@ -291,6 +329,8 @@ containing "-", "_", and alpha-numeric characters only`);
                 )
             );
         }
+        updateMultiselectUI("network-strain");
+        updateMultiselectUI("network-annotation");
         event.stopPropagation();
         displayCurrentGenes();
     });
@@ -299,6 +339,101 @@ containing "-", "_", and alpha-numeric characters only`);
         grnState.customWorkbook.genes = {};
         event.stopPropagation();
         displayCurrentGenes();
+    });
+    const MULTISELECT_CONFIG = {
+        "network-strain": {
+            stateKey: "strains",
+            placeholder: "Select strain(s)",
+            defaultValue: "S288c",
+        },
+        "network-annotation": {
+            stateKey: "annotationTypes",
+            placeholder: "Select annotation type(s)",
+        },
+    };
+
+    const ensureSelection = id => {
+        const config = MULTISELECT_CONFIG[id];
+        const $options = $(`#${id}-menu .multiselect-option`);
+        if ($options.filter(".selected").length > 0) {
+            return;
+        }
+        let $fallback = $options.filter(`[data-value="${config.defaultValue}"]`);
+        if ($fallback.length === 0) {
+            $fallback = $options.first();
+        }
+        $fallback.addClass("selected");
+    };
+
+    const updateMultiselectUI = id => {
+        const config = MULTISELECT_CONFIG[id];
+        ensureSelection(id);
+
+        const $options = $(`#${id}-menu .multiselect-option`);
+        const $selected = $options.filter(".selected");
+        const values = $selected
+            .map(function () {
+                return $(this).attr("data-value");
+            })
+            .get();
+        const labels = $selected
+            .map(function () {
+                return $(this).text();
+            })
+            .get();
+        grnState.customWorkbook[config.stateKey] = values;
+
+        let text;
+        if (labels.length === 1) {
+            text = labels[0];
+        } else if ($options.length === labels.length) {
+            text = "All"
+        }
+        else if (labels.length >= 2) {
+            text = "Multiple items selected";
+        }
+        $(`#${id}-text`).text(text);
+
+        // Select all is disabled when everything is selected.
+        $(`#${id}-select-all`).parent().toggleClass("disabled", labels.length === $options.length);
+
+        // Clear is disabled when only the default option is already selected.
+        const onlyDefault =
+            labels.length === 1 && values[0] === config.defaultValue;
+        $(`#${id}-clear`).parent().toggleClass("disabled", onlyDefault);
+    };
+
+    $("body").on("click", ".multiselect-menu .multiselect-option", function (event) {
+        event.preventDefault();
+        event.stopPropagation(); // keeps the dropdown open so multiple options can be picked
+        const $option = $(this);
+        const $menu = $option.closest(".multiselect-menu");
+
+        // Never allow the last selected option to be deselected
+        if ($option.hasClass("selected") && $menu.find(".multiselect-option.selected").length === 1) {
+            return;
+        }
+        $option.toggleClass("selected");
+        updateMultiselectUI($menu.attr("data-multiselect"));
+    });
+
+    $("body").on("click", ".multiselect-select-all", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        const id = $(this).attr("data-multiselect");
+        $(`#${id}-menu .multiselect-option`).addClass("selected");
+        updateMultiselectUI(id);
+    });
+
+    $("body").on("click", ".multiselect-clear", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        const id = $(this).attr("data-multiselect");
+        const config = MULTISELECT_CONFIG[id];
+        const $options = $(`#${id}-menu .multiselect-option`);
+        $options.removeClass("selected");
+        $options.filter(`[data-value="${config.defaultValue}"]`).addClass("selected");
+        updateMultiselectUI(id); // ensureSelection covers a missing default value
     });
     $("body").on("click", "#submit-network", function () {
         let genesAmount = Object.keys(grnState.customWorkbook.genes).length;
@@ -313,6 +448,7 @@ containing "-", "_", and alpha-numeric characters only`);
                 const genes = sortedGenes.map(([key]) => key);
                 const displayGenes = sortedGenes.map(([_, value]) => value);
                 const source = grnState.customWorkbook.source;
+                // const strain = grnState.customWorkbook.strain;
                 const headers = {
                     type: "GenerateNetwork",
                     genes: genes.join(","),
