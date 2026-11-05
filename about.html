@@ -1,7 +1,7 @@
 ---
 layout: default
 title: About
-modified: 6/7/2026
+modified: 11/5/2026
 description: >-
     About the GRNsight gene regulatory network and protein-protein interaction visualization web app: availability, compatibility, release notes, funding, privacy statement.
 ---
@@ -50,7 +50,7 @@ description: >-
 
                         <div id="compatibilityContent" class="panel-collapse collapse">
                             <div class="panel-body">
-                                GRNsight has been tested with and confirmed to be working in Chrome version 149.0.7827.54 or higher and Firefox version 151.0.3 or higher on Windows 11 and macOS 26 Tahoe operating systems. It may not work with other browsers, versions, or operating systems.
+                                GRNsight has been tested with and confirmed to be working in Chrome version 157.0.8103.39 or higher and Firefox version 159.0.1 or higher on Windows 11 and macOS 26 Tahoe operating systems. It may not work with other browsers, versions, or operating systems.
                             </div>
                         </div>
                     </div>
@@ -67,6 +67,57 @@ description: >-
                         <div id="releaseContent" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <div class="panel-group">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <p class="panel-title aboutHeaders">
+                                                <a href="#v7_10_0Content" data-toggle="collapse">
+                                                    GRNsight v7.10.0
+                                                </a>
+                                            </p>
+                                        </div>
+                                        
+                                        <div id="v7_8_0Content" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                GRNsight v7.10.0 contains enhancements and bug fixes in these areas of functionality:
+                                                <ul>
+                                                  <li>Adding tests and user warnings upon the import and export of worksheets in Excel workbooks
+                                                    <ul>
+                                                        <li> Complete and verify tests and warnings for two-column worksheets</li>
+                                                        <li> Create test files for optimized_production_rates and optimized_threshold_b worksheets</li>
+                                                    </ul>
+                                                  </li>
+                                                  <li>User interface updates
+                                                    <ul>
+                                                        <li> Edge menu options disabled when edge coloring is turned off</li>
+                                                    </ul>
+                                                  </li>
+                                                  <li>Export data to Excel
+                                                    <ul>
+                                                        <li> Fix issues related to expression data source availability</li>
+                                                        <li> Fix export of the optimization_parameters worksheet</li>
+                                                        <li> Regularize the behavior of checkboxes</li>
+                                                        <li> Define the availability of network_optimized_weights worksheet for export</li>
+                                                        <li> Fix bug related to exporting PPI data to Excel</li>
+                                                        <li> Change the expression data source from radio buttons to a drop-down menu</li>
+                                                    </ul>
+                                                  </li>
+                                                  <li>Additional bugs fixed
+                                                    <ul>
+                                                        <li> Right-clicking on a protein node from a PPI now opens a Gene Page</li>
+                                                        <li> Fix regression in behavior of Demo drop-down menu</li>
+                                                        <li> Fix import Excel workbook error</li>
+                                                    </ul>
+                                                  </li>
+                                                  <li>Code improvements
+                                                    <ul>
+                                                        <li> Make function name more explicit</li>
+                                                    </ul>
+                                                  </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                             <p class="panel-title aboutHeaders">
