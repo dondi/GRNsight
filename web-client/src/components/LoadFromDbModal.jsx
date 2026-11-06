@@ -35,13 +35,20 @@ export default function LoadFromDbModal({ margin }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [customWorkbook, setCustomWorkbook] = useState(EMPTY_WORKBOOK);
 
-  const allStrainsOption = "All";
+  const allStrainsOption = "All Strains";
   const strainOptions = dataCategories.find(({ type }) => type === "Strain")?.options ?? [];
-  const [selectedStrain, setSelectedStrain] = useState([]);
+  const [selectedStrain, setSelectedStrain] = useState(strainOptions);
+  const allStrainsSelected = selectedStrain.length === strainOptions.length;
+  const choosenStrains = allStrainsSelected ? [allStrainsOption] : selectedStrain;
 
+  const allAnnotationTypeOptions = "All Annotation Types";
   const annotationTypeOptions =
     dataCategories.find(({ type }) => type === "annotationType")?.options ?? [];
-  const [selectedAnnotationType, setSelectedAnnotationType] = useState([]);
+  const [selectedAnnotationType, setSelectedAnnotationType] = useState(annotationTypeOptions);
+  const allAnnotationTypeSelected = selectedAnnotationType.length === annotationTypeOptions.length;
+  const choosenAnnotationType = allAnnotationTypeSelected
+    ? [allAnnotationTypeOptions]
+    : selectedAnnotationType;
 
   const sourceOptions = useMemo(() => {
     if (customWorkbook.type === NETWORK_PPI_MODE_SHORT) {
@@ -107,20 +114,22 @@ export default function LoadFromDbModal({ margin }) {
     setIsOpen(false);
     setSearchValue("");
     setErrorMessage("");
+    setSelectedStrain(strainOptions);
+    setSelectedAnnotationType(annotationTypeOptions);
     setCustomWorkbook(EMPTY_WORKBOOK);
   };
 
   const setStrainType = nextStrain => {
     setSelectedStrain(nextStrain);
-    setSelectedAnnotationType([]);
+    setSelectedAnnotationType(annotationTypeOptions);
     setCustomWorkbook(prev => ({ ...prev, genes: {} }));
   };
 
   const setWorkbookType = nextType => {
     setErrorMessage("");
     setSearchValue("");
-    setSelectedStrain([]);
-    setSelectedAnnotationType([]);
+    setSelectedStrain(strainOptions);
+    setSelectedAnnotationType(annotationTypeOptions);
     setCustomWorkbook(prev => {
       const nextSources =
         nextType === NETWORK_PPI_MODE_SHORT
@@ -416,34 +425,24 @@ export default function LoadFromDbModal({ margin }) {
                         className="generate-network-select"
                         multiple
                         options={[allStrainsOption, ...strainOptions]}
-                        value={selectedStrain}
-                        onChange={({ value = [] }) =>
-                          setStrainType(value.includes(allStrainsOption) ? strainOptions : value)
-                        }
-                        messages={{ multiple: "\u00A0" }} 
+                        value={choosenStrains}
+                        onChange={({ option, value = [] }) => {
+                          if (option === allStrainsOption) {
+                            setStrainType(value.includes(allStrainsOption) ? strainOptions : []);
+                            return;
+                          }
+                          const clickedStrain = allStrainsSelected
+                            ? [option]
+                            : value.filter(strain => strain !== allStrainsOption);
+                          setStrainType(
+                            clickedStrain.length === strainOptions.length
+                              ? strainOptions
+                              : clickedStrain
+                          );
+                        }}
+                        messages={{ multiple: "Multiple items selected" }}
                         size="14px"
                       />
-                    </Box>
-                  </Box>
-
-                  <Box className="selected-genes-container">
-                    <Box direction="row" wrap gap="xsmall">
-                      {selectedStrain.map(strain => (
-                        <Button
-                          key={strain}
-                          className="selected-gene-button"
-                          onClick={() =>
-                            setStrainType(selectedStrain.filter(selected => selected !== strain))
-                          }
-                          margin={{ bottom: "20px" }}
-                        >
-                          <Box pad={{ horizontal: "10px", vertical: "8px" }}>
-                            <Text size="small" weight="bold">
-                              {strain}
-                            </Text>
-                          </Box>
-                        </Button>
-                      ))}
                     </Box>
                   </Box>
 
@@ -455,11 +454,26 @@ export default function LoadFromDbModal({ margin }) {
                       <Select
                         className="generate-network-select"
                         multiple
-                        options={annotationTypeOptions}
-                        value={selectedAnnotationType}
-                        onChange={({ value }) => setSelectedAnnotationType(value)}
-                        messages={{ multiple: selectedAnnotationType.join(", ") }} 
-                        size="14px"
+                        options={[allAnnotationTypeOptions, ...annotationTypeOptions]}
+                        value={choosenAnnotationType}
+                        onChange={({ option, value = [] }) => {
+                          if (option === allAnnotationTypeOptions) {
+                            setSelectedAnnotationType(
+                              value.includes(allAnnotationTypeOptions) ? annotationTypeOptions : []
+                            );
+                            return;
+                          }
+                          const clickedAnnotationType = allAnnotationTypeSelected
+                            ? [option]
+                            : value.filter(
+                                annotationType => annotationType !== allAnnotationTypeOptions
+                              );
+                          setSelectedAnnotationType(
+                            clickedAnnotationType.length === annotationTypeOptions.length
+                              ? annotationTypeOptions
+                              : clickedAnnotationType
+                          );
+                        }}
                       />
                     </Box>
                   </Box>
