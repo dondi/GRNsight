@@ -186,6 +186,8 @@ export const setupHandlers = grnState => {
     };
 
     const exportPDF = async (svgContainerElement, name) => {
+        // strips marker-end references with no matching marker in the string, 
+        // since canvg throws on unresolved markers. 
         const markerIds = [...svgContainerElement.matchAll(/<marker[^>]*\sid="([^"]+)"/g)].map(
             m => m[1]
         );
