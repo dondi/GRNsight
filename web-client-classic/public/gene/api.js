@@ -46,35 +46,33 @@ let defaultYeastmine = {
     geneOntologySummary: "Not found",
 };
 
-let getUniProtInfo = function (query) {
+let getUniProtInfo = async function (query) {
     const taxon = query.uniprot;
     const geneSymbol = query.symbol;
-    // console.log("this is uniprot: " + taxon);
-    return $.get({
-        url: serviceRoot + "/uniprot/uploadlists/",
-        data: {
-            from: "GENENAME",
-            to: "ACC",
-            format: "tab",
-            taxon: taxon,
-            query: geneSymbol,
-        },
-        dataType: "text",
-        timeout: 5000,
-    }).then(function (data) {
-        const regex = new RegExp(geneSymbol + "[ \t\r\n\v\f]*([A-Z0-9]+)", "gm");
-        const id = regex.exec(data)[1];
-        return $.get({
-            url: serviceRoot + "/uniprot/uniprot/" + id + ".xml",
-            timeout: 5000,
-        });
+    const job = await fetch(`${serviceRoot}/uniprot/idmapping/run`, {
+        method: "POST",
+        body: new URLSearchParams({
+            ids: geneSymbol,
+            from: "Gene_Name",
+            to: "UniProtKB",
+            taxId: taxon,
+        }),
     });
+    const jobStatus = await job.json();
+    if (!job.ok) {
+        setTimeout(() => getUniProtInfo(query), 5000);
+    }
+    const result = await fetch(`${serviceRoot}/uniprot/idmapping/status/${jobStatus.jobId}`, {
+        method: "GET",
+    });
+    const data = await result.json();
+    return data.results[0].to;
 };
 
 let getNCBIInfo = function (query) {
     const geneSymbol = query.symbol;
     const geneName = query.species.replace(/_/, "+");
-    // console.log("calling ncbi")
+    // console.log("calling ncbi");
 
     return $.get({
         url: serviceRoot + "/ncbi/entrez/eutils/esearch.fcgi",
@@ -256,10 +254,10 @@ let parseGeneOntology = function (data) {
 
 let parseUniprot = function (data) {
     let uniprotTemplate = {
-        uniprotID: XMLParser(data.getElementsByTagName("name")[0]),
-        proteinSequence: XMLParser(data.getElementsByTagName("sequence")[0]),
-        proteinType: XMLParser(data.getElementsByTagName("protein")[0].childNodes[1].childNodes[1]),
-        species: XMLParser(data.getElementsByTagName("organism")[0].childNodes[1]),
+        uniprotID: data.primaryAccession,
+        proteinSequence: data.sequence.value,
+        proteinType: data.proteinDescription.recommendedName.fullName.value,
+        species: data.organism.scientificName,
     };
 
     for (var prop in uniprotTemplate) {
@@ -358,7 +356,6 @@ let parseJaspar = function (data) {
                     return window.api.getUniProtInfo(symbol);
                 })
                 .then(function (uniProtInfo) {
-                    //    console.log("in uniprot")
                     defaultValues.uniprot = parseUniprot(uniProtInfo);
                     return window.api.getJasparInfo(symbol);
                 })
