@@ -313,7 +313,7 @@ var parseNetworkSheet = function (sheet, network) {
     // } catch (err) {
     //   console.log ("Graph statistics report failed to be complete.");
     // }
-    return semanticChecker(network);
+    return semanticChecker(network, cellA1 === CELL_A1_PPI ? NETWORK_PPI_MODE : NETWORK_GRN_MODE);
 };
 
 /*

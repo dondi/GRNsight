@@ -7,6 +7,8 @@
 // var helpers = require(__dirname + "/helpers");
 
 var constants = require(__dirname + "/workbook-constants");
+var { isValidGeneName } = require(__dirname + "/validators/two-column-warnings");
+var { NETWORK_PPI_MODE } = require(__dirname + "/constants");
 
 /*
 var addMessageToArray = function (messageArray, message) {
@@ -109,14 +111,29 @@ var checkIfEmptyWorkbook = function (errorArray, genesList) {
     }
 };
 
+var checkGeneNames = function (warningArray, genesList) {
+    var invalidGenes = [];
+    for (var i = 0; i < genesList.length; i++) {
+        if (!isValidGeneName(genesList[i].name).isValid) {
+            invalidGenes.push(genesList[i].name);
+        }
+    }
+    if (invalidGenes.length > 0) {
+        warningArray.push(constants.warnings.ppiNamingConventionWarning(invalidGenes.join(", ")));
+    }
+};
+
 // TODO Entry-point semantic checker function goes here.
-module.exports = function (workbook) {
+module.exports = function (workbook, mode) {
     // Note: checkSpecialCharacter is unused, however it does not contain all of the parameters needed to
     //       call the specialCharacterError in rorkbook-constants.js. As it has no real impact to the current codebase,
     //       this is being mentioned because when this is implemented, it is a good thing to be aware of.
     checkSpecialCharacter(workbook.errors, workbook.genes);
     checkDuplicates(workbook.errors, workbook.genes);
     checkGeneLength(workbook.errors, workbook.genes);
+    if (mode === NETWORK_PPI_MODE) {
+        checkGeneNames(workbook.warnings, workbook.genes);
+    }
     checkWorkbookSize(
         workbook.errors,
         workbook.warnings,
