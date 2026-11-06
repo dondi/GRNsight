@@ -12,8 +12,8 @@ module.exports = function (app) {
 
     // Headers that must not be copied verbatim to the upstream request
     const SKIP_REQUEST_HEADERS = new Set([
-        "host",              // must be the target host, not localhost:5000
-        "content-length",    // must match the bytes actually sent
+        "host", // must be the target host, not localhost:5000
+        "content-length", // must match the bytes actually sent
         "connection",
         "keep-alive",
         "transfer-encoding",
@@ -98,7 +98,7 @@ module.exports = function (app) {
             }
         }
     };
-    
+
     app.use("/uniprot/", (req, res) => {
         relay(req, res, UNIPROT_HOST);
     });
