@@ -3,6 +3,7 @@ import { uploadState } from "./upload";
 import { displayGraphWarnings, displayPPINodeColorWarning } from "./warnings";
 import { max } from "d3-array";
 import { grnState } from "./grnstate";
+import { proteinToGeneName } from "./node-names";
 
 import {
     HOST_SITE,
@@ -391,10 +392,7 @@ const enableNodeColoringUI = function () {
 };
 
 const adjustGeneNameForExpression = function (gene) {
-    const geneName = gene.name;
-    return grnState.mode === NETWORK_PPI_MODE && geneName.endsWith("p")
-        ? geneName.slice(0, -1)
-        : geneName;
+    return proteinToGeneName(gene.name, grnState.mode);
 };
 
 const loadExpressionDatabase = function (isTopDataset) {
