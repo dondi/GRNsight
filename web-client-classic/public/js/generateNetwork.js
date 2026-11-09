@@ -58,22 +58,20 @@ export const generateNetwork = function () {
                 <div class='dropdown multiselect-dropdown' id='network-strain'>
                     <button type='button' class='btn btn-default dropdown-toggle' id='network-strain-toggle'
                             data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                        <span id='network-strain-text'>Multiple options selected</span>
+                        <span id='network-strain-text'>All</span>
                         <span class='caret'></span>
                     </button>
                     <ul class='dropdown-menu multiselect-menu' id='network-strain-menu' data-multiselect='network-strain'>
-                        <li><a href='#' class='multiselect-select-all' id='network-strain-select-all'
+                        <li><a href='#' class='multiselect-select-all selected' id='network-strain-select-all'
                             data-multiselect='network-strain'>Select all</a></li>
-                        <li><a href='#' class='multiselect-clear' id='network-strain-clear'
-                            data-multiselect='network-strain'>Clear</a></li>
                         <li role='separator' class='divider'></li>
-                        <li><a href='#' class='multiselect-option selected' data-value='S288c'>S288C</a></li>
-                        <li><a href='#' class='multiselect-option selected' data-value='Other'>Other</a></li>
-                        <li><a href='#' class='multiselect-option selected' data-value='W303'>W303</a></li>
-                        <li><a href='#' class='multiselect-option selected' data-value='CENPK'>CENPK</a></li>
-                        <li><a href='#' class='multiselect-option selected' data-value='SK1'>SK1</a></li>
-                        <li><a href='#' class='multiselect-option selected' data-value='Sigma1278b'>Sigma1278b</a></li>
-                        <li><a href='#' class='multiselect-option selected' data-value='SEY6210'>SEY6210</a></li>
+                        <li><a href='#' class='multiselect-option' data-value='S288c'>S288C</a></li>
+                        <li><a href='#' class='multiselect-option' data-value='Other'>Other</a></li>
+                        <li><a href='#' class='multiselect-option' data-value='W303'>W303</a></li>
+                        <li><a href='#' class='multiselect-option' data-value='CENPK'>CENPK</a></li>
+                        <li><a href='#' class='multiselect-option' data-value='SK1'>SK1</a></li>
+                        <li><a href='#' class='multiselect-option' data-value='Sigma1278b'>Sigma1278b</a></li>
+                        <li><a href='#' class='multiselect-option' data-value='SEY6210'>SEY6210</a></li>
                     </ul>
                 </div>
             </div>
@@ -344,7 +342,6 @@ containing "-", "_", and alpha-numeric characters only`);
         "network-strain": {
             stateKey: "strains",
             placeholder: "Select strain(s)",
-            defaultValue: "S288c",
         },
         "network-annotation": {
             stateKey: "annotationTypes",
@@ -367,10 +364,23 @@ containing "-", "_", and alpha-numeric characters only`);
 
     const updateMultiselectUI = id => {
         const config = MULTISELECT_CONFIG[id];
-        ensureSelection(id);
-
         const $options = $(`#${id}-menu .multiselect-option`);
-        const $selected = $options.filter(".selected");
+        const $selectAll = $(`#${id}-select-all`);
+        let allMode = false;
+
+        if ($selectAll.length > 0) {
+            // Strain: nothing highlighted or everything highlighted both mean "All"
+            const count = $options.filter(".selected").length;
+            allMode = count === 0 || count === $options.length;
+            if (allMode) {
+                $options.removeClass("selected"); // implied by Select all
+            }
+            $selectAll.toggleClass("selected", allMode);
+        } else {
+            ensureSelection(id); // annotation: never zero selected
+        }
+
+        const $selected = allMode ? $options : $options.filter(".selected");
         const values = $selected
             .map(function () {
                 return $(this).attr("data-value");
@@ -386,21 +396,12 @@ containing "-", "_", and alpha-numeric characters only`);
         let text;
         if (labels.length === 1) {
             text = labels[0];
-        } else if ($options.length === labels.length) {
-            text = "All"
-        }
-        else if (labels.length >= 2) {
+        } else if (labels.length === $options.length) {
+            text = "All";
+        } else {
             text = "Multiple items selected";
         }
         $(`#${id}-text`).text(text);
-
-        // Select all is disabled when everything is selected.
-        $(`#${id}-select-all`).parent().toggleClass("disabled", labels.length === $options.length);
-
-        // Clear is disabled when only the default option is already selected.
-        const onlyDefault =
-            labels.length === 1 && values[0] === config.defaultValue;
-        $(`#${id}-clear`).parent().toggleClass("disabled", onlyDefault);
     };
 
     $("body").on("click", ".multiselect-menu .multiselect-option", function (event) {
@@ -408,9 +409,15 @@ containing "-", "_", and alpha-numeric characters only`);
         event.stopPropagation(); // keeps the dropdown open so multiple options can be picked
         const $option = $(this);
         const $menu = $option.closest(".multiselect-menu");
+        const hasSelectAll = $menu.find(".multiselect-select-all").length > 0;
 
-        // Never allow the last selected option to be deselected
-        if ($option.hasClass("selected") && $menu.find(".multiselect-option.selected").length === 1) {
+        // Annotation (no Select all) can't deselect its last option.
+        // Strain doesn't need this: deselecting the last one falls back to "All".
+        if (
+            !hasSelectAll &&
+            $option.hasClass("selected") &&
+            $menu.find(".multiselect-option.selected").length === 1
+        ) {
             return;
         }
         $option.toggleClass("selected");
@@ -421,19 +428,8 @@ containing "-", "_", and alpha-numeric characters only`);
         event.preventDefault();
         event.stopPropagation();
         const id = $(this).attr("data-multiselect");
-        $(`#${id}-menu .multiselect-option`).addClass("selected");
+        $(`#${id}-menu .multiselect-option`).removeClass("selected"); // zero highlights = All mode
         updateMultiselectUI(id);
-    });
-
-    $("body").on("click", ".multiselect-clear", function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        const id = $(this).attr("data-multiselect");
-        const config = MULTISELECT_CONFIG[id];
-        const $options = $(`#${id}-menu .multiselect-option`);
-        $options.removeClass("selected");
-        $options.filter(`[data-value="${config.defaultValue}"]`).addClass("selected");
-        updateMultiselectUI(id); // ensureSelection covers a missing default value
     });
     $("body").on("click", "#submit-network", function () {
         let genesAmount = Object.keys(grnState.customWorkbook.genes).length;
