@@ -19,6 +19,9 @@ import {
   VIEW_SIZE_MEDIUM,
   VIEW_SIZE_LARGE,
   FIT_TO_WINDOW,
+  WEIGHTS_ALWAYS,
+  WEIGHTS_MOUSEOVER,
+  WEIGHTS_HIDE,
 } from "../helpers/constants";
 import { getNetworkMode, uploadWorkbook } from "../services/api";
 import {
@@ -67,7 +70,12 @@ export default function Sidebar({}) {
     setViewSize,
     adaptive,
     setAdaptive,
+    isWeighted,
   } = useContext(GrnStateContext);
+
+  const edgeTextColor = isWeighted ? undefined : "disabled";
+  const coloringControlsDisabled = !isWeighted || !colorOptimal;
+  const coloringTextColor = coloringControlsDisabled ? "disabled" : undefined;
 
   const [uploadError, setUploadError] = useState("");
   const [isUploading, setIsUploading] = useState(false);
@@ -339,18 +347,19 @@ export default function Sidebar({}) {
       {/* Edge */}
       <Box className="panel" margin={{ top: "5px" }}>
         <Box margin="10px">
-          <Text size="18px" weight="bold">
+          <Text size="18px" weight="bold" color={edgeTextColor}>
             Edge
           </Text>
         </Box>
         <Box pad={{ right: "10px", left: "10px", bottom: "10px" }} gap="5px">
           <CheckBox
             checked={colorOptimal}
-            label={<Text>Enable Edge Coloring</Text>}
+            disabled = {!isWeighted}
+            label={<Text color={edgeTextColor}>Enable Edge Coloring</Text>}
             onChange={event => setColorOptimal(event.target.checked)}
           />
           <Box>
-            <Text weight="bold">Hide/Show Edge Weights</Text>
+            <Text weight="bold" color={edgeTextColor}>Hide/Show Edge Weights</Text>
             <RadioButtonGroup
               className="sidebar-radio-buttons"
               gap="0px"
@@ -361,34 +370,36 @@ export default function Sidebar({}) {
               ]}
               size="small"
               value={edgeWeightVisibility}
+              disabled = {!isWeighted}
               onChange={event => setEdgeWeightVisibility(event.target.value)}
             />
           </Box>
           <Box>
-            <Text weight="bold">Edge Weight Normalization Factor (0.0001-1000):</Text>
-            <TextInput value={edgeWeightNormalization} />
+            <Text weight="bold" color={coloringTextColor}>Edge Weight Normalization Factor (0.0001-1000):</Text>
+            <TextInput value={edgeWeightNormalization} disabled = {coloringControlsDisabled} />
           </Box>
           {/* TODO: need to center buttons and make the same size */}
           <Box className="panel-dropdown-container" direction="row" gap="5px">
-            <Button>
+            <Button disabled = {coloringControlsDisabled}>
               <Box pad={{ vertical: "6px", horizontal: "10px" }} direction="row" gap="4px">
-                <Text size="14px">Set Factor</Text>
+                <Text size="14px" color={coloringTextColor}>Set Factor</Text>
               </Box>
             </Button>
-            <Button>
+            <Button disabled = {coloringControlsDisabled}>
               <Box pad={{ vertical: "6px", horizontal: "10px" }} direction="row" gap="4px">
-                <Text size="14px">Reset Factor</Text>
+                <Text size="14px" color={coloringTextColor}>Reset Factor</Text>
               </Box>
             </Button>
           </Box>
           <Box>
-            <Text weight="bold">
+            <Text weight="bold" color={coloringTextColor}>
               Gray Threshold (0-100%):{" "}
               <Text weight="normal">{(grayThreshold * 100).toFixed()}%</Text>
             </Text>
             <RangeInput
               color="blue"
               value={grayThreshold * 100}
+              disabled = {coloringControlsDisabled}
               onChange={event => setGrayThreshold(event.target.value / 100)}
               min={0}
               max={100}
@@ -396,7 +407,8 @@ export default function Sidebar({}) {
           </Box>
           <CheckBox
             checked={showGrayEdgesDashed}
-            label={<Text>Show Gray Edges as Dashed</Text>}
+            disabled = {coloringControlsDisabled}
+            label={<Text color={coloringTextColor}>Show Gray Edges as Dashed</Text>}
             onChange={event => setShowGrayEdgesDashed(event.target.checked)}
           />
         </Box>

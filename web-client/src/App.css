@@ -654,3 +654,21 @@ table {
 .dragging {
   cursor: grabbing;
 }
+
+.dropdown-menu button:disabled:hover,
+.dropdown-menu div:has(button:disabled):hover {
+  background-color: transparent;
+  cursor: not-allowed;
+}
+
+.weight {
+  visibility: hidden; pointer-events: none;
+}
+
+.weight.visible {
+  visibility: visible;
+}
+
+.weights-always .link .weight {
+  visibility: visible;
+}
