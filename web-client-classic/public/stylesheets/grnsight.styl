@@ -742,3 +742,36 @@ body {
   min-width: 1355px;
   overflow-x: auto;
 }
+
+.multiselect-row
+  display: flex
+  align-items: flex-start
+  gap: 8px
+  width: 100%
+
+.multiselect-dropdown
+  flex: 1
+  position: relative
+
+.multiselect-dropdown .dropdown-toggle
+  width: 100%
+  display: flex
+  justify-content: space-between
+  align-items: center
+  text-align: left
+
+.multiselect-dropdown .dropdown-menu
+  width: 100%
+  max-height: 250px
+  overflow-y: auto
+
+.multiselect-dropdown .dropdown-menu > li > a
+  padding: 8px 16px
+
+.multiselect-dropdown .dropdown-menu > li > a.selected
+  background-color: #e6e6e6cb
+  font-weight: bold
+
+.multiselect-dropdown .dropdown-menu > li > a:hover
+  background-color: #f2f1f1
+  text-decoration: none;
