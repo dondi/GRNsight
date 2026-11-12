@@ -22,6 +22,8 @@ import {
   NODE_POS_OFFSET,
   MAX_GRAPH_WIDTH,
   SELF_REFERRING_Y_OFFSET,
+  WEIGHTS_ALWAYS,
+  WEIGHTS_MOUSEOVER,
 } from "../helpers/constants";
 import {
   getNodeWidth,
@@ -55,7 +57,6 @@ export default function Graph() {
 
   // The workbook or sheetType are not needed in global state outside of Graph, so keep them local
   const [workbook, setWorkbook] = useState(null);
-  const [sheetType, setSheetType] = useState(null);
   const [allWeights, setAllWeights] = useState([]);
   const [maxWeight, setMaxWeight] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -90,7 +91,15 @@ export default function Graph() {
     grayThreshold,
     zoomPercent,
     setZoomPercent,
+    sheetType,
+    setSheetType,
+    edgeWeightVisibility,
   } = useContext(GrnStateContext);
+
+  const weightVisibilityRef = useRef(edgeWeightVisibility);
+  useEffect(() => {
+    weightVisibilityRef.current = edgeWeightVisibility;
+  }, [edgeWeightVisibility]);
 
   const applyWorkbookData = data => {
     setWorkbook(data);
@@ -371,6 +380,27 @@ export default function Graph() {
         });
       });
 
+    const isWeighted = workbook.sheetType === "weighted";
+
+    // For "Show With Mouse Over" - creating hoverable mousezone
+    if (isWeighted) {
+      link
+        .append("path")
+        .attr("class", "mousezone")
+        .style("fill", "none")
+        .style("stroke", "black")
+        .style("stroke-opacity", 0)
+        .style("stroke-width", d => Math.max(getEdgeThickness(workbook, colorOptimal, d), 5));
+      
+      link
+        .append("text")
+        .attr("class", "weight")
+        .attr("text-anchor", "middle")
+        .attr("fill", "rgb(0,0,0)")
+        .style("font-family", "sans-serif")
+        .text(d => d.value.toPrecision(4));
+    }
+
     const drag = d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended);
 
     // Create nodes
@@ -413,6 +443,33 @@ export default function Graph() {
         .select("rect")
         .attr("width", NODE_MARGIN + d.textWidth + NODE_MARGIN);
     });
+
+     // For "Show With Mouse Over" - value is displayed where mouse is hovering over/near edge
+    if (isWeighted) {
+      boundingBoxContainer
+        .selectAll(".weight-floating")
+        .data(uniqueLinks)
+        .enter()
+        .append("text")
+        .attr("class", "weight weight-floating")
+        .attr("text-anchor", "middle")
+        .attr("fill", "rgb(0,0,0)")
+        .style("font-family", "sans-serif")
+        .text(d => d.value.toPrecision(4))
+        .each(function (d) {
+          d.weightElement = d3.select(this);
+        });
+
+      link
+        .on("mouseover", function (event, d) {
+          if (weightVisibilityRef.current !== WEIGHTS_MOUSEOVER) return;
+          const [x, y] = d3.pointer(event, this);
+          d.weightElement.attr("x", x).attr("y", y).classed("visible", true);
+        })
+        .on("mouseout", (event, d) => {
+          d.weightElement.attr("x", null).attr("y", null).classed("visible", false);
+        });
+    }
 
     function dragstarted(event, d) {
       if (!event.active) simulation.alphaTarget(0.3).restart();
@@ -624,7 +681,7 @@ export default function Graph() {
         });
 
       link
-        .select("path")
+        .selectAll("path")
         .attr("d", d => {
           const baseStrokeWidth = getEdgeThickness(workbook, colorOptimal, d);
           d.strokeWidth = getEffectiveStrokeWidth({
@@ -639,6 +696,8 @@ export default function Graph() {
           }
           return createPath(d, width, height, colorOptimal);
         })
+      link
+        .selectAll("path.link-path")
         .attr("marker-end", d => {
           // Update marker-end during tick so repressors can switch between horizontal/vertical
           return getEdgeMarkerId({
@@ -677,7 +736,10 @@ export default function Graph() {
   return (
     <div
       ref={containerRef}
-      className={`grnsight-container ${isDragging ? "dragging" : "draggable"}`}
+      className={
+        `grnsight-container ${isDragging ? "dragging" : "draggable"} 
+        ${edgeWeightVisibility === WEIGHTS_ALWAYS ? "weights-always": ""}`
+      }
       style={width && height ? { width, height } : { ...VIEW_SIZE_DIMENSIONS[VIEW_SIZE_SMALL] }}
     >
       {loading && <div>Loading graph...</div>}
