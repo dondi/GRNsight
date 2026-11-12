@@ -58,7 +58,7 @@ export const generateNetwork = function () {
                 <div class='dropdown multiselect-dropdown' id='network-strain'>
                     <button type='button' class='btn btn-default dropdown-toggle' id='network-strain-toggle'
                             data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                        <span id='network-strain-text'>All</span>
+                        <span id='network-strain-text'>All Strains</span>
                         <span class='caret'></span>
                     </button>
                     <ul class='dropdown-menu multiselect-menu' id='network-strain-menu' data-multiselect='network-strain'>
@@ -82,7 +82,7 @@ export const generateNetwork = function () {
                 <div class='dropdown multiselect-dropdown' id='network-annotation'>
                     <button type='button' class='btn btn-default dropdown-toggle' id='network-annotation-toggle'
                             data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                        <span id='network-annotation-text'>Multiple options selected</span>
+                        <span id='network-annotation-text'>All Annotation Types </span>
                         <span class='caret'></span>
                     </button>
                     <ul class='dropdown-menu multiselect-menu' id='network-annotation-menu' data-multiselect='network-annotation'>
@@ -342,10 +342,12 @@ containing "-", "_", and alpha-numeric characters only`);
         "network-strain": {
             stateKey: "strains",
             placeholder: "Select strain(s)",
+            allText: "All Strains",
         },
         "network-annotation": {
             stateKey: "annotationTypes",
             placeholder: "Select annotation type(s)",
+            allText: "All Annotation Types",
         },
     };
 
@@ -394,12 +396,12 @@ containing "-", "_", and alpha-numeric characters only`);
         grnState.customWorkbook[config.stateKey] = values;
 
         let text;
-        if (labels.length === 1) {
+        if (labels.length === $options.length) {
+            text = config.allText;
+        } else if (labels.length === 1) {
             text = labels[0];
-        } else if (labels.length === $options.length) {
-            text = "All";
         } else {
-            text = "Multiple items selected";
+            text = "Multiple options selected";
         }
         $(`#${id}-text`).text(text);
     };
