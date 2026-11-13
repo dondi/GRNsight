@@ -444,7 +444,7 @@ export const upload = function () {
                 workbookWarnings: grnState.workbook.warnings,
             });
 
-        finalExportSheets.warnings.push(...warningsToAdd);
+        finalExportSheets.warnings = warningsToAdd;
 
         if (sheetsToFetch.length > 0) {
             await Promise.all(

@@ -425,6 +425,10 @@ module.exports = {
                           `The imported ${sheetName} sheet is blank.`,
                           `This will not affect the display of the graph.`,
                       ].join(" "),
+                exportErrorDescription: [
+                    `The exported ${sheetName} sheet is blank,`,
+                    "because it was imported without any data.",
+                ].join(" "),
             };
         },
 
