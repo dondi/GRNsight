@@ -427,7 +427,7 @@ module.exports = {
                       ].join(" "),
                 exportErrorDescription: [
                     `The exported ${sheetName} sheet is blank,`,
-                    `because it was imported without any data.`,
+                    "because it was imported without any data.",
                 ].join(" "),
             };
         },
