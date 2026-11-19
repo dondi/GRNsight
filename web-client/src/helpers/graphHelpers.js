@@ -201,6 +201,11 @@ export function getEdgeColor(workbook, edge, grayThreshold, maxWeight, colorOpti
   return edge.value < 0 ? EDGE_BLUE : EDGE_RED;
 }
 
+export function getEdgeDashArray(workbook, edge, grayThreshold, maxWeight, colorOptimal, showGrayEdgesDashed) {
+  if (!showGrayEdgesDashed || !colorOptimal || workbook.sheetType === "unweighted") return "none";
+  return normalize(edge, maxWeight) <= grayThreshold ? "6, 9" : "none";
+}
+
 export function calcAllWeights(data, colorOptimal) {
   // Create an array of all the network weights
   const allWeights = data.positiveWeights.concat(data.negativeWeights);
