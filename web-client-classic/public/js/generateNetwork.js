@@ -23,38 +23,42 @@ export const generateNetwork = function () {
     const createHTMLforForm = (sources, source, networkType) => {
         const geneProtein = networkType === NETWORK_PPI_MODE ? "protein" : "gene";
         let result = `
-            <div id=\'generateNetworkFormContainer\' '>
-                <h2 id=\'generateNetwork\'>Generate Network</h2>
+            <div id='generateNetworkFormContainer'>
+                <h2 id='generateNetwork'>Generate Network</h2>
                 <p>Warning: changing network type or source will clear the list of selected genes or proteins below.</p>
-                <div class=\'form-group\' id=\'getNetworkTypeForm\'>
-                    <label for=\'network-type\' id=\'network-type-label\'>Network Type</label>
-                    <select class=\'network-dropdown btn btn-default\' id=\'network-type\'>
-                        <option value=\'grn\' ${geneProtein === "gene" ? "selected=\'true\'" : ""}>Gene Regulatory</option>
-                        <option value=\'protein-protein-physical-interaction\' ${geneProtein === "protein" ? "selected=\'true\'" : ""}>Protein-Protein Physical Interactions</option>
-                    </select>
+                <div class='form-group network-field-row' id='getNetworkTypeForm'>
+                    <label for='network-type' id='network-type-label' class='network-field-label'>Network Type</label>
+                    <div class='network-field-control'>
+                        <select class='network-dropdown btn btn-default' id='network-type'>
+                            <option value='grn' ${geneProtein === "gene" ? "selected='true'" : ""}>Gene Regulatory</option>
+                            <option value='protein-protein-physical-interaction' ${geneProtein === "protein" ? "selected='true'" : ""}>Protein-Protein Physical Interactions</option>
+                        </select>
+                    </div>
                 </div>
-                <div class=\'form-group\' id=\'getNetworkSourceForm\'>
-                    <label for=\'network-source\' id=\'network-source-label\'>Network Source</label>
-                    <select class=\'network-dropdown btn btn-default\' id=\'network-source\'>
+                <div class='form-group network-field-row' id='getNetworkSourceForm'>
+                    <label for='network-source' id='network-source-label' class='network-field-label'>Network Source</label>
+                    <div class='network-field-control'>
+                        <select class='network-dropdown btn btn-default' id='network-source'>
             `;
         if (sources.length !== 1) {
             for (let source in sources) {
                 result += `
-                            <option value=\'${sources[source]}\' ${
-                                source === sources[source] ? "\'selected=\'true" : ""
-                            }\'>${sources[source]}</option>
+                            <option value='${sources[source]}' ${
+                                source === sources[source] ? "'selected='true" : ""
+                            }'>${sources[source]}</option>
                 `;
             }
         } else {
             result += `
-                        <option value=\'${sources[0]}\' selected=\'true\' disabled hidden>${sources[0]}</option>
+                        <option value='${sources[0]}' selected='true' disabled hidden>${sources[0]}</option>
             `;
         }
         result += `</select>
+                    </div>
                 </div>
-        <div class='form-group' id='getNetworkStrainForm'>
-            <label for='network-strain-toggle' id='network-strain-label'>Strain</label>
-            <div class='multiselect-row'>
+        <div class='form-group network-field-row' id='getNetworkStrainForm'>
+            <label for='network-strain-toggle' id='network-strain-label' class='network-field-label'>Strain</label>
+            <div class='network-field-control'>
                 <div class='dropdown multiselect-dropdown' id='network-strain'>
                     <button type='button' class='btn btn-default dropdown-toggle' id='network-strain-toggle'
                             data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
@@ -66,19 +70,19 @@ export const generateNetwork = function () {
                             data-multiselect='network-strain'>Select all</a></li>
                         <li role='separator' class='divider'></li>
                         <li><a href='#' class='multiselect-option' data-value='S288c'>S288C</a></li>
-                        <li><a href='#' class='multiselect-option' data-value='Other'>Other</a></li>
                         <li><a href='#' class='multiselect-option' data-value='W303'>W303</a></li>
                         <li><a href='#' class='multiselect-option' data-value='CENPK'>CENPK</a></li>
-                        <li><a href='#' class='multiselect-option' data-value='SK1'>SK1</a></li>
-                        <li><a href='#' class='multiselect-option' data-value='Sigma1278b'>Sigma1278b</a></li>
+                        <li><a href='#' class='multiselect-option' data-value='Other'>Other</a></li>
                         <li><a href='#' class='multiselect-option' data-value='SEY6210'>SEY6210</a></li>
+                        <li><a href='#' class='multiselect-option' data-value='Sigma1278b'>Sigma1278b</a></li>
+                        <li><a href='#' class='multiselect-option' data-value='SK1'>SK1</a></li>
                     </ul>
                 </div>
             </div>
         </div>
-        <div class='form-group' id='getNetworkAnnotationForm'>
-            <label for='network-annotation-toggle' id='network-annotation-label'>Annotation Type</label>
-            <div class='multiselect-row'>
+        <div class='form-group network-field-row' id='getNetworkAnnotationForm'>
+            <label for='network-annotation-toggle' id='network-annotation-label' class='network-field-label'>Annotation Type</label>
+            <div class='network-field-control'>
                 <div class='dropdown multiselect-dropdown' id='network-annotation'>
                     <button type='button' class='btn btn-default dropdown-toggle' id='network-annotation-toggle'
                             data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
@@ -86,24 +90,26 @@ export const generateNetwork = function () {
                         <span class='caret'></span>
                     </button>
                     <ul class='dropdown-menu multiselect-menu' id='network-annotation-menu' data-multiselect='network-annotation'>
-                        <li><a href='#' class='multiselect-option selected' data-value='high-throughput'>High-throughput</a></li>
                         <li><a href='#' class='multiselect-option selected' data-value='manually-curated'>Manually curated</a></li>
+                        <li><a href='#' class='multiselect-option selected' data-value='high-throughput'>High-throughput</a></li>
                     </ul>
                 </div>
             </div>
         </div>
-        <div class=\'form-group\' id=\'getNetworkGenesForm\'>
-            <form id=\'getNetworkGenesForm\' class=\'NetworkGenesForm\' >
-                <label for=\'network-search-bar\' id=\'network-source-label\'>Select ${geneProtein}</label>
-                <input type=\'text\' id=\'network-search-bar\' name=\'network-search-bar\'></input>
-                <button id=\'enter-search\' type=\'submit\' class=\'search-button btn btn-default\'>
-                    <span class=\'glyphicon glyphicon-search\'></span>
-                </button>
-            </form>
+        <div class='form-group network-field-row' id='getNetworkGenesForm'>
+            <label for='network-search-bar' id='network-search-label' class='network-field-label'>Select ${geneProtein}</label>
+            <div class='network-field-control'>
+                <div class='gene-search-row'>
+                    <input type='text' id='network-search-bar' name='network-search-bar'>
+                    <button id='enter-search' type='submit' class='search-button btn btn-default'>
+                        <span class='glyphicon glyphicon-search'></span>
+                    </button>
+                </div>
+            </div>
         </div>
-        <div id=\'selected-genes-container\'>
+        <div id='selected-genes-container'>
             <p>Added ${geneProtein}s go below! Click on a ${geneProtein} to remove it.</p>
-            <div id=\'selected-genes\'>
+            <div id='selected-genes'>
             </div>
         `;
         return result;
