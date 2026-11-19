@@ -36,6 +36,7 @@ import {
   calcMaxWeight,
   getSelfReferringRadius,
   getUniquePpiLinks,
+  getEdgeDashArray,
 } from "../helpers/graphHelpers";
 import { createAllMarkers, getEdgeMarkerId } from "../helpers/markerHelpers";
 import {
@@ -94,6 +95,7 @@ export default function Graph() {
     sheetType,
     setSheetType,
     edgeWeightVisibility,
+    showGrayEdgesDashed,
   } = useContext(GrnStateContext);
 
   const weightVisibilityRef = useRef(edgeWeightVisibility);
@@ -359,6 +361,9 @@ export default function Graph() {
         d.stroke = getEdgeColor(workbook, d, grayThreshold, maxWeight, colorOptimal);
         return d.stroke;
       })
+      .style("stroke-dasharray", d =>
+        getEdgeDashArray(workbook, d, grayThreshold, maxWeight, colorOptimal, showGrayEdgesDashed)
+      )
       .style("stroke-width", d => {
         const baseStrokeWidth = getEdgeThickness(workbook, colorOptimal, d);
         d.baseStrokeWidth = baseStrokeWidth;
@@ -732,6 +737,15 @@ export default function Graph() {
     windowDimensions,
     zoomPercent,
   ]);
+
+  useEffect(() => {
+    if (!workbook || !svgRef.current) return;
+    d3.select(svgRef.current)
+      .selectAll("path.link-path")
+      .style("stroke-dasharray", d =>
+        getEdgeDashArray(workbook, d, grayThreshold, maxWeight, colorOptimal, showGrayEdgesDashed)
+      );
+  }, [showGrayEdgesDashed]);
 
   return (
     <div

@@ -406,8 +406,8 @@ export default function Navbar({}) {
           <div className="dropdown-menu" onClickCapture={handleDropContentClick}>
             <Box pad={{ horizontal: "20px", vertical: "3px" }}>
               <Button disabled = {!isWeighted} onClick={() => setColorOptimal(!colorOptimal)}>
-                {colorOptimal && <Checkmark size="small" />}
-                <Text margin={{ left: "12px" }} color={edgeTextColor}>Enable Edge Coloring Based on Weight Values</Text>
+                <OptionalCheckmark desiredValue={true} currentValue={colorOptimal} />
+                <Text color={edgeTextColor}>Enable Edge Coloring Based on Weight Values</Text>
               </Button>
             </Box>
             <DottedLine />
@@ -462,7 +462,8 @@ export default function Navbar({}) {
               />
             </Box>
             <Box pad={{ horizontal: "20px", vertical: "3px" }}>
-              <Button disabled = {coloringControlsDisabled} pad={{ horizontal: "20px", vertical: "3px" }}>
+              <Button disabled = {coloringControlsDisabled} pad={{ horizontal: "20px", vertical: "3px" }} onClick={() => setShowGrayEdgesDashed(!showGrayEdgesDashed)} >
+                <OptionalCheckmark desiredValue={true} currentValue={showGrayEdgesDashed} />
                 <Text color={coloringTextColor}>Show Gray Edges as Dashed</Text>
               </Button>
             </Box>
