@@ -574,7 +574,7 @@ module.exports = {
             };
         },
 
-        ppiNamingConventionWarning: function (sheetName, genes) {
+        ppiNamingConventionWarning: function (genes) {
             return {
                 warningCode: "PPI_NAMING_CONVENTION",
                 errorDescription: `The following gene names do not follow the expected yeast naming convention: ${genes}.`,
