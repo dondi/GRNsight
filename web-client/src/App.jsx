@@ -6,7 +6,7 @@ import Graph from "./components/Graph";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import { theme } from "./helpers/theme";
-import { ZOOM_DISPLAY_MIDDLE } from "./helpers/constants";
+import { ZOOM_DISPLAY_MIDDLE, MIN_EDGE_WEIGHT_NORMALIZATION, MAX_EDGE_WEIGHT_NORMALIZATION } from "./helpers/constants";
 import { initialViewportSize } from "./helpers/viewportHelpers";
 import "./App.css";
 
@@ -26,7 +26,6 @@ function App() {
   const [averageReplicateValuesBottom, setAverageReplicateValuesBottom] = useState(false);
   const [logFoldChangeMax, setLogFoldChangeMax] = useState(3);
   const [edgeWeightVisibility, setEdgeWeightVisibility] = useState("Show With Mouse Over");
-  const [edgeWeightNormalization, setEdgeWeightNormalization] = useState(2.971);
   const [grayThreshold, setGrayThreshold] = useState(0.05);
   const [showGrayEdgesDashed, setShowGrayEdgesDashed] = useState(false);
   const [demoValue, setDemoValue] = useState(null);
@@ -36,6 +35,23 @@ function App() {
   const [zoomPercent, setZoomPercent] = useState(ZOOM_DISPLAY_MIDDLE);
   const [sheetType, setSheetType] = useState(null);
   const isWeighted = sheetType === "weighted";
+  const [edgeWeightNormalization, setEdgeWeightNormalization] = useState("");
+  const [defaultEdgeWeightNormalization, setDefaultEdgeWeightNormalization] = useState("");
+
+  const applyEdgeWeightNormalization = rawValue => {
+  const n = Number(rawValue);
+  const next =
+    String(rawValue).trim() === "" || Number.isNaN(n)
+      ? defaultEdgeWeightNormalization
+      : Math.min(MAX_EDGE_WEIGHT_NORMALIZATION, Math.max(MIN_EDGE_WEIGHT_NORMALIZATION, n));
+  setEdgeWeightNormalization(next);
+  return next;
+};
+
+  const resetEdgeWeightNormalization = () => {
+    setEdgeWeightNormalization(defaultEdgeWeightNormalization);
+    return defaultEdgeWeightNormalization;
+  };
 
   // All state and setters bundled into a single value for context
   const grnState = {
@@ -78,6 +94,10 @@ function App() {
     sheetType,
     setSheetType,
     isWeighted,
+    defaultEdgeWeightNormalization,
+    setDefaultEdgeWeightNormalization,
+    applyEdgeWeightNormalization,
+    resetEdgeWeightNormalization,
   };
 
   useEffect(() => {

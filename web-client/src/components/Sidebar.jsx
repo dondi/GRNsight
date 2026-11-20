@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Box,
   Text,
@@ -71,7 +71,17 @@ export default function Sidebar({}) {
     adaptive,
     setAdaptive,
     isWeighted,
+    applyEdgeWeightNormalization,
+    resetEdgeWeightNormalization,
   } = useContext(GrnStateContext);
+
+  const [normalizationDraft, setNormalizationDraft] = useState(edgeWeightNormalization);
+  useEffect(() => {
+    setNormalizationDraft(edgeWeightNormalization);
+  }, [edgeWeightNormalization]);
+
+  const commitNormalization = () =>
+    setNormalizationDraft(applyEdgeWeightNormalization(normalizationDraft));
 
   const edgeTextColor = isWeighted ? undefined : "disabled";
   const coloringControlsDisabled = !isWeighted || !colorOptimal;
@@ -376,16 +386,21 @@ export default function Sidebar({}) {
           </Box>
           <Box>
             <Text weight="bold" color={coloringTextColor}>Edge Weight Normalization Factor (0.0001-1000):</Text>
-            <TextInput value={edgeWeightNormalization} disabled = {coloringControlsDisabled} />
+            <TextInput
+              value={normalizationDraft}
+              disabled={coloringControlsDisabled}
+              onChange={event => setNormalizationDraft(event.target.value)}
+              onKeyDown={event => { if (event.key === "Enter") commitNormalization(); }}
+            />
           </Box>
           {/* TODO: need to center buttons and make the same size */}
           <Box className="panel-dropdown-container" direction="row" gap="5px">
-            <Button disabled = {coloringControlsDisabled}>
+            <Button disabled = {coloringControlsDisabled} onClick={commitNormalization}>
               <Box pad={{ vertical: "6px", horizontal: "10px" }} direction="row" gap="4px">
                 <Text size="14px" color={coloringTextColor}>Set Factor</Text>
               </Box>
             </Button>
-            <Button disabled = {coloringControlsDisabled}>
+            <Button disabled = {coloringControlsDisabled} onClick={() => setNormalizationDraft(resetEdgeWeightNormalization())}>
               <Box pad={{ vertical: "6px", horizontal: "10px" }} direction="row" gap="4px">
                 <Text size="14px" color={coloringTextColor}>Reset Factor</Text>
               </Box>
