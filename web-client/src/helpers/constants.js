@@ -70,6 +70,9 @@ export const WEIGHTS_MOUSEOVER = "Show With Mouse Over";
 export const WEIGHTS_ALWAYS = "Always Show Edge Weights";
 export const WEIGHTS_HIDE = "Never Show Edge Weights";
 
+export const MIN_EDGE_WEIGHT_NORMALIZATION = 0.0001;
+export const MAX_EDGE_WEIGHT_NORMALIZATION = 1000;
+
 // Zoom
 export const ZOOM_DISPLAY_MINIMUM = 25;
 export const ZOOM_MIN_DISPLAY = ZOOM_DISPLAY_MINIMUM;

@@ -37,6 +37,7 @@ import {
   getSelfReferringRadius,
   getUniquePpiLinks,
   getEdgeDashArray,
+  getMaxAbsWeight,
 } from "../helpers/graphHelpers";
 import { createAllMarkers, getEdgeMarkerId } from "../helpers/markerHelpers";
 import {
@@ -96,6 +97,9 @@ export default function Graph() {
     setSheetType,
     edgeWeightVisibility,
     showGrayEdgesDashed,
+    edgeWeightNormalization,
+    setEdgeWeightNormalization,
+    setDefaultEdgeWeightNormalization,
   } = useContext(GrnStateContext);
 
   const weightVisibilityRef = useRef(edgeWeightVisibility);
@@ -111,6 +115,10 @@ export default function Graph() {
     setAllWeights(weights);
     setMaxWeight(calcMaxWeight(weights));
     setError(null);
+    const defaultFactor = Number(getMaxAbsWeight(data).toPrecision(4));
+    const safeDefault = Number.isFinite(defaultFactor) && defaultFactor > 0 ? defaultFactor : "";
+    setDefaultEdgeWeightNormalization(safeDefault);
+    setEdgeWeightNormalization(safeDefault);
   };
 
   const getViewportBoundsData = () => ({
@@ -365,7 +373,7 @@ export default function Graph() {
         getEdgeDashArray(workbook, d, grayThreshold, maxWeight, colorOptimal, showGrayEdgesDashed)
       )
       .style("stroke-width", d => {
-        const baseStrokeWidth = getEdgeThickness(workbook, colorOptimal, d);
+        const baseStrokeWidth = getEdgeThickness(workbook, colorOptimal, d, edgeWeightNormalization);
         d.baseStrokeWidth = baseStrokeWidth;
         d.strokeWidth = getEffectiveStrokeWidth({
           baseStrokeWidth,
@@ -395,7 +403,7 @@ export default function Graph() {
         .style("fill", "none")
         .style("stroke", "black")
         .style("stroke-opacity", 0)
-        .style("stroke-width", d => Math.max(getEdgeThickness(workbook, colorOptimal, d), 5));
+        .style("stroke-width", d => Math.max(getEdgeThickness(workbook, colorOptimal, d, edgeWeightNormalization), 5));
       
       link
         .append("text")
@@ -688,7 +696,7 @@ export default function Graph() {
       link
         .selectAll("path")
         .attr("d", d => {
-          const baseStrokeWidth = getEdgeThickness(workbook, colorOptimal, d);
+          const baseStrokeWidth = getEdgeThickness(workbook, colorOptimal, d, edgeWeightNormalization);
           d.strokeWidth = getEffectiveStrokeWidth({
             baseStrokeWidth,
             edge: d,
@@ -736,6 +744,7 @@ export default function Graph() {
     adaptive,
     windowDimensions,
     zoomPercent,
+    edgeWeightNormalization,
   ]);
 
   useEffect(() => {

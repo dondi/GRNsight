@@ -78,7 +78,17 @@ export default function Navbar({}) {
     adaptive,
     setAdaptive,
     isWeighted,
+    applyEdgeWeightNormalization,
+    resetEdgeWeightNormalization,
   } = useContext(GrnStateContext);
+
+  const [normalizationDraft, setNormalizationDraft] = useState(edgeWeightNormalization);
+  useEffect(() => {
+    setNormalizationDraft(edgeWeightNormalization);
+  }, [edgeWeightNormalization, openMenu]);
+
+  const commitNormalization = () =>
+    setNormalizationDraft(applyEdgeWeightNormalization(normalizationDraft));
 
   const edgeTextColor = isWeighted ? undefined : "disabled";
   const coloringControlsDisabled = !isWeighted || !colorOptimal;
@@ -433,13 +443,16 @@ export default function Navbar({}) {
             <Box margin={{ horizontal: "20px", vertical: "3px" }} direction="row">
               <Text color={coloringTextColor}>Edge Weight Normalization Factor (0.0001 - 1000)</Text>{" "}
               <TextInput
-                value={edgeWeightNormalization}
+                value={normalizationDraft}
                 disabled = {coloringControlsDisabled}
-                onChange={event => setEdgeWeightNormalization(event.target.value)}
+                onChange={event => setNormalizationDraft(event.target.value)}
+                onBlur={commitNormalization}
+                onKeyDown={event => { if (event.key === "Enter") commitNormalization(); }}
               />
             </Box>
             <Box pad={{ horizontal: "20px", vertical: "3px" }}>
-              <Button disabled = {coloringControlsDisabled} pad={{ horizontal: "20px", vertical: "3px" }}>
+              <Button disabled = {coloringControlsDisabled} pad={{ horizontal: "20px", vertical: "3px" }}
+                onClick={() => setNormalizationDraft(resetEdgeWeightNormalization())}>
                 <Text color={coloringTextColor}>Reset Edge Weight Normalization Factor</Text>
               </Button>
             </Box>

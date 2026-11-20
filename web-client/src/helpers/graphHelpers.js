@@ -180,15 +180,21 @@ export function createSelfLoop(d, width, height, colorOptimal) {
   );
 }
 
-export function getEdgeThickness(workbook, colorOptimal, edge) {
+export function getMaxAbsWeight(workbook) {
+  const all = workbook.positiveWeights.concat(workbook.negativeWeights);
+  return all.length ? Math.max(...all.map(Math.abs)) : 0;
+}
+
+export function getEdgeThickness(workbook, colorOptimal, edge, normalizationFactor) {
   if (!colorOptimal || workbook.sheetType === "unweighted") {
     return 2;
   }
 
-  const allWeights = workbook.positiveWeights.concat(workbook.negativeWeights);
-  const maxWeight = Math.max(...allWeights.map(Math.abs));
+  const factor = Number(normalizationFactor);
+  const domainMax = factor > 0 ? factor : getMaxAbsWeight(workbook);
 
-  const scale = d3.scaleLinear().domain([0, maxWeight]).range([2, 14]).clamp(true);
+
+  const scale = d3.scaleLinear().domain([0, domainMax]).range([2, 14]).clamp(true);
 
   return Math.floor(scale(Math.abs(edge.value)));
 }
