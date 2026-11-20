@@ -80,6 +80,8 @@ export const buildPreFetchTwoColumnWarnings = ({
     const warningsToAdd = [];
     const sheetsToFetch = [];
 
+    warningsToAdd.push(...migrateImportWarnings(workbookWarnings, ["BLANK_EXPRESSION_SHEET"]));
+
     for (const sheetName of chosenTwoColumnSheets) {
         const sheetUpperName = sheetName.toUpperCase();
         const sheetData = (workbookTwoColumnSheets || {})[sheetName];
@@ -112,6 +114,7 @@ export const buildPreFetchTwoColumnWarnings = ({
             `MISSING_COLUMN_HEADER_${sheetName.toUpperCase()}`,
             `INCORRECT_COLUMN_HEADER_${sheetName.toUpperCase()}`,
         ];
+
         warningsToAdd.push(...migrateImportWarnings(workbookWarnings, importWarningCodesToMigrate));
 
         const wrongGeneOrder = wrongGeneOrderWarning(
