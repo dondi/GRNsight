@@ -1,5 +1,6 @@
 import Grid from "d3-v4-grid";
 import { grnState } from "./grnstate";
+import { proteinToGeneName } from "./node-names";
 import {
     modifyChargeParameter,
     modifyLinkDistanceParameter,
@@ -1233,10 +1234,7 @@ export var drawGraph = function (workbook) {
                     href:
                         "info?" +
                         $.param({
-                            symbol:
-                                grnState.mode === NETWORK_PPI_MODE
-                                    ? gene.name.replace(/p$/i, "")
-                                    : gene.name,
+                            symbol: proteinToGeneName(gene.name, grnState.mode),
                             species: grnState.genePageData.species,
                             jaspar: grnState.genePageData.taxonJaspar,
                             uniprot: grnState.genePageData.taxonUniprot,
