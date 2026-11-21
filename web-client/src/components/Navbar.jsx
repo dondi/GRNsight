@@ -18,6 +18,9 @@ import {
   VIEW_SIZE_MEDIUM,
   VIEW_SIZE_LARGE,
   FIT_TO_WINDOW,
+  WEIGHTS_ALWAYS,
+  WEIGHTS_MOUSEOVER,
+  WEIGHTS_HIDE,
 } from "../helpers/constants";
 import { getNetworkMode, uploadWorkbook } from "../services/api";
 import {
@@ -74,7 +77,12 @@ export default function Navbar({}) {
     setZoomPercent,
     adaptive,
     setAdaptive,
+    isWeighted,
   } = useContext(GrnStateContext);
+
+  const edgeTextColor = isWeighted ? undefined : "disabled";
+  const coloringControlsDisabled = !isWeighted || !colorOptimal;
+  const coloringTextColor = coloringControlsDisabled ? "disabled" : undefined;
 
   const isZoomControlDisabled =
     networkMode !== NETWORK_GRN_MODE_FULL && networkMode !== NETWORK_PPI_MODE_FULL;
@@ -397,38 +405,42 @@ export default function Navbar({}) {
         dropContent={
           <div className="dropdown-menu" onClickCapture={handleDropContentClick}>
             <Box pad={{ horizontal: "20px", vertical: "3px" }}>
-              <Button onClick={() => setColorOptimal(!colorOptimal)}>
+              <Button disabled = {!isWeighted} onClick={() => setColorOptimal(!colorOptimal)}>
                 {colorOptimal && <Checkmark size="small" />}
-                <Text margin={{ left: "12px" }}>Enable Edge Coloring Based on Weight Values</Text>
+                <Text margin={{ left: "12px" }} color={edgeTextColor}>Enable Edge Coloring Based on Weight Values</Text>
               </Button>
             </Box>
             <DottedLine />
             <Box pad={{ horizontal: "20px", vertical: "3px" }}>
-              <Button pad={{ horizontal: "20px", vertical: "3px" }}>
-                <Text>Only Show Edge Weights With Mouse Over</Text>
+              <Button disabled = {!isWeighted} pad={{ horizontal: "20px", vertical: "3px" }} onClick={() => setEdgeWeightVisibility(WEIGHTS_MOUSEOVER)} >
+                <OptionalCheckmark desiredValue={WEIGHTS_MOUSEOVER} currentValue={edgeWeightVisibility} />
+                <Text color={edgeTextColor}>Only Show Edge Weights With Mouse Over</Text>
               </Button>
             </Box>
             <Box pad={{ horizontal: "20px", vertical: "3px" }}>
-              <Button pad={{ horizontal: "20px", vertical: "3px" }}>
-                <Text>Always Show Edge Weights</Text>
+              <Button disabled = {!isWeighted} pad={{ horizontal: "20px", vertical: "3px" }} onClick={() => setEdgeWeightVisibility(WEIGHTS_ALWAYS)} >
+                <OptionalCheckmark desiredValue={WEIGHTS_ALWAYS} currentValue={edgeWeightVisibility} />
+                <Text color={edgeTextColor}>Always Show Edge Weights</Text>
               </Button>
             </Box>
             <Box pad={{ horizontal: "20px", vertical: "3px" }}>
-              <Button pad={{ horizontal: "20px", vertical: "3px" }}>
-                <Text>Never Show Edge Weights</Text>
+              <Button disabled = {!isWeighted} pad={{ horizontal: "20px", vertical: "3px" }} onClick={() => setEdgeWeightVisibility(WEIGHTS_HIDE)} >
+                <OptionalCheckmark desiredValue={WEIGHTS_HIDE} currentValue={edgeWeightVisibility} />
+                <Text color={edgeTextColor}>Never Show Edge Weights</Text>
               </Button>
             </Box>
             <DottedLine />
             <Box margin={{ horizontal: "20px", vertical: "3px" }} direction="row">
-              <Text>Edge Weight Normalization Factor (0.0001 - 1000)</Text>{" "}
+              <Text color={coloringTextColor}>Edge Weight Normalization Factor (0.0001 - 1000)</Text>{" "}
               <TextInput
                 value={edgeWeightNormalization}
+                disabled = {coloringControlsDisabled}
                 onChange={event => setEdgeWeightNormalization(event.target.value)}
               />
             </Box>
             <Box pad={{ horizontal: "20px", vertical: "3px" }}>
-              <Button pad={{ horizontal: "20px", vertical: "3px" }}>
-                <Text>Reset Edge Weight Normalization Factor</Text>
+              <Button disabled = {coloringControlsDisabled} pad={{ horizontal: "20px", vertical: "3px" }}>
+                <Text color={coloringTextColor}>Reset Edge Weight Normalization Factor</Text>
               </Button>
             </Box>
             <Box
@@ -442,15 +454,16 @@ export default function Navbar({}) {
             ></Box>
             {/* TODO: restrict size of text input and restrict to number values only */}
             <Box margin={{ horizontal: "20px", vertical: "3px" }} direction="row">
-              <Text>Gray Edge Threshold (0 - 100%)</Text>{" "}
+              <Text color={coloringTextColor}>Gray Edge Threshold (0 - 100%)</Text>{" "}
               <TextInput
                 value={(grayThreshold * 100).toFixed()}
+                disabled = {coloringControlsDisabled}
                 onChange={event => setGrayThreshold(event.target.value / 100)}
               />
             </Box>
             <Box pad={{ horizontal: "20px", vertical: "3px" }}>
-              <Button pad={{ horizontal: "20px", vertical: "3px" }}>
-                <Text>Show Gray Edges as Dashed</Text>
+              <Button disabled = {coloringControlsDisabled} pad={{ horizontal: "20px", vertical: "3px" }}>
+                <Text color={coloringTextColor}>Show Gray Edges as Dashed</Text>
               </Button>
             </Box>
           </div>
