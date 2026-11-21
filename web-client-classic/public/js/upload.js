@@ -238,15 +238,9 @@ export const upload = function () {
                     : null;
             const strain =
                 expression.length > 0 ? expression.map(x => removeExpressionSuffix(x)) : null;
-            if (expTimepoints) {
-                optimizationParameters.data["expression_timepoints"] = expTimepoints;
-            }
-            if (strain) {
-                optimizationParameters.data.Strain = strain;
-            }
-            if (simTimepoints) {
-                optimizationParameters.data["simulation_timepoints"] = simTimepoints;
-            }
+            optimizationParameters.data.expression_timepoints = expTimepoints;
+            optimizationParameters.data.Strain = strain;
+            optimizationParameters.data.simulation_timepoints = simTimepoints;
         }
         return optimizationParameters;
     };
@@ -444,7 +438,7 @@ export const upload = function () {
                 workbookWarnings: grnState.workbook.warnings,
             });
 
-        finalExportSheets.warnings.push(...warningsToAdd);
+        finalExportSheets.warnings = warningsToAdd;
 
         if (sheetsToFetch.length > 0) {
             await Promise.all(

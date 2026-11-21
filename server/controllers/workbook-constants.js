@@ -425,6 +425,10 @@ module.exports = {
                           `The imported ${sheetName} sheet is blank.`,
                           `This will not affect the display of the graph.`,
                       ].join(" "),
+                exportErrorDescription: [
+                    `The exported ${sheetName} sheet is blank,`,
+                    "because it was imported without any data.",
+                ].join(" "),
             };
         },
 
@@ -571,6 +575,13 @@ module.exports = {
                 warningCode: "MISSING_GENE_NAME",
                 errorDescription: `Gene names in column A of the "${sheetName}"
                     sheet are missing one or more genes from the network sheet. This will not affect the functionality of the graph in GRNsight.`,
+            };
+        },
+
+        ppiNamingConventionWarning: function (genes) {
+            return {
+                warningCode: "PPI_NAMING_CONVENTION",
+                errorDescription: `The following gene names do not follow the expected yeast naming convention: ${genes}.`,
             };
         },
 

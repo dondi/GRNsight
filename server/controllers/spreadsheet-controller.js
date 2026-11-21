@@ -56,7 +56,9 @@ var supportWorkbookType = function (type) {
 };
 
 var addMessageToArray = function (messageArray, message) {
-    messageArray.push(message);
+    if (messageArray.indexOf(message) === -1) {
+        messageArray.push(message);
+    }
 };
 
 var addWarning = function (workbook, message) {
@@ -268,7 +270,7 @@ var crossSheetInteractions = function (workbookFile) {
             expressionData.errors.forEach(data => workbook.errors.push(data));
         }
         if (expressionData.warnings !== undefined) {
-            expressionData.warnings.forEach(data => workbook.warnings.push(data));
+            expressionData.warnings.forEach(data => addMessageToArray(workbook.warnings, data));
         }
     }
 
@@ -278,7 +280,9 @@ var crossSheetInteractions = function (workbookFile) {
         }
 
         if (expressionData.expression.warnings !== undefined) {
-            expressionData.expression.warnings.forEach(data => workbook.warnings.push(data));
+            expressionData.expression.warnings.forEach(data =>
+                addMessageToArray(workbook.warnings, data)
+            );
         }
     }
 
@@ -295,7 +299,7 @@ var crossSheetInteractions = function (workbookFile) {
 
         if (expressionData.expression.wt_log2_expression.warnings !== undefined) {
             expressionData.expression.wt_log2_expression.warnings.forEach(data =>
-                workbook.warnings.push(data)
+                addMessageToArray(workbook.warnings, data)
             );
         }
     }
