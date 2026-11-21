@@ -65,6 +65,11 @@ export const HEIGHT_OFFSET = 53;
 export const MAX_GENES = 75;
 export const MAX_EDGES = 100;
 
+// Edge Weight Visibility Controls
+export const WEIGHTS_MOUSEOVER = "Show With Mouse Over";
+export const WEIGHTS_ALWAYS = "Always Show Edge Weights";
+export const WEIGHTS_HIDE = "Never Show Edge Weights";
+
 // Zoom
 export const ZOOM_DISPLAY_MINIMUM = 25;
 export const ZOOM_MIN_DISPLAY = ZOOM_DISPLAY_MINIMUM;
