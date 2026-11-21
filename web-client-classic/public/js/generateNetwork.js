@@ -23,47 +23,93 @@ export const generateNetwork = function () {
     const createHTMLforForm = (sources, source, networkType) => {
         const geneProtein = networkType === NETWORK_PPI_MODE ? "protein" : "gene";
         let result = `
-            <div id=\'generateNetworkFormContainer\' '>
-                <h2 id=\'generateNetwork\'>Generate Network</h2>
+            <div id='generateNetworkFormContainer'>
+                <h2 id='generateNetwork'>Generate Network</h2>
                 <p>Warning: changing network type or source will clear the list of selected genes or proteins below.</p>
-                <div class=\'form-group\' id=\'getNetworkTypeForm\'>
-                    <label for=\'network-type\' id=\'network-type-label\'>Network Type</label>
-                    <select class=\'network-dropdown btn btn-default\' id=\'network-type\'>
-                        <option value=\'grn\' ${geneProtein === "gene" ? "selected=\'true\'" : ""}>Gene Regulatory</option>
-                        <option value=\'protein-protein-physical-interaction\' ${geneProtein === "protein" ? "selected=\'true\'" : ""}>Protein-Protein Physical Interactions</option>
-                    </select>
+                <div class='form-group network-field-row' id='getNetworkTypeForm'>
+                    <label for='network-type' id='network-type-label' class='network-field-label'>Network Type</label>
+                    <div class='network-field-control'>
+                        <select class='network-dropdown btn btn-default' id='network-type'>
+                            <option value='grn' ${geneProtein === "gene" ? "selected='true'" : ""}>Gene Regulatory</option>
+                            <option value='protein-protein-physical-interaction' ${geneProtein === "protein" ? "selected='true'" : ""}>Protein-Protein Physical Interactions</option>
+                        </select>
+                    </div>
                 </div>
-                <div class=\'form-group\' id=\'getNetworkSourceForm\'>
-                    <label for=\'network-source\' id=\'network-source-label\'>Network Source</label>
-                    <select class=\'network-dropdown btn btn-default\' id=\'network-source\'>
+                <div class='form-group network-field-row' id='getNetworkSourceForm'>
+                    <label for='network-source' id='network-source-label' class='network-field-label'>Network Source</label>
+                    <div class='network-field-control'>
+                        <select class='network-dropdown btn btn-default' id='network-source'>
             `;
         if (sources.length !== 1) {
             for (let source in sources) {
                 result += `
-                            <option value=\'${sources[source]}\' ${
-                                source === sources[source] ? "\'selected=\'true" : ""
-                            }\'>${sources[source]}</option>
+                            <option value='${sources[source]}' ${
+                                source === sources[source] ? "'selected='true" : ""
+                            }'>${sources[source]}</option>
                 `;
             }
         } else {
             result += `
-                        <option value=\'${sources[0]}\' selected=\'true\' disabled hidden>${sources[0]}</option>
+                        <option value='${sources[0]}' selected='true' disabled hidden>${sources[0]}</option>
             `;
         }
         result += `</select>
+                    </div>
                 </div>
-        <div class=\'form-group\' id=\'getNetworkGenesForm\'>
-            <form id=\'getNetworkGenesForm\' class=\'NetworkGenesForm\' >
-                <label for=\'network-search-bar\' id=\'network-source-label\'>Select ${geneProtein}</label>
-                <input type=\'text\' id=\'network-search-bar\' name=\'network-search-bar\'></input>
-                <button id=\'enter-search\' type=\'submit\' class=\'search-button btn btn-default\'>
-                    <span class=\'glyphicon glyphicon-search\'></span>
-                </button>
-            </form>
+        <div class='form-group network-field-row' id='getNetworkStrainForm'>
+            <label for='network-strain-toggle' id='network-strain-label' class='network-field-label'>Strain</label>
+            <div class='network-field-control'>
+                <div class='dropdown multiselect-dropdown' id='network-strain'>
+                    <button type='button' class='btn btn-default dropdown-toggle' id='network-strain-toggle'
+                            data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                        <span id='network-strain-text'>All Strains</span>
+                        <span class='caret'></span>
+                    </button>
+                    <ul class='dropdown-menu multiselect-menu' id='network-strain-menu' data-multiselect='network-strain'>
+                        <li><a href='#' class='multiselect-select-all selected' id='network-strain-select-all'
+                            data-multiselect='network-strain'>Select all</a></li>
+                        <li role='separator' class='divider'></li>
+                        <li><a href='#' class='multiselect-option' data-value='S288c'>S288C</a></li>
+                        <li><a href='#' class='multiselect-option' data-value='W303'>W303</a></li>
+                        <li><a href='#' class='multiselect-option' data-value='CENPK'>CENPK</a></li>
+                        <li><a href='#' class='multiselect-option' data-value='Other'>Other</a></li>
+                        <li><a href='#' class='multiselect-option' data-value='SEY6210'>SEY6210</a></li>
+                        <li><a href='#' class='multiselect-option' data-value='Sigma1278b'>Sigma1278b</a></li>
+                        <li><a href='#' class='multiselect-option' data-value='SK1'>SK1</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        <div id=\'selected-genes-container\'>
+        <div class='form-group network-field-row' id='getNetworkAnnotationForm'>
+            <label for='network-annotation-toggle' id='network-annotation-label' class='network-field-label'>Annotation Type</label>
+            <div class='network-field-control'>
+                <div class='dropdown multiselect-dropdown' id='network-annotation'>
+                    <button type='button' class='btn btn-default dropdown-toggle' id='network-annotation-toggle'
+                            data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                        <span id='network-annotation-text'>All Annotation Types </span>
+                        <span class='caret'></span>
+                    </button>
+                    <ul class='dropdown-menu multiselect-menu' id='network-annotation-menu' data-multiselect='network-annotation'>
+                        <li><a href='#' class='multiselect-option selected' data-value='manually-curated'>Manually curated</a></li>
+                        <li><a href='#' class='multiselect-option selected' data-value='high-throughput'>High-throughput</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class='form-group network-field-row' id='getNetworkGenesForm'>
+            <label for='network-search-bar' id='network-search-label' class='network-field-label'>Select ${geneProtein}</label>
+            <div class='network-field-control'>
+                <div class='gene-search-row'>
+                    <input type='text' id='network-search-bar' name='network-search-bar'>
+                    <button id='enter-search' type='submit' class='search-button btn btn-default'>
+                        <span class='glyphicon glyphicon-search'></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id='selected-genes-container'>
             <p>Added ${geneProtein}s go below! Click on a ${geneProtein} to remove it.</p>
-            <div id=\'selected-genes\'>
+            <div id='selected-genes'>
             </div>
         `;
         return result;
@@ -201,6 +247,8 @@ containing "-", "_", and alpha-numeric characters only`);
         $("#generateNetworkFooter-container").append(createHTMLforModalButtons());
         grnState.customWorkbook = {
             genes: {},
+            strains: [],
+            annotationTypes: [],
             type: NETWORK_GRN_MODE,
             source: null,
             sources: {
@@ -232,6 +280,8 @@ containing "-", "_", and alpha-numeric characters only`);
                         grnState.customWorkbook.type
                     )
                 );
+                updateMultiselectUI("network-strain");
+                updateMultiselectUI("network-annotation");
             })
             .catch(function (error) {
                 console.log(error.stack);
@@ -283,6 +333,8 @@ containing "-", "_", and alpha-numeric characters only`);
                 )
             );
         }
+        updateMultiselectUI("network-strain");
+        updateMultiselectUI("network-annotation");
         event.stopPropagation();
         displayCurrentGenes();
     });
@@ -291,6 +343,101 @@ containing "-", "_", and alpha-numeric characters only`);
         grnState.customWorkbook.genes = {};
         event.stopPropagation();
         displayCurrentGenes();
+    });
+    const MULTISELECT_CONFIG = {
+        "network-strain": {
+            stateKey: "strains",
+            placeholder: "Select strain(s)",
+            allText: "All Strains",
+        },
+        "network-annotation": {
+            stateKey: "annotationTypes",
+            placeholder: "Select annotation type(s)",
+            allText: "All Annotation Types",
+        },
+    };
+
+    const ensureSelection = id => {
+        const config = MULTISELECT_CONFIG[id];
+        const $options = $(`#${id}-menu .multiselect-option`);
+        if ($options.filter(".selected").length > 0) {
+            return;
+        }
+        let $fallback = $options.filter(`[data-value="${config.defaultValue}"]`);
+        if ($fallback.length === 0) {
+            $fallback = $options.first();
+        }
+        $fallback.addClass("selected");
+    };
+
+    const updateMultiselectUI = id => {
+        const config = MULTISELECT_CONFIG[id];
+        const $options = $(`#${id}-menu .multiselect-option`);
+        const $selectAll = $(`#${id}-select-all`);
+        let allMode = false;
+
+        if ($selectAll.length > 0) {
+            // Strain: nothing highlighted or everything highlighted both mean "All"
+            const count = $options.filter(".selected").length;
+            allMode = count === 0 || count === $options.length;
+            if (allMode) {
+                $options.removeClass("selected"); // implied by Select all
+            }
+            $selectAll.toggleClass("selected", allMode);
+        } else {
+            ensureSelection(id); // annotation: never zero selected
+        }
+
+        const $selected = allMode ? $options : $options.filter(".selected");
+        const values = $selected
+            .map(function () {
+                return $(this).attr("data-value");
+            })
+            .get();
+        const labels = $selected
+            .map(function () {
+                return $(this).text();
+            })
+            .get();
+        grnState.customWorkbook[config.stateKey] = values;
+
+        let text;
+        if (labels.length === $options.length) {
+            text = config.allText;
+        } else if (labels.length === 1) {
+            text = labels[0];
+        } else {
+            text = "Multiple options selected";
+        }
+        $(`#${id}-text`).text(text);
+    };
+
+    $("body").on("click", ".multiselect-menu .multiselect-option", function (event) {
+        event.preventDefault();
+        event.stopPropagation(); // keeps the dropdown open so multiple options can be picked
+        const $option = $(this);
+        const $menu = $option.closest(".multiselect-menu");
+        const hasSelectAll = $menu.find(".multiselect-select-all").length > 0;
+
+        // Annotation (no Select all) can't deselect its last option.
+        // Strain doesn't need this: deselecting the last one falls back to "All".
+        if (
+            !hasSelectAll &&
+            $option.hasClass("selected") &&
+            $menu.find(".multiselect-option.selected").length === 1
+        ) {
+            return;
+        }
+        $option.toggleClass("selected");
+        updateMultiselectUI($menu.attr("data-multiselect"));
+    });
+
+    $("body").on("click", ".multiselect-select-all", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        const id = $(this).attr("data-multiselect");
+        $(`#${id}-menu .multiselect-option`).removeClass("selected"); // zero highlights = All mode
+        updateMultiselectUI(id);
     });
     $("body").on("click", "#submit-network", function () {
         let genesAmount = Object.keys(grnState.customWorkbook.genes).length;
@@ -305,6 +452,7 @@ containing "-", "_", and alpha-numeric characters only`);
                 const genes = sortedGenes.map(([key]) => key);
                 const displayGenes = sortedGenes.map(([_, value]) => value);
                 const source = grnState.customWorkbook.source;
+                // const strain = grnState.customWorkbook.strain;
                 const headers = {
                     type: "GenerateNetwork",
                     genes: genes.join(","),
