@@ -60,7 +60,7 @@ let getUniProtInfo = async function (query) {
     });
     const jobStatus = await job.json();
     if (!job.ok) {
-        setTimeout(() => getUniProtInfo(query), 5000);
+        setTimeout(() => getUniProtInfo(query), 1000);
     }
     const result = await fetch(`${serviceRoot}/uniprot/idmapping/status/${jobStatus.jobId}`, {
         method: "GET",
@@ -72,8 +72,6 @@ let getUniProtInfo = async function (query) {
 let getNCBIInfo = function (query) {
     const geneSymbol = query.symbol;
     const geneName = query.species.replace(/_/, "+");
-    // console.log("calling ncbi");
-
     return $.get({
         url: serviceRoot + "/ncbi/entrez/eutils/esearch.fcgi",
         data: {
